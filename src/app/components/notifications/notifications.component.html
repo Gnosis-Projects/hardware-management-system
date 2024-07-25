@@ -1,0 +1,26 @@
+<div class="notification-wrapper position-relative">
+  <button mat-icon-button [matMenuTriggerFor]="notificationMenu" class="text-white">
+    <mat-icon [matTooltip]="notifications.length === 0 ? 'Ειδοποιήσεις' : ''">
+      {{ notifications.length === 0 ? 'notifications_none' : 'notifications' }}
+    </mat-icon>
+  </button>
+  <span *ngIf="notifications.length > 0" class="notification-badge">{{ notifications.length }}</span>
+</div>
+<mat-menu #notificationMenu="matMenu">
+  <ng-container *ngIf="notifications.length > 0; else noNotifications">
+    <button mat-menu-item *ngFor="let notification of notifications; let i = index" class="notification-item" (click)="deleteNotification(i)">
+      <span class="notification-message">▪️ {{ notification.message }}</span>
+      <br>
+      <span class="notification-time">{{ getRelativeTime(notification.time) }}</span>
+    </button>
+    <button mat-menu-item (click)="clearNotifications()" class="clear-notifications">
+      <mat-icon>clear_all</mat-icon>
+      <span>{{ 'clear' | translate }}</span>
+    </button>
+  </ng-container>
+  <ng-template #noNotifications>
+    <button mat-menu-item disabled>
+      {{ 'no.notifications' | translate }}
+    </button>
+  </ng-template>
+</mat-menu>

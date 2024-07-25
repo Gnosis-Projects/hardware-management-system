@@ -1,0 +1,117 @@
+.container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  margin-top: 20px;
+  font-size: 2rem;
+  font-weight: 400;
+  color: #333;
+  text-align: center;
+}
+
+.item-description{
+  text-align: center;
+  justify-content: center;
+  font-size: 2em;
+  font-weight: 300;
+  text-decoration: underline;
+}
+
+.mat-mdc-standard-chip .mdc-evolution-chip__text-label {
+  text-align: center !important;
+  justify-content: center !important;
+}
+
+.workstation-card {
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  position: relative;
+
+  .card-body {
+    padding: 20px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .menu-button {
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  .card-text {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #666;
+  }
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  text-align: center;
+  justify-content: center;
+
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #333;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .add-button {
+    margin-left: 10px;
+  }
+}
+
+.device-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+
+  button {
+    width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .add-button {
+    margin-top: 10px;
+  }
+
+  .device-buttons {
+    flex-direction: column;
+    align-items: center;
+    
+    button {
+      margin-bottom: 10px;
+      width: 100%;
+    }
+  }
+}

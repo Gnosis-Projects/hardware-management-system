@@ -1,0 +1,28 @@
+<div class="dynamic-filter-container">
+  <form [formGroup]="filterForm" (ngSubmit)="onFilter()" class="filter-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="carrierId">{{ 'labels.carrier' | translate }}</label>
+        <select id="carrierId" formControlName="carrierId" class="form-control form-control-sm">
+          <option *ngFor="let carrier of carriers" [value]="carrier.id">{{ carrier.name }}</option>
+        </select>
+      </div>
+      <div class="form-group" *ngFor="let control of filterForm.controls | keyvalue">
+        <div *ngIf="control.key !== 'carrierId' && control.key !== 'operatingSystem'">
+          <label [for]="control.key">{{ control.key | translate }}</label>
+          <input [id]="control.key" [formControlName]="control.key" class="form-control form-control-sm" type="text">
+        </div>
+      </div>
+      <div class="form-group" *ngIf="filterType === FilterType.Computer">
+        <label for="operatingSystem">{{ 'labels.operatingSystem' | translate }}</label>
+        <select id="operatingSystem" formControlName="operatingSystem" class="form-control form-control-sm">
+          <option *ngFor="let os of operationSystems" [value]="os">{{ os }}</option>
+        </select>
+      </div>
+      <div class="button-group">
+        <button type="submit" class="btn btn-primary btn-sm">{{ 'search' | translate }}</button>
+        <button type="button" class="btn btn-warning btn-sm" (click)="onReset()">{{ 'reset' | translate }}</button>
+      </div>
+    </div>
+  </form>
+</div>

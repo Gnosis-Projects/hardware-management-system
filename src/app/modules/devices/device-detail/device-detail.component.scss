@@ -1,0 +1,100 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-y: hidden;
+  padding: 20px;
+}
+
+.card-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+}
+
+.device-card {
+  border: 1px solid #ddd;
+  border-radius: 0.75rem;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.device-card .card-body {
+  position: relative;
+  padding: 20px;
+}
+
+.device-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.device-card .device-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.device-card .card-text {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.device-card .card-text strong {
+  color: #333;
+}
+
+.device-card .menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+}
+
+.device-card .mat-menu-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.device-card .mat-menu-item mat-icon {
+  margin-right: 0.5rem;
+}
+
+.toggle-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+
+.toggle-buttons button {
+  flex: 1;
+  margin: 0 5px;
+}
+
+.toggle-buttons button.active {
+  background-color: #1976d2;
+  color: white;
+}
+
+@media screen and (max-width: 500px) {
+  .device-card {
+    padding: 0.5rem;
+  }
+
+  .device-card .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .device-card .menu-button {
+    align-self: flex-end;
+  }
+}

@@ -1,0 +1,18 @@
+.main-content {
+    flex: 1;
+  }
+  
+  /* Style the footer to stick at the bottom */
+  .footer {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    background: #f8f9fa; /* Change this to your desired background */
+    padding: 1rem 0;
+    text-align: center;
+  }
+  
+  /* Add additional styling as needed */
+  .back-gradient {
+    background: linear-gradient(to right, #4caf50, #81c784); /* Example gradient */
+  }

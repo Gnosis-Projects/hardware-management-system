@@ -1,0 +1,77 @@
+:host {
+    display: block;
+  }
+  
+  mat-form-field.full-width {
+    width: 100%;
+  }
+  
+  mat-horizontal-stepper {
+    background: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  button {
+    margin-right: 8px;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .mat-form-field {
+    margin-bottom: 16px;
+  }
+  
+  .mat-step-header {
+    background-color: var(--dark-color);
+    color: #ffffff;
+  }
+  
+  .confirm-details-text{
+    font-weight: bold;
+  }
+  
+  .mat-step-icon {
+    color: #ffffff;
+  }
+  
+  .mat-step-label {
+    color: #ffffff;
+  }
+  
+  .mat-stepper-horizontal-line {
+    border-top-width: 3px;
+  }
+  
+  .mat-horizontal-stepper-header-container {
+    background-color: #3f51b5;
+    color: #ffffff;
+  }
+  
+  .mat-step-title {
+    font-weight: bold;
+  }
+  
+  .mat-stepper-horizontal,
+  .mat-stepper-vertical {
+    .mat-stepper-icon-container {
+      color: #ffffff;
+    }
+  
+    .mat-stepper-label-container {
+      font-weight: bold;
+    }
+  
+    .mat-stepper-optional {
+      color: #ff4081;
+    }
+  
+    .mat-stepper-line {
+      border-color: #3f51b5;
+    }
+  }
+  

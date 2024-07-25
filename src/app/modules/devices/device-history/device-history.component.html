@@ -1,0 +1,14 @@
+<div class="container mt-4 mb-4">
+  <h4 class="text-primary mb-4">{{ 'device.history' | translate }}</h4>
+  <button mat-mini-fab class="mr-5" (click)="goBack()"><mat-icon>chevron_left</mat-icon></button>
+  <div *ngIf="deviceHistory && deviceHistory.data.length > 0; else noHistory">
+    <app-export-data-button *ngIf="deviceHistory.data.length > 0" [data]="deviceHistory.data" fileName="{{'export.device.history.report' | translate}}" [columnNames]="columnNames"></app-export-data-button>
+    <app-item-history 
+    [isTypeComputer]="isComputer(deviceHistory)" 
+    [deviceHistory]="deviceHistory">
+  </app-item-history>
+  </div>
+  <ng-template #noHistory>
+    <p class="text-warning">{{ 'no.device.history.found' | translate }}</p>
+  </ng-template>
+</div>

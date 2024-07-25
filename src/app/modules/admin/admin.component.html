@@ -1,0 +1,87 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" mode="side" opened>
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">{{ 'admin.sidebar.title' | translate }}</h2>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="sidebar-buttons">
+      <button mat-flat-button color="accent" (click)="showAllCarriers()" matTooltip="{{ 'all.carriers' | translate }}">
+        <mat-icon>local_play</mat-icon>
+        <span>{{ 'all.carriers' | translate }}</span>
+      </button>
+      <button mat-flat-button color="accent" [matMenuTriggerFor]="deviceMenu" matTooltip="{{ 'search' | translate }}">
+        <mat-icon>devices</mat-icon>
+        <span>{{ 'search' | translate }}</span>
+      </button>
+      <button mat-flat-button color="accent" (click)="addUser()" matTooltip="{{ 'create.user' | translate }}">
+        <mat-icon>person_add</mat-icon>
+        <span>{{ 'create.user' | translate }}</span>
+      </button>
+      <button mat-flat-button color="accent" (click)="toggleUsersList()" matTooltip="{{ 'view.all.users' | translate }}">
+        <mat-icon>supervisor_account</mat-icon>
+        <span>{{ 'view.all.users' | translate }}</span>
+      </button>
+      <button mat-flat-button color="accent" (click)="addCarrier()" matTooltip="{{ 'create.carrier' | translate }}">
+        <mat-icon>domain</mat-icon>
+        <span>{{ 'create.carrier' | translate }}</span>
+      </button>
+      <button mat-flat-button color="accent" (click)="addWorkstation()" matTooltip="{{ 'create.carrier' | translate }}">
+        <mat-icon>domain</mat-icon>
+        <span>{{ 'create.workstation' | translate }}</span>
+      </button>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-content">
+    <div class="col-md-1">
+    <mat-toolbar color="primary" class="header-toolbar">
+      <button mat-icon-button (click)="toggleDrawer()">
+        <mat-icon class="sidebar-icon">{{ isDrawerOpen ? 'menu' : 'close' }}</mat-icon>
+      </button>
+    </mat-toolbar>
+    </div>
+
+    <div class="content-container">
+      <h1 class="content-title text-center">{{ 'admin.content.title' | translate }}</h1>
+      <mat-menu #deviceMenu="matMenu">
+        <button mat-menu-item (click)="fetchAllDevices(DeviceType.WORKSTATION)">
+          <mat-icon>work</mat-icon> {{ 'all.workstations' | translate }}
+        </button>
+        <button mat-menu-item (click)="fetchAllDevices(DeviceType.COMPUTER)">
+          <mat-icon>computer</mat-icon> {{ 'all.computers' | translate }}
+        </button>
+        <button mat-menu-item (click)="fetchAllDevices(DeviceType.PHONE)">
+          <mat-icon>phone_iphone</mat-icon> {{ 'all.phones' | translate }}
+        </button>
+        <button mat-menu-item (click)="fetchAllDevices(DeviceType.PRINTER)">
+          <mat-icon>printer</mat-icon> {{ 'all.printers' | translate }}
+        </button>
+        <button mat-menu-item (click)="fetchAllDevices(DeviceType.NETWORK_EQUIPMENT)">
+          <mat-icon>router</mat-icon> {{ 'all.net_equipment' | translate }}
+        </button>
+      </mat-menu>
+      <app-carrier-table *ngIf="showCarriers"></app-carrier-table>
+      <app-users-table *ngIf="showUsersTable"></app-users-table>
+
+      <div class="device-list">
+        <div class="export-button-container" *ngIf="devices.length > 0 || workstations.length > 0">
+          <app-export-data-button [data]="devices.length > 0 ? devices : workstations" fileName="admin-report" [columnNames]="columnNames">
+          </app-export-data-button>
+        </div>
+        <div class="all-devices-text" *ngIf="devices.length > 0">
+          {{ 'all.devices' | translate }}
+          <mat-icon *ngIf="searchType === DeviceType.COMPUTER">computer</mat-icon>
+          <mat-icon *ngIf="searchType === DeviceType.PHONE">phone_iphone</mat-icon>
+          <mat-icon *ngIf="searchType === DeviceType.PRINTER">print</mat-icon>
+          <mat-icon *ngIf="searchType === DeviceType.NETWORK_EQUIPMENT">router</mat-icon>
+        </div>
+        <div class="all-devices-text" *ngIf="workstations.length > 0">{{ 'all.workstations' | translate }}</div>
+        <app-filter [filterType]="filterType" [carriers]="carriers" *ngIf="this.showFilter" (filter)="applyFilter($event)"></app-filter>
+        <div class="row">
+          <app-item-table *ngIf="devices.length > 0" [items]="devices" [deviceType]="searchType"></app-item-table>
+          <app-item-table *ngIf="workstations.length > 0" [items]="workstations" [deviceType]="searchType"></app-item-table>
+        </div>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

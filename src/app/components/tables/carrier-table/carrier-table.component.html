@@ -1,0 +1,51 @@
+<div class="container mt-4">
+  <h2 class="text-primary mb-4">{{ 'carriers' | translate }}</h2>
+  <app-filter-search (search)="onSearch($event)"></app-filter-search>
+  <span class="text-danger" *ngIf="dataSource && dataSource.data.length === 0">{{ 'results.not.found' | translate
+    }}</span>
+  <mat-table [dataSource]="dataSource" class="custom-table mat-elevation-z8" *ngIf="dataSource.data.length > 0">
+    <ng-container matColumnDef="ID">
+      <mat-header-cell *matHeaderCellDef> {{ 'table-headers.ID' | translate }} </mat-header-cell>
+      <mat-cell *matCellDef="let carrier"> {{ carrier.id }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> {{ 'table-headers.name' | translate }} </mat-header-cell>
+      <mat-cell *matCellDef="let carrier"> {{ carrier.name }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="units">
+      <mat-header-cell *matHeaderCellDef> {{ 'table-headers.num_units' | translate }} </mat-header-cell>
+      <mat-cell *matCellDef="let carrier"> {{ getAUnits(carrier.id).length }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> {{ 'table-headers.actions' | translate }} </mat-header-cell>
+      <mat-cell *matCellDef="let carrier">
+        <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="{{ 'table-headers.actions' | translate }}"
+          [disabled]="this.checkedIds.length > 1">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="viewCarrierDetails(carrier)">
+            <mat-icon>visibility</mat-icon> {{ 'view_carrier' | translate }}
+          </button>
+          <ng-container *ngIf="isSuperAdmin">
+            <button mat-menu-item (click)="editCarrier(carrier.id, carrier.name)">
+              <mat-icon>edit</mat-icon> {{ 'edit_carrier' | translate }}
+            </button>
+            <button mat-menu-item (click)="deleteCarrier(carrier.id, carrier.name)">
+              <mat-icon>delete</mat-icon> {{ 'delete_carrier' | translate }}
+            </button>
+          </ng-container>
+
+        </mat-menu>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <app-export-data-button *ngIf="dataSource.data.length > 0" [data]="dataSource.data"
+    fileName="{{ 'export.carriers.report' | translate }}" [columnNames]="columnNames"></app-export-data-button>
+</div>

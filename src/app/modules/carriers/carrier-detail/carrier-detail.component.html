@@ -1,0 +1,115 @@
+<div class="container mt-4" *ngIf="carrier">
+  <div class="card carrier-card">
+    <div class="card-body">
+      <div class="card-title text-primary mb-4 carrier-name">{{ carrier.name }}</div>
+      <div class="btn-group mb-3">
+        <button mat-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon> {{ 'options' | translate }}
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="toggleSearchOptions()" [disabled]="aUnits.length === 0">
+            <mat-icon>search</mat-icon> {{ 'search_form' | translate }}
+          </button>
+          <button mat-menu-item (click)="toggleAUnits()" [disabled]="aUnits.length === 0">
+            <mat-icon>{{ showAUnits ? 'visibility_off' : 'visibility' }}</mat-icon>
+            {{ showAUnits ? ('close.units' | translate) : ('view_units' | translate) }}
+          </button>
+          <button mat-menu-item (click)="openUnitDialog()" *ngIf="isSuperAdmin">
+            <mat-icon>add_circle</mat-icon> {{ 'add_unit' | translate }}
+          </button>
+          <button mat-menu-item (click)="addWorkStation()" [disabled]="aUnits.length === 0">
+            <mat-icon>add_circle</mat-icon> {{ 'addWorkStation' | translate }}
+          </button>
+        </mat-menu>
+      </div>
+
+      <div class="row">
+        <div *ngIf="showSearchOptions" class="btn-group mb-3 gap-buttons">
+          <button class="btn"
+            [ngClass]="{'btn-primary': searchType === DeviceType.WORKSTATION, 'btn-outline-primary': searchType !== DeviceType.WORKSTATION}"
+            (click)="setSearchType(DeviceType.WORKSTATION)">
+            {{ 'workstations' | translate }}
+          </button>
+          <button class="btn"
+            [ngClass]="{'btn-primary': searchType === DeviceType.COMPUTER, 'btn-outline-primary': searchType !== DeviceType.COMPUTER}"
+            (click)="setSearchType(DeviceType.COMPUTER)">
+            {{ 'computerDevices' | translate }}
+          </button>
+          <button class="btn"
+            [ngClass]="{'btn-primary': searchType === DeviceType.PHONE, 'btn-outline-primary': searchType !== DeviceType.PHONE}"
+            (click)="setSearchType(DeviceType.PHONE)">
+            {{ 'phoneDevices' | translate }}
+          </button>
+          <button class="btn"
+            [ngClass]="{'btn-primary': searchType === DeviceType.PRINTER, 'btn-outline-primary': searchType !== DeviceType.PRINTER}"
+            (click)="setSearchType(DeviceType.PRINTER)">
+            {{ 'printerDevices' | translate }}
+          </button>
+          <button class="btn"
+          [ngClass]="{'btn-primary': searchType === DeviceType.NETWORK_EQUIPMENT, 'btn-outline-primary': searchType !== DeviceType.NETWORK_EQUIPMENT}"
+          (click)="setSearchType(DeviceType.NETWORK_EQUIPMENT)">
+          {{ 'networkEquipmentDevices' | translate }}
+        </button>
+        </div>
+      </div>
+
+      <app-search-form *ngIf="showForm" [aUnits]="aUnits" [searchType]="searchType" (search)="searchDevices($event)"
+        (close)="onClose()"></app-search-form>
+
+      <app-filter-search
+        *ngIf="devices.length > 0 && (searchType === DeviceType.COMPUTER || searchType === DeviceType.PHONE)"
+        (search)="onSearch($event)"></app-filter-search>
+      <app-filter-search *ngIf="workstations.length > 0 && searchType === DeviceType.WORKSTATION"
+        (search)="onSearch($event)"></app-filter-search>
+
+      <!-- For larger screens -->
+      <ng-container *ngIf="!isMobileScreen">
+        <div
+          *ngIf="(searchType === DeviceType.COMPUTER || searchType === DeviceType.PHONE) && filteredResults.length > 0"
+          class="col-12">
+          <app-export-data-button [data]="filteredResults"
+            fileName="{{searchType.toString() | translate }}"
+            [columnNames]="columnNames"></app-export-data-button>
+          <app-item-table [items]="filteredResults" [deviceType]="searchType"></app-item-table>
+        </div>
+        <div *ngIf="searchType === DeviceType.WORKSTATION && filteredResults.length > 0" class="col-12">
+          <app-export-data-button [data]="filteredResults" fileName="Σταθμοί εργασίας"
+            [columnNames]="columnNames"></app-export-data-button>
+          <app-item-table [items]="filteredResults" [deviceType]="searchType"></app-item-table>
+        </div>
+      </ng-container>
+
+      <!-- For mobile screens -->
+      <ng-container *ngIf="isMobileScreen">
+        <div
+          *ngIf="(searchType === DeviceType.COMPUTER || searchType === DeviceType.PHONE) && filteredResults.length > 0"
+          class="col-12">
+          <app-export-data-button [data]="filteredResults"
+            fileName="{{searchType === DeviceType.COMPUTER ? 'Υπολογιστές' : 'Τηλέφωνα'}}"
+            [columnNames]="columnNames"></app-export-data-button>
+          <div class="row">
+            <div class="col-md-6 col-lg-4 mb-3" *ngFor="let item of filteredResults ">
+              <app-item-details [item]="item" [deviceType]="searchType"></app-item-details>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="searchType === DeviceType.WORKSTATION && filteredResults.length > 0" class="col-12">
+          <app-export-data-button [data]="filteredResults" fileName="Σταθμοί εργασίας"
+            [columnNames]="columnNames"></app-export-data-button>
+          <div class="row">
+            <div class="col-md-6 col-lg-4 mb-3" *ngFor="let workstation of filteredResults">
+              <app-workstation-item-details [workstation]="workstation"></app-workstation-item-details>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="aunits-text" *ngIf="showAUnits">{{ 'labels.aUnits' | translate }}</div>
+      <app-aunit-table *ngIf="showAUnits" [aunits]="aUnits" (close)="onClose()" (edit)="openUnitDialog($event)"
+        (delete)="onDeleteUnit($event)"></app-aunit-table>
+
+      <app-export-data-button class="mt-4" *ngIf="showAUnits && aUnits.length > 0" [data]="aUnits" fileName="μονάδες"
+        [columnNames]="columnNames"></app-export-data-button>
+    </div>
+  </div>
+</div>

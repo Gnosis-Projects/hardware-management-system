@@ -1,0 +1,35 @@
+<div class="login-container d-flex justify-content-center align-items-center min-vh-100"[ngStyle]="{'background-image': 'url(' + backgroundImage + ')'}">
+  <div class="text-center w-100">
+    <div class="login-title-container">
+      <h1 class="login-title">ΣΥΣΤΗΜΑ ΔΙΑΧΕΙΡΙΣΗΣ ΥΛΙΚΟΥ</h1>
+    </div>
+    
+  </div>
+  <div class="login-card p-4 shadow-sm">
+    <h3 class="card-title text-center mb-4">{{'login.user' | translate }} </h3>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group mb-3">
+        <div class="input-group">
+          <span class="input-group-text"><mat-icon>person</mat-icon></span>
+          <input type="text" id="username" class="form-control" formControlName="username" [placeholder]="'enter.your.username' | translate">
+        </div>
+        <div *ngIf="loginForm.get('username')?.invalid && (loginForm.get('username')?.dirty || loginForm.get('username')?.touched)" class="text-danger">
+          <small *ngIf="loginForm.get('username')?.errors?.required">{{'username.is.required' | translate }}</small>
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <div class="input-group">
+          <span class="input-group-text"><mat-icon>lock</mat-icon></span>
+          <input type="password" id="password" class="form-control" formControlName="password" [placeholder]="'enter.your.password' | translate">
+        </div>
+        <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="text-danger">
+          <small *ngIf="loginForm.get('password')?.errors?.required">{{'password.is.required' | translate }}</small>
+          <small *ngIf="loginForm.get('password')?.errors?.minlength">{{'Password must be at least 6 characters long' | translate }}</small>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100" [disabled]="loginForm.invalid">{{'login' | translate}}</button>
+    </form>
+  </div>
+</div>

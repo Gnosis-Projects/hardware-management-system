@@ -1,0 +1,29 @@
+.edit-device-container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+textarea {
+  resize: none;
+}
+
+@media (max-width: 768px) {
+  .edit-device-container {
+    padding: 1rem;
+  }
+}

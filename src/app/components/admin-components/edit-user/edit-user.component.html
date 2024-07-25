@@ -1,0 +1,46 @@
+<div class="edit-user-container">
+    <mat-card>
+      <mat-card-title class="mb-4">{{ 'edit.user' | translate }}</mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="editUserForm" (ngSubmit)="onSubmit()">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'username' | translate }}</mat-label>
+            <input matInput formControlName="username" required>
+          </mat-form-field>
+  
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'email' | translate }}</mat-label>
+            <input matInput formControlName="email" type="email" required>
+          </mat-form-field>
+  
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'roles' | translate }}</mat-label>
+            <mat-select formControlName="roles">
+              <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'carrier' | translate }}</mat-label>
+            <mat-select formControlName="carrier">
+              <mat-option *ngFor="let carrier of carriers" [value]="carrier.id">{{ carrier.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'user.status' | translate }}</mat-label>
+            <mat-select formControlName="active" required>
+              <mat-option [value]="true">{{ 'active.user' | translate }}</mat-option>
+              <mat-option [value]="false">{{ 'inactive.user' | translate }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <div class="button-container">
+            <button mat-button type="button" (click)="onCancel()">{{ 'cancel' | translate }}</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="!editUserForm.valid">{{ 'save' | translate }}</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  

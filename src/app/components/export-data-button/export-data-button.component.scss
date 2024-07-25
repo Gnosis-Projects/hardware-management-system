@@ -1,0 +1,26 @@
+.export-button {
+  display: flex;
+  align-items: center;
+  background-color: var(--background-color);
+  color: #ffffff;
+  border: 1px solid var(--excel-color);
+  padding: 5px 10px;
+  border-radius: 31px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--excel-color);
+
+   mat-menu-item .icon {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+img{
+  width: 20px !important;
+  height: 20px !important;
+  margin-right: 5px;
+}
+

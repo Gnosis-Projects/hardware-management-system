@@ -1,0 +1,73 @@
+<div class="history-container">
+  <table mat-table [dataSource]="deviceHistory?.data" class="mat-elevation-z8 mt-3">
+    <ng-container matColumnDef="actionType">
+      <th mat-header-cell *matHeaderCellDef> {{ 'table-headers.actions' | translate }} </th>
+      <td mat-cell *matCellDef="let entry"> {{ entry.actionType.name }} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef> {{ 'labels.username' | translate }} </th>
+      <td mat-cell *matCellDef="let entry"> {{ entry.username }} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="checkDateTime">
+      <th mat-header-cell *matHeaderCellDef> {{ 'labels.date' | translate }} </th>
+      <td mat-cell *matCellDef="let entry"> {{ entry.checkDateTime | date: 'medium' }} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="ram" *ngIf="isTypeComputer">
+      <th mat-header-cell *matHeaderCellDef> {{ 'labels.RAM' | translate }} </th>
+      <td mat-cell *matCellDef="let entry"> {{ entry.ram }} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="deviceName">
+      <th mat-header-cell *matHeaderCellDef> {{ 'labels.deviceName' | translate }} </th>
+      <td mat-cell *matCellDef="let entry"> {{ entry.deviceName }} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="model">
+      <th mat-header-cell *matHeaderCellDef> {{ 'labels.model' | translate }} </th>
+      <td mat-cell *matCellDef="let entry"> {{ entry.model }} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="serialNumber">
+      <th mat-header-cell *matHeaderCellDef> {{ 'labels.serialNumber' | translate }} </th>
+      <td mat-cell *matCellDef="let entry"> {{ entry.serialNumber }} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="employeeName">
+      <th mat-header-cell *matHeaderCellDef> {{ 'labels.employeeName' | translate }} </th>
+      <td mat-cell *matCellDef="let entry"> {{ entry.employeeFirstName }} {{ entry.employeeLastName }} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> {{ 'labels.email' | translate }} </th>
+      <td mat-cell *matCellDef="let entry"> {{ entry.email }} </td>
+    </ng-container>
+    
+
+    
+    <ng-container matColumnDef="ip" *ngIf="isTypeComputer">
+      <th mat-header-cell *matHeaderCellDef> {{ 'labels.ip' | translate }} </th>
+      <td mat-cell *matCellDef="let entry"> {{ entry.ip }} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="macAddress" *ngIf="isTypeComputer">
+      <th mat-header-cell *matHeaderCellDef> {{ 'Διεύθυνση MAC' | translate }} </th>
+      <td mat-cell *matCellDef="let entry"> {{ entry.macAddress }} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="operatingSystem" *ngIf="isTypeComputer">
+      <th mat-header-cell *matHeaderCellDef> {{ 'labels.operatingSystem' | translate }} </th>
+      <td mat-cell *matCellDef="let entry"> {{ entry.operatingSystem }} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="comments">
+      <th mat-header-cell *matHeaderCellDef> {{ 'labels.comments' | translate }} </th>
+      <td mat-cell *matCellDef="let entry" class="comment-cell" [matTooltip]="entry.comments"> {{ entry.comments }} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

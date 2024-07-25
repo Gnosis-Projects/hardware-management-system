@@ -1,0 +1,40 @@
+.minimal-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .minimal-table th,
+  .minimal-table td {
+    border: 1px solid #dee2e6;
+    padding: 0.5rem;
+    text-align: left;
+  }
+  
+  .minimal-table thead {
+    background-color: #f8f9fa;
+  }
+  
+  .minimal-table th {
+    font-weight: 600;
+    color: #495057;
+  }
+  
+  .minimal-table td {
+    color: #212529;
+  }
+  
+  .minimal-table button {
+    padding: 0;
+  }
+  
+  .minimal-table .mat-icon {
+    font-size: 1.25rem;
+    color: #495057;
+  }
+  
+  .spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border-width: 0.3rem;
+  }
+  

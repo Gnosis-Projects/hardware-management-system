@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="card-wrapper">
+        <div *ngIf="device && device.data && device.data.workStation" class="card device-card">
+          <div class="card-body">
+            <div class="card-header">
+              <div class="device-title">{{ 'labels.deviceName' | translate }}: {{ device.data.deviceName }}</div>
+              <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </div>
+            <app-export-data-button *ngIf="device" [data]="device.data ? [device.data] : []" [columnNames]="columnNames" [fileName]="device.data.deviceName"></app-export-data-button>
+            
+            <div class="toggle-buttons">
+              <button mat-button [class.active]="showGeneralInfo" (click)="toggleSection('general')">{{ 'general.info' | translate }}</button>
+              <button mat-button [class.active]="showTechnicalInfo" (click)="toggleSection('technical')">{{ 'technical.info' | translate }}</button>
+              <button mat-button [class.active]="showWorkstationInfo" (click)="toggleSection('workstation')">{{ 'workstation.info' | translate }}</button>
+            </div>
+            <mat-divider></mat-divider>
+            
+            <app-item-info 
+              [device]="device" 
+              [deviceType]="deviceType" 
+              [showGeneralInfo]="showGeneralInfo" 
+              [showTechnicalInfo]="showTechnicalInfo" 
+              [showWorkstationInfo]="showWorkstationInfo">
+            </app-item-info>
+            
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="viewHistory()">
+                <mat-icon>list_alt</mat-icon> {{ 'view.device.history' | translate }}
+              </button>
+              <button mat-menu-item (click)="toggleConfirmDelete()">
+                <mat-icon>delete</mat-icon> {{ 'delete' | translate }}
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 mt-4">
+      <app-edit-device></app-edit-device>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+<h2 mat-dialog-title>{{ 'addWorkStation' | translate }}</h2>
+<div mat-dialog-content>
+  <form [formGroup]="addWorkStationForm" class="workstation-form">
+    <div *ngIf="isSuperAdmin">
+      <mat-form-field class="full-width">
+        <mat-label>{{ 'carrier' | translate }}</mat-label>
+        <mat-select formControlName="carrierId" (selectionChange)="onCarrierChange($event.value)">
+          <mat-option *ngFor="let carrier of carriers" [value]="carrier.id">{{ carrier.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-form-field class="full-width">
+      <mat-label>{{ 'unit' | translate }}</mat-label>
+      <mat-select formControlName="aUnitId">
+        <mat-option *ngFor="let unit of filteredAUnits" [value]="unit.id">{{ unit.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>{{ 'employeeFirstName' | translate }}</mat-label>
+      <input matInput formControlName="employeeFirstName">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>{{ 'employeeLastName' | translate }}</mat-label>
+      <input matInput formControlName="employeeLastName">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>{{ 'email' | translate }}</mat-label>
+      <input matInput formControlName="email">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>{{ 'phone' | translate }}</mat-label>
+      <input matInput formControlName="personalPhone">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>{{ 'department' | translate }}</mat-label>
+      <input matInput formControlName="department">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>{{ 'city' | translate }}</mat-label>
+      <input matInput formControlName="city">
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button color="primary" (click)="onSave()">{{ 'save' | translate }}</button>
+  <button mat-button color="warn" (click)="onCancel()">{{ 'cancel' | translate }}</button>
+</div>

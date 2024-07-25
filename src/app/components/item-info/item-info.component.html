@@ -1,0 +1,70 @@
+<div *ngIf="showGeneralInfo">
+    <div class="row mt-3">
+      <div class="col-md-6">
+        <p class="card-text"><strong>{{ 'labels.model' | translate }}:</strong> {{ device.data.model }}</p>
+        <p class="card-text"><strong>{{ 'labels.serialNumber' | translate }}:</strong> {{ device.data.serialNumber }}</p>
+        <p class="card-text" *ngIf="device.data.purchaseDate"><strong>{{ 'labels.purchaseDate' | translate }}:</strong>  {{ device.data.purchaseDate | date:'dd-MMMM-yyyy' : 'el' }}</p>
+        <p class="card-text"><strong>{{ 'labels.carrier' | translate }}:</strong> {{ device.data.workStation.carrier.name }}</p>
+      </div>
+      <div class="col-md-6">
+        <p class="card-text"><strong>{{ 'labels.unit' | translate }}:</strong> {{ device.data.workStation.aUnit.name }}</p>
+        <p class="card-text" *ngIf="device.data.checkDateTime"><strong>{{ 'labels.checkDateTime' | translate }}:</strong> {{ device.data.checkDateTime | date:'dd MMMM yyyy hh:mm' : 'el' }}</p>
+        <div *ngIf="deviceType === 'computer'">
+          <p class="card-text" *ngIf="device.data.remoteDesktopApps && device.data.remoteDesktopApps.length">
+            <strong>{{ 'labels.remote.desktop.app' | translate }}:</strong>
+          </p>
+          <ul>
+            <li *ngFor="let app of device.data.remoteDesktopApps">
+              <span *ngIf="app.typeId === 1">TeamViewer</span>
+              <span *ngIf="app.typeId === 2">AnyDesk</span>
+              <span>: {{ app.userId }} / {{ app.password }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="showTechnicalInfo">
+    <div class="row mt-3">
+      <div class="col-md-6">
+        <p class="card-text" *ngIf="device.data.phoneNumber"><strong>{{ 'labels.phoneNumber' | translate }}:</strong> {{ device.data.phoneNumber }}</p>
+        <p class="card-text" *ngIf="device.data.floor"><strong>{{ 'labels.floor' | translate }}:</strong> {{ device.data.floor }}</p>
+        <p class="card-text" *ngIf="device.data.networkEquipmentType"><strong>{{ 'labels.netEquipmentType' | translate }}:</strong> {{ device.data.networkEquipmentType.name }}</p>
+        <p class="card-text" *ngIf="device.data.printerType"><strong>{{ 'labels.printerType' | translate }}:</strong> {{ device.data.printerType.name | translate}}</p>
+        <p class="card-text" *ngIf="device.data.ram"><strong>{{ 'labels.RAM' | translate }}:</strong> {{ device.data.ram }} GB</p>
+        <p class="card-text" *ngIf="device.data.ip"><strong>{{ 'labels.ip' | translate }}:</strong> {{ device.data.ip }}</p>
+        <p class="card-text" *ngIf="device.data.workGroupDomain"><strong>{{ 'labels.workGroupDomain' | translate }}:</strong> {{ device.data.workGroupDomain }}</p>
+        <p class="card-text" *ngIf="device.data.macAddress"><strong>{{ 'labels.macAddress' | translate }}:</strong> {{ device.data.macAddress }}</p>
+      </div>
+      <div class="col-md-6">
+        <div *ngIf="device.data.disks && device.data.disks.length > 0">
+          <p><strong>{{ 'labels.disks' | translate }}:</strong></p>
+          <div *ngFor="let disk of device.data.disks">
+            <p class="card-text"><u>{{'Σκληρός Δίσκος' | translate}}</u>: {{ disk.capacity }} GB</p>
+            <p class="card-text"><u>{{'labels.ssd' | translate}}</u>: {{ disk.ssd ? 'Ναι' : 'Οχι' }}</p>
+          </div>
+        </div>
+        <p class="card-text" *ngIf="device.data.machineType"><strong>{{ 'labels.machineType' | translate }}:</strong> {{ device.data.machineType }}</p>
+        <p class="card-text" *ngIf="device.data.operatingSystem"><strong>{{ 'labels.operatingSystem' | translate }}:</strong> {{ device.data.operatingSystem }}</p>
+        <p class="card-text" *ngIf="device.data.monitorType"><strong>{{ 'labels.monitorType' | translate }}:</strong> {{ device.data.monitorType }}</p>
+        <p class="card-text" *ngIf="device.data.outlet"><strong>{{ 'labels.outlet' | translate }}:</strong> {{ device.data.outlet }}</p>
+        <p class="card-text" *ngIf="device.data.antivirus"><strong>{{ 'labels.antivirus' | translate }}:</strong> {{ device.data.antivirus }}</p>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="showWorkstationInfo">
+    <div class="row mt-3">
+      <div class="col-md-6">
+        <p class="card-text"><strong>{{ 'labels.employeeName' | translate }}:</strong> {{ device.data.workStation.employeeFirstName }} {{ device.data.workStation.employeeLastName }}</p>
+        <p class="card-text"><strong>{{ 'labels.email' | translate }}:</strong> {{ device.data.workStation.email }}</p>
+        <p class="card-text" *ngIf="device.data.workStation.personalPhone"><strong>{{ 'labels.phone' | translate }}:</strong> {{ device.data.workStation.personalPhone }}</p>
+      </div>
+      <div class="col-md-6">
+        <p class="card-text"><strong>{{ 'labels.department' | translate }}:</strong> {{ device.data.workStation.department }}</p>
+        <p class="card-text"><strong>{{ 'labels.city' | translate }}:</strong> {{ device.data.workStation.city }}</p>
+      </div>
+    </div>
+  </div>
+  

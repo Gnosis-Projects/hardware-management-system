@@ -1,0 +1,36 @@
+<div class="workstation-card mt-1" *ngIf="workstation">
+  <div class="workstation-card-header d-flex justify-content-between align-items-center">
+    <h6 class="workstation-card-title m-0">{{ workstation.employeeLastName }} {{ workstation.employeeFirstName }}</h6>
+    <button mat-icon-button [matMenuTriggerFor]="menu" class="workstation-menu-button">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </div>
+  <div class="workstation-card-body">
+    <p class="workstation-card-text">
+      <strong>{{ "labels.aunit" | translate }}:</strong> {{ workstation.aUnit.name }}
+    </p>  
+    <p class="workstation-card-text">
+      <strong>{{ "labels.city" | translate }}:</strong> {{ workstation.city }}
+    </p>
+    <p class="workstation-card-text">
+      <strong>{{ "labels.department" | translate }}:</strong> {{ workstation.department }}
+    </p>
+    <p class="workstation-card-text" *ngIf="workstation.carrier?.name">
+      <strong>{{ "labels.carrier" | translate }}:</strong> {{ workstation.carrier.name }}
+    </p>
+    <p class="workstation-card-text"  *ngIf="workstation.aUnit?.name">
+      <strong>{{ "labels.aunit" | translate }}:</strong> {{ workstation.aUnit.name }}
+    </p>
+  </div>
+</div>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="viewItemDetail(workstation?.id)">
+    <mat-icon>visibility</mat-icon>
+    <span>{{ "view" | translate }}</span>
+  </button>
+  <button mat-menu-item (click)="deleteItem(workstation?.id)">
+    <mat-icon>delete</mat-icon>
+    <span>{{ "delete" | translate }}</span>
+  </button>
+</mat-menu>

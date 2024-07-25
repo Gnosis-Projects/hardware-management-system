@@ -1,0 +1,21 @@
+.aunits-text{
+    font-size:25px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.carrier-name{
+    text-align: center;
+    justify-content: center;
+    font-weight: bold !important;
+    font-size: 2.5em !important;
+
+}
+
+
+@media screen and (max-width: 768px) {
+    .carrier-name{
+        font-size: 1.5em !important;
+    }
+}
+

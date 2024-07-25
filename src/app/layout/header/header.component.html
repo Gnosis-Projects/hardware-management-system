@@ -1,0 +1,49 @@
+<mat-toolbar color="primary" *ngIf="isLoggedIn" class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <button mat-mini-fab color="accent" class="back-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <a class="navbar-brand text-white">
+      <mat-icon>computer</mat-icon>
+      <span class="brand-text d-none d-md-inline">ΣΥΣΤΗΜΑ ΔΙΑΧΕΙΡΙΣΗΣ ΥΛΙΚΟΥ</span>
+    </a>
+    <div class="ml-auto d-flex align-items-center">
+      <app-notifications></app-notifications>
+      <button mat-icon-button [matMenuTriggerFor]="menu" class="text-white">
+        <mat-icon [matTooltip]="'Menu'">menu</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <p class="type-user">{{ isSuperAdmin ? ('SuperAdmin' | translate) : ('Admin' | translate) }}: <span class="username">{{this.user!.username}}</span></p>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="navigateToLogin()" *ngIf="!isLoggedIn">
+          <mat-icon>login</mat-icon>
+          <span>{{ MenuOptions.LOGIN | translate }}</span>
+        </button>
+        <button mat-menu-item (click)="navigateToCarrier()" *ngIf="!isSuperAdmin  && this.user?.carriers!.length === 1">
+          <mat-icon>business_center</mat-icon>
+          <span>{{ MenuOptions.CARRIER | translate }}</span>
+        </button>
+        <button mat-menu-item (click)="navigateToCarriers()" *ngIf="!isSuperAdmin && this.user?.carriers!.length > 1 ">
+          <mat-icon>business_center</mat-icon>
+          <span>{{ MenuOptions.CARRIERS | translate }}</span>
+        </button>
+        <button mat-menu-item (click)="navigateToAdmin()" *ngIf="isSuperAdmin">
+          <mat-icon>lock</mat-icon>
+          <span>{{ MenuOptions.ADMIN_PAGE | translate }}</span>
+        </button>
+        <button mat-menu-item (click)="navigateToProfile()" *ngIf="isLoggedIn">
+          <mat-icon>person</mat-icon>
+          <span>{{ MenuOptions.PROFILE | translate }}</span>
+        </button>
+        <button mat-menu-item (click)="reportProblem()" *ngIf="isLoggedIn && this.user?.email !=='vasilis@test.com'">
+          <mat-icon>bug_report</mat-icon>
+          <span>{{ MenuOptions.REPORT_PROBLEM | translate }}</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>{{ MenuOptions.LOGOUT }}</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</mat-toolbar>

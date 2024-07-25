@@ -1,0 +1,42 @@
+<div class="flex m-4">
+  <ng-container *ngIf="isLoading">
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+  </ng-container>
+
+  <div *ngIf="!isLoading">
+    <span class="text-danger" *ngIf="aunits.length === 0">{{ 'results.not.found' | translate }}</span>
+    <mat-table [dataSource]="dataSource" class="minimal-table mat-elevation-z8" *ngIf="aunits.length > 0">
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef>{{ 'table-headers.ID' | translate }}</mat-header-cell>
+        <mat-cell *matCellDef="let unit">{{ unit.id }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>{{ 'table-headers.aunit-name' | translate }}</mat-header-cell>
+        <mat-cell *matCellDef="let unit">{{ unit.name }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>{{ 'table-headers.actions' | translate }}</mat-header-cell>
+        <mat-cell *matCellDef="let unit">
+          <button [disabled]="!isSuperAdmin" mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="editUnit(unit)">
+              <mat-icon>edit</mat-icon> {{ 'edit' | translate }}
+            </button>
+            <button mat-menu-item (click)="deleteUnit(unit)">
+              <mat-icon>delete</mat-icon> {{ 'delete' | translate }}
+            </button>
+          </mat-menu>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
+</div>

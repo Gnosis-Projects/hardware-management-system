@@ -1,0 +1,41 @@
+<div class="item-card mt-3" *ngIf="item">
+  <div class="item-card-header">
+    <h5 class="item-card-title">{{ item.deviceName }}</h5>
+    <button mat-icon-button [matMenuTriggerFor]="menu" class="item-menu-button">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </div>
+  <div class="item-card-body">
+    <p class="item-card-text">
+      <strong>{{ 'labels.model' | translate }}:</strong> {{ item.model }}
+    </p>
+    <p class="item-card-text">
+      <strong>{{ 'labels.serialNumber' | translate }}:</strong> {{ item.serialNumber }}
+    </p>
+    <p class="item-card-text" *ngIf="item.ram">
+      <strong>{{ 'labels.RAM' | translate }}:</strong> {{ item.ram }} GB
+    </p>
+    <p class="item-card-text" *ngIf="item.carrier">
+      <strong>{{ 'labels.carrier' | translate }}:</strong> {{ item.carrier.name }}
+    </p>
+    <p class="item-card-text" *ngIf="item.aUnit">
+      <strong>{{ 'labels.aunit' | translate }}:</strong> {{ item.aUnit.name }}
+    </p>
+  </div>
+</div>
+
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="viewItemDetail(item?.id)">
+    <mat-icon>visibility</mat-icon>
+    <span>{{ 'view' | translate }}</span>
+  </button>
+  <button mat-menu-item (click)="viewItemHistory(item?.id)">
+    <mat-icon>list_alt</mat-icon>
+    <span>{{ 'view.device.history' | translate }}</span>
+  </button>
+  <button mat-menu-item (click)="deleteItem(item?.id)">
+    <mat-icon>delete</mat-icon>
+    <span>{{ 'delete' | translate }}</span>
+  </button>
+</mat-menu>

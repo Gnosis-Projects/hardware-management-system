@@ -1,0 +1,53 @@
+<div class="container mt-4">
+    <h2 class="text-primary mb-4">{{ 'users' | translate }}</h2>
+    <app-filter-search (search)="onSearch($event)"></app-filter-search>
+    <span class="text-danger" *ngIf="dataSource && dataSource.data.length === 0">{{ 'results.not.found' | translate }}</span>
+    <mat-table [dataSource]="dataSource" class="custom-table mat-elevation-z8" *ngIf="dataSource">
+  
+      <ng-container matColumnDef="userName">
+        <mat-header-cell *matHeaderCellDef> {{ 'table-headers.userName' | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{ user.username }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef> {{ 'table-headers.email' | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{ user.email }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="roles">
+        <mat-header-cell *matHeaderCellDef> {{ 'table-headers.roles' | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let user">
+          <mat-chip [ngClass]="{'super-admin-chip': user.roles[0] === 'SuperAdmin', 'admin-chip': user.roles[0] !== 'SuperAdmin'}">
+            {{ user.roles[0] | translate }}
+          </mat-chip>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="carrier">
+        <mat-header-cell *matHeaderCellDef> {{ 'table-headers.carriers' | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{ user.carriers[0].name }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> {{ 'table-headers.actions' | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let user">
+          <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="{{ 'table-headers.actions' | translate }}">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="viewUserDetails(user)">
+              <mat-icon>visibility</mat-icon> {{ 'view' | translate }}
+            </button>
+            <button mat-menu-item (click)="deleteUser(user.userId)" [disabled]="user.roles[0] === 'SuperAdmin' ">
+              <mat-icon>remove</mat-icon> {{ 'delete.user' | translate }}
+            </button>
+          </mat-menu>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <app-export-data-button *ngIf="dataSource && dataSource.data.length > 0" [data]="dataSource.data"
+      fileName="{{ 'export.users.report' | translate }}" [columnNames]="columnNames"></app-export-data-button>
+  </div>

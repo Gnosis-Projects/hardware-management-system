@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>{{ data.carrierName ? ( 'edit.carrier' | translate ) : ( 'create.carrier' | translate ) }}</h2>
+<mat-dialog-content class="dialog-content">
+    <form [formGroup]="carrierForm">
+        <mat-form-field class="full-width">
+            <mat-label>{{ 'carrier' | translate }}</mat-label>
+            <input matInput formControlName="carrierName" placeholder="Όνομα Φορέα">
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-actions">
+    <button mat-button color="primary" (click)="onSave()">{{ 'save' | translate }}</button>
+    <button mat-button color="warn" (click)="onCancel()">{{ 'cancel' | translate }}</button>
+</mat-dialog-actions>

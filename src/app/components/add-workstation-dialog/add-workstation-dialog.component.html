@@ -2,7 +2,7 @@
 <div mat-dialog-content>
   <form [formGroup]="addWorkStationForm" class="workstation-form">
     <div *ngIf="isSuperAdmin">
-      <mat-form-field class="full-width">
+      <mat-form-field class="full-width" [ngClass]="{'display-none': disableCarrierInput}">
         <mat-label>{{ 'carrier' | translate }}</mat-label>
         <mat-select formControlName="carrierId" (selectionChange)="onCarrierChange($event.value)">
           <mat-option *ngFor="let carrier of carriers" [value]="carrier.id">{{ carrier.name }}</mat-option>

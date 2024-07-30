@@ -3,7 +3,7 @@
   <mat-horizontal-stepper linear #stepper>
     <mat-step [stepControl]="carrierForm">
       <form [formGroup]="carrierForm">
-        <ng-template matStepLabel>{{ 'choose.carrier' | translate }}</ng-template>
+        <ng-template matStepLabel>{{ 'carrier.and.role' | translate }}</ng-template>
         <mat-form-field class="full-width">
           <mat-label>{{ 'roles' | translate }}</mat-label>
           <mat-select formControlName="role">
@@ -70,7 +70,7 @@
 
     <mat-step>
       <ng-template matStepLabel>{{ 'confirm.details' | translate }}</ng-template>
-      <p class="confirm-details-text">{{ 'carrier' | translate }}: {{ getCarrierName() }}</p>
+      <p class="confirm-details-text" *ngIf="carrierForm.value.role === 'Admin' ">{{ 'carrier' | translate }}: {{ getCarrierName() }}</p>
       <p class="confirm-details-text">{{ 'roles' | translate }}: {{ carrierForm.value.role | translate }}</p>
       <p class="confirm-details-text">{{ 'email' | translate }}: {{ userForm.value.email }}</p>
       <p class="confirm-details-text">{{ 'username' | translate }}: {{ userForm.value.username }}</p>

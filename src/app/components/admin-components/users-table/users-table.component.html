@@ -1,6 +1,6 @@
 <div class="container mt-4">
     <h2 class="text-primary mb-4">{{ 'users' | translate }}</h2>
-    <app-filter-search (search)="onSearch($event)"></app-filter-search>
+    <app-quick-search (search)="onSearch($event)"></app-quick-search>
     <span class="text-danger" *ngIf="dataSource && dataSource.data.length === 0">{{ 'results.not.found' | translate }}</span>
     <mat-table [dataSource]="dataSource" class="custom-table mat-elevation-z8" *ngIf="dataSource">
   
@@ -23,6 +23,11 @@
         </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="active">
+        <mat-header-cell *matHeaderCellDef> {{ 'table-headers.active' | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let user"> <span class="status">{{ user.active ? 'Ενεργός' : 'Ανενεργός' }} </span></mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="carrier">
         <mat-header-cell *matHeaderCellDef> {{ 'table-headers.carriers' | translate }} </mat-header-cell>
         <mat-cell *matCellDef="let user"> {{ user.carriers[0].name }} </mat-cell>
@@ -38,8 +43,8 @@
             <button mat-menu-item (click)="viewUserDetails(user)">
               <mat-icon>visibility</mat-icon> {{ 'view' | translate }}
             </button>
-            <button mat-menu-item (click)="deleteUser(user.userId)" [disabled]="user.roles[0] === 'SuperAdmin' ">
-              <mat-icon>remove</mat-icon> {{ 'delete.user' | translate }}
+            <button mat-menu-item *ngIf="user.active === true" (click)="deleteUser(user.userId)" [disabled]="user.roles[0] === 'SuperAdmin' ">
+              <mat-icon>block</mat-icon> {{ 'disable.user' | translate }}
             </button>
           </mat-menu>
         </mat-cell>

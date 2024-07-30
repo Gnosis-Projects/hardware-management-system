@@ -51,6 +51,7 @@ export interface Device {
   aUnit: CommonResponse;
   carrier: CommonResponse;
   workStation?: WorkStation;
+  comments?: string;  
 }
 
 export interface SingleDeviceResponse {

@@ -1,6 +1,6 @@
 import { Component, effect, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { FilterSearchComponent } from '../../filter-search/filter-search.component';
+import { QuickSearchComponent } from '../../quick-search/quick-search.component';
 import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { GetAllUsersResponse, UserData } from '../../../interfaces/responses/auth-response';
@@ -17,10 +17,11 @@ import { Helper } from '../../../shared/helpers';
 import { Router } from '@angular/router';
 import { AuthStateService } from '../../../services/state-management/auth-state.service';
 import { MatChipsModule } from '@angular/material/chips';
+import { AlertService } from '../../../services/alert.service';
 @Component({
   selector: 'app-users-table',
   standalone: true,
-  imports: [CommonModule, MatTooltipModule, MatChipsModule, ExportDataButtonComponent,MatButtonModule,MatIconModule,MatMenuModule,MatTableModule,TranslateModule,FilterSearchComponent,],
+  imports: [CommonModule, MatTooltipModule, MatChipsModule, ExportDataButtonComponent,MatButtonModule,MatIconModule,MatMenuModule,MatTableModule,TranslateModule,QuickSearchComponent,],
   templateUrl: './users-table.component.html',
   styleUrl: './users-table.component.scss'
 })
@@ -36,6 +37,7 @@ export class UsersTableComponent implements OnInit {
   
   constructor(
     private authService: AuthService,
+    private alertService: AlertService,
     private toastr: ToastrService,
     private authStateService: AuthStateService,
     private router: Router
@@ -66,18 +68,20 @@ viewUserDetails(user: UserData): void {
 }
 
 deleteUser(id:number){
-  this.authService.deleteUser(id).subscribe({
-    next: (response) => {
-      if (response.success) {
-        this.toastr.success('User deleted successfully');
-        this.fetchAllUsers();
-      }
-    },
-    error: () => {
-      this.toastr.error('Failed to delete user');
-    }
-  });
-
+  this.alertService.showDeleteUserAlert().then(result => {
+  if(result.isConfirmed){
+    this.authService.deleteUser(id).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.toastr.success('successMessages.user.disabled.successfully');
+          this.fetchAllUsers();
+        } else {
+          this.toastr.error('successMessages.failed.to.disable.user');
+        }
+      },
+    });
+  }
+});
 }
 
 

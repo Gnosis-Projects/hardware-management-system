@@ -56,16 +56,15 @@
       <app-search-form *ngIf="showForm" [aUnits]="aUnits" [searchType]="searchType" (search)="searchDevices($event)"
         (close)="onClose()"></app-search-form>
 
-      <app-filter-search
+      <app-quick-search
         *ngIf="devices.length > 0 && (searchType === DeviceType.COMPUTER || searchType === DeviceType.PHONE)"
-        (search)="onSearch($event)"></app-filter-search>
-      <app-filter-search *ngIf="workstations.length > 0 && searchType === DeviceType.WORKSTATION"
-        (search)="onSearch($event)"></app-filter-search>
+        (search)="onSearch($event)"></app-quick-search>
+      <app-quick-search *ngIf="workstations.length > 0 && searchType === DeviceType.WORKSTATION"
+        (search)="onSearch($event)"></app-quick-search>
 
-      <!-- For larger screens -->
       <ng-container *ngIf="!isMobileScreen">
         <div
-          *ngIf="(searchType === DeviceType.COMPUTER || searchType === DeviceType.PHONE) && filteredResults.length > 0"
+          *ngIf="(searchType !== DeviceType.WORKSTATION) && filteredResults.length > 0"
           class="col-12">
           <app-export-data-button [data]="filteredResults"
             fileName="{{searchType.toString() | translate }}"
@@ -73,13 +72,12 @@
           <app-item-table [items]="filteredResults" [deviceType]="searchType"></app-item-table>
         </div>
         <div *ngIf="searchType === DeviceType.WORKSTATION && filteredResults.length > 0" class="col-12">
-          <app-export-data-button [data]="filteredResults" fileName="Σταθμοί εργασίας"
+          <app-export-data-button [data]="filteredResults" fileName="Θεσεις εργασίας"
             [columnNames]="columnNames"></app-export-data-button>
           <app-item-table [items]="filteredResults" [deviceType]="searchType"></app-item-table>
         </div>
       </ng-container>
 
-      <!-- For mobile screens -->
       <ng-container *ngIf="isMobileScreen">
         <div
           *ngIf="(searchType === DeviceType.COMPUTER || searchType === DeviceType.PHONE) && filteredResults.length > 0"

@@ -30,6 +30,7 @@ export enum CarrierTableHeaders {
     userName= 'Όνομα Χρήστη',
     email= 'Email',
     carrier= 'Διαχειριστής Φορέα',
+    active = 'Κατάσταση',
     roles= 'Ρόλος',
     actions= 'Επιλογές',
   }

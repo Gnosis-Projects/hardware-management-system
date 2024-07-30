@@ -16,6 +16,8 @@ import { Utils } from '../../../shared/utils';
 import { ToastrService } from 'ngx-toastr';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
+import { ExportDataButtonComponent } from '../../../components/export-data-button/export-data-button.component';
+import { ExcelColumnNames } from '../../../enums/excel-column-names';
 
 @Component({
   selector: 'app-workstation-detail',
@@ -27,6 +29,7 @@ import { MatDividerModule } from '@angular/material/divider';
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
+    ExportDataButtonComponent,
     MatDividerModule,
     MatChipsModule,
     MatMenuModule,
@@ -43,7 +46,7 @@ export class WorkstationDetailComponent implements OnInit {
   aUnitId: number | null = null;
   deviceType = DeviceType;
   currentView: string = 'COMPUTER';
-
+  columnNames = ExcelColumnNames
   constructor(
     private router: Router,
     private workStationStateService: WorkStationStateService,

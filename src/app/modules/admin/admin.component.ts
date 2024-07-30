@@ -31,8 +31,8 @@ import { AddWorkStationDialogComponent } from '../../components/add-workstation-
 import { AuthStateService } from '../../services/state-management/auth-state.service';
 import { AUnitService } from '../../services/aunit.service';
 import { Helper } from '../../shared/helpers';
-import { UserData } from '../../interfaces/responses/auth-response';
-import { tr } from 'date-fns/locale';
+import { AddCarrierDialogComponent } from '../../components/admin-components/add-carrier-dialog/add-carrier-dialog.component';
+import { AddAunitDialogComponent } from '../../components/admin-components/add-aunit-dialog/add-aunit-dialog.component';
 
 @Component({
   standalone: true,
@@ -44,6 +44,7 @@ import { tr } from 'date-fns/locale';
     CarrierTableComponent,
     MatToolbarModule,
     MatSidenavModule,
+    AddCarrierDialogComponent,
     ItemTableComponent,
     MatMenuModule,
     ExportDataButtonComponent,
@@ -131,9 +132,22 @@ export class AdminComponent implements OnInit {
 
 
   addCarrier(): void {
-    this.alertService.showAddOrEditCarrierAlert().then((result) => {
-      if (result.isConfirmed) {
-        const carrierName = result.value?.carrierName;
+    const dialogRef = this.dialog.open(AddCarrierDialogComponent, {
+      width: '400px',
+      data: { carrierName: '' }
+    });
+  }
+
+  addAunit(): void {
+      const dialogRef = this.dialog.open(AddAunitDialogComponent, {
+        width: '400px',
+        data: { carrierName: '' }
+      });
+  
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.isConfirmed) {
+        const carrierName = result.value.carrierName;
         if (carrierName) {
           this.carrierService.createCarrier(carrierName).subscribe((response) => {
             if (response.message && response.data === null) {
@@ -144,6 +158,7 @@ export class AdminComponent implements OnInit {
               this.toastr.success(
                 this.translate.instant('successMessages.carrier.created.successfully')
               );
+              this.fetchCarriersAndUnits();
             } else {
               this.toastr.error(response.message);
             }
@@ -162,7 +177,7 @@ export class AdminComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log('Workstation created:', result);
+        this.toastr.success('successMessages.workstation.added.successfully')  
       }
     });
   }

@@ -26,7 +26,7 @@ import { WorkStationItemDetailsComponent } from '../../../components/mobile-scre
 import { NotificationsService } from '../../../services/notifications.service';
 import { UtilityService } from '../../../services/utility/utility.service';
 import { AUnitStateService } from '../../../services/state-management/aunit-state.service';
-import { FilterSearchComponent } from "../../../components/filter-search/filter-search.component";
+import { QuickSearchComponent } from "../../../components/quick-search/quick-search.component";
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ItemTableComponent } from '../../../components/tables/item-table/item-table.component';
 import { WorkstationDetailComponent } from "../../workstations/workstation-detail/workstation-detail.component";
@@ -63,7 +63,7 @@ import { AuthStateService } from '../../../services/state-management/auth-state.
     ExportDataButtonComponent,
     WorkStationItemDetailsComponent,
     TranslateModule,
-    FilterSearchComponent,
+    QuickSearchComponent,
     WorkstationDetailComponent,
     LoadingSpinnerComponent
   ],
@@ -87,7 +87,7 @@ export class CarrierDetailComponent implements OnInit {
   isMobileScreen = false;
   isLoading = false;
   isSuperAdmin = this.authStateService.isSuperAdmin();
-  hasMultipleCarriers = this.authStateService.hasMultipleCarriers();  
+  hasMultipleCarriers = this.authStateService.hasMultipleCarriers();
   dataSource = new MatTableDataSource<Device>(this.filteredResults);
   workstationDataSource = new MatTableDataSource<WorkStation>(this.workstations);
 
@@ -125,7 +125,7 @@ export class CarrierDetailComponent implements OnInit {
       this.carrier = carrier;
 
       this.fetchAUnits(carrier.id);
-      
+
     }
   }
 
@@ -172,6 +172,7 @@ export class CarrierDetailComponent implements OnInit {
       }
     });
   }
+
 
   openUnitDialog(unit?: CommonResponse): void {
     const dialogRef = this.dialog.open(AddAunitDialogComponent, {

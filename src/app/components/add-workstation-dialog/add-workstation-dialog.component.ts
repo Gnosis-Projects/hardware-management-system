@@ -13,6 +13,7 @@ import { AUnitService } from '../../services/aunit.service';
 import { WorkStationService } from '../../services/workstation.service';
 import { WorkstationRequest } from '../../interfaces/requests/workstation/add-workstation-request';
 import { take } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-workstation-dialog',
@@ -40,8 +41,9 @@ export class AddWorkStationDialogComponent implements OnInit {
   filteredAUnits: CommonResponse[] = [];
   isSuperAdmin: boolean = false;
   addWorkStationForm: FormGroup;
+  disableCarrierInput: boolean = false;
 
-  constructor(private authStateService: AuthStateService, private aUnitService: AUnitService, private workstationService:WorkStationService) {
+  constructor(private authStateService: AuthStateService, private router: Router, private aUnitService: AUnitService, private workstationService:WorkStationService) {
     this.addWorkStationForm = this.fb.group({
       carrierId: [''],
       aUnitId: ['', Validators.required],
@@ -68,6 +70,10 @@ export class AddWorkStationDialogComponent implements OnInit {
     if (this.data) {
       this.addWorkStationForm.patchValue(this.data);
     }
+    if(this.router.url == '/selectedCarrier'){
+      this.disableCarrierInput = true
+    }
+
   }
 
   onCarrierChange(carrierId: number) {
@@ -97,6 +103,7 @@ export class AddWorkStationDialogComponent implements OnInit {
         .subscribe((response) => {
           if (response.success) {
             this.dialogRef.close(response.data);
+            this.disableCarrierInput = false;
           } else {
             console.error('error');
           }

@@ -71,6 +71,18 @@ export class AlertService {
     });
   }
 
+  showDeleteUserAlert(): Promise<any>{
+    return Swal.fire({
+      title: this.translate.instant('disable.user'),
+      text: this.translate.instant('are.you.sure.disable.user'),
+      icon: 'question',
+      showCancelButton: true,
+      showCloseButton: true,
+      confirmButtonText: this.translate.instant('confirm'),
+      cancelButtonText: this.translate.instant('cancel')
+    });
+  }
+
   
 
   showEditWorkStationAlert(workstation: EditWorkStationRequest): Promise<any> {

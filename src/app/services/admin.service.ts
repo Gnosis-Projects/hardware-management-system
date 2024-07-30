@@ -23,13 +23,15 @@ export class AdminService {
         return this.http.post<DeviceListResponse>(`${this.apiUrl}/Phone/GetAll`, searchParams);
     }
 
+    getAllNetworkEquipments(searchParams: any): Observable<DeviceListResponse> {
+        return this.http.post<DeviceListResponse>(`${this.apiUrl}/NetworkEquipment/GetAll`, searchParams);
+    }
+    
     getAllPrinters(searchParams: any): Observable<DeviceListResponse> {
         return this.http.post<DeviceListResponse>(`${this.apiUrl}/Printer/GetAll`, searchParams);
     }
 
-    getAllNetworkEquipments(searchParams: any): Observable<DeviceListResponse> {
-        return this.http.post<DeviceListResponse>(`${this.apiUrl}/NetworkEquipment/GetAll`, searchParams);
-    }
+  
     
     getAllWorkStations(searchParams: any): Observable<WorkStationResponse> {
         return this.http.post<WorkStationResponse>(`${this.apiUrl}/WorkStation/GetAll`, searchParams);

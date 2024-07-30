@@ -133,7 +133,7 @@ export class AdminComponent implements OnInit {
 
   addCarrier(): void {
     const dialogRef = this.dialog.open(AddCarrierDialogComponent, {
-      width: '500px',
+      width: '600px',
       data: { carrierName: '' }
     });
   }

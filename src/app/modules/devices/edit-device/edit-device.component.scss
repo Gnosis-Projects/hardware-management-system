@@ -1,29 +1,70 @@
+
 .edit-device-container {
   background: #fff;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden; 
+  margin: 0 auto;
+}
+
+h2.text-primary {
+  font-size: 1.25rem;
+  margin-bottom: 1rem; /* Adjusted margin */
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 label {
   font-weight: bold;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+input.form-control, select.form-control, textarea.form-control {
+  width: 100%;
+  padding: 0.5rem; /* Adjusted padding */
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  font-size: 0.875rem; /* Adjusted font size */
+}
+
+textarea {
+  resize: vertical;
+  height: 80px; /* Adjusted height */
 }
 
 .btn-primary {
   background-color: #007bff;
   border-color: #007bff;
-}
-
-textarea {
-  resize: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
 }
 
 @media (max-width: 768px) {
   .edit-device-container {
-    padding: 1rem;
+    padding: 0.5rem;
+  }
+
+  h2.text-primary {
+    font-size: 1rem;
+  }
+
+  .btn-primary {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  input.form-control, select.form-control, textarea.form-control {
+    font-size: 0.75rem;
   }
 }

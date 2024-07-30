@@ -1,0 +1,10 @@
+<div class="filter-search">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearchChange()"
+      [placeholder]="'quick.search' | translate"
+      class="form-control"
+    />
+  </div>
+  

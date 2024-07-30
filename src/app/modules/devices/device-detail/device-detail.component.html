@@ -1,6 +1,5 @@
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-12">
       <div class="card-wrapper">
         <div *ngIf="device && device.data && device.data.workStation" class="card device-card">
           <div class="card-body">
@@ -28,6 +27,9 @@
             </app-item-info>
             
             <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="editDevice()">
+                <mat-icon>edit</mat-icon> {{ 'edit.device' | translate }}
+              </button>
               <button mat-menu-item (click)="viewHistory()">
                 <mat-icon>list_alt</mat-icon> {{ 'view.device.history' | translate }}
               </button>
@@ -39,9 +41,4 @@
         </div>
       </div>
     </div>
-
-    <div class="col-12 mt-4">
-      <app-edit-device></app-edit-device>
-    </div>
-  </div>
 </div>

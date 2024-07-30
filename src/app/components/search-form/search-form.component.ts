@@ -31,7 +31,7 @@ export class SearchFormComponent implements OnInit, OnChanges {
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.searchForm = this.fb.group({
-      aUnitId: [null, Validators.required],
+      aUnitId: [0, Validators.required],
       filterDto: this.fb.group({
         deviceName: [''],
         model: [''],

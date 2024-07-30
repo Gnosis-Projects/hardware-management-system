@@ -79,9 +79,6 @@ export class DeviceDetailComponent implements OnInit {
     }
   }
 
-  toggleEdit() {
-    this.showEdit = !this.showEdit;
-  }
 
   fetchDevice(id: number): void {
     if (this.deviceType !== null) {
@@ -100,7 +97,7 @@ export class DeviceDetailComponent implements OnInit {
     this.router.navigate(['/view-history']);
   }
 
-  editComputer() {
+  editDevice() {
     this.router.navigate(['/selectedDevice/edit']);
   }
 

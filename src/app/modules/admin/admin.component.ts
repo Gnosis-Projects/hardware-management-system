@@ -291,9 +291,10 @@ export class AdminComponent implements OnInit {
   }
 
   applyFilter(filterParams: any): void {
-    const { carrierId, filterDto } = filterParams;
+    const { carrierId,aUnitId, filterDto } = filterParams;
     const searchParams = {
       carrierId: parseInt(carrierId),
+      aUnitId: parseInt(aUnitId),
       [this.filterType]: filterDto,
       sorting: {
         sortBy: 'name',

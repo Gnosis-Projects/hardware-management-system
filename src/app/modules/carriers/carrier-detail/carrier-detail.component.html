@@ -80,10 +80,10 @@
 
       <ng-container *ngIf="isMobileScreen">
         <div
-          *ngIf="(searchType === DeviceType.COMPUTER || searchType === DeviceType.PHONE) && filteredResults.length > 0"
+          *ngIf="(searchType !== DeviceType.WORKSTATION) && filteredResults.length > 0"
           class="col-12">
           <app-export-data-button [data]="filteredResults"
-            fileName="{{searchType === DeviceType.COMPUTER ? 'Υπολογιστές' : 'Τηλέφωνα'}}"
+            fileName="{{searchType.toString() | translate }}"
             [columnNames]="columnNames"></app-export-data-button>
           <div class="row">
             <div class="col-md-6 col-lg-4 mb-3" *ngFor="let item of filteredResults ">
@@ -92,7 +92,7 @@
           </div>
         </div>
         <div *ngIf="searchType === DeviceType.WORKSTATION && filteredResults.length > 0" class="col-12">
-          <app-export-data-button [data]="filteredResults" fileName="σταθμοί εργασίας"
+          <app-export-data-button [data]="filteredResults" fileName="{{searchType.toString() | translate }}"
             [columnNames]="columnNames"></app-export-data-button>
           <div class="row">
             <div class="col-md-6 col-lg-4 mb-3" *ngFor="let workstation of filteredResults">

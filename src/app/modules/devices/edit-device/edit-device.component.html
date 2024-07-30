@@ -2,19 +2,20 @@
   <h2 class="text-primary mb-4">{{ 'edit.device' | translate }}</h2>
   <form [formGroup]="editForm" (ngSubmit)="submitEdit()">
     <div class="row">
-      <div class="col-md-6">
+
+      <div class="col-md-4">
         <div class="form-group">
           <label for="model">{{ 'labels.model' | translate }}</label>
           <input id="model" type="text" formControlName="model" class="form-control" />
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <div class="form-group">
           <label for="serialNumber">{{ 'labels.serialNumber' | translate }}</label>
           <input id="serialNumber" type="text" formControlName="serialNumber" class="form-control" />
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <div class="form-group">
           <label for="deviceName">{{ 'labels.deviceName' | translate }}</label>
           <input id="deviceName" type="text" formControlName="deviceName" class="form-control" />
@@ -22,19 +23,19 @@
       </div>
 
       <ng-container *ngIf="deviceType === DeviceType.COMPUTER">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="form-group">
             <label for="ram">{{ 'labels.RAM' | translate }}</label>
             <input id="ram" type="number" formControlName="ram" class="form-control" />
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="form-group">
             <label for="ip">{{ 'labels.ip' | translate }}</label>
             <input id="ip" type="text" formControlName="ip" class="form-control" />
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="form-group">
             <label for="macAddress">{{ 'Διεύθυνση MAC' | translate }}</label>
             <input id="macAddress" type="text" formControlName="macAddress" class="form-control" />
@@ -113,12 +114,14 @@
         </div>
       </ng-container>
 
+
       <div class="col-md-6" *ngIf="deviceType === DeviceType.PHONE">
         <div class="form-group">
           <label for="phoneNumber">{{ 'labels.phoneNumber' | translate }}</label>
           <input id="phoneNumber" type="text" formControlName="phoneNumber" class="form-control" />
         </div>
       </div>
+
 
       <div class="col-md-6" *ngIf="deviceType === DeviceType.PRINTER">
         <div class="form-group">
@@ -134,8 +137,8 @@
         <div class="form-group">
           <label for="networkEquipmentTypeId">{{ 'labels.netEquipmentType' | translate }}</label>
           <select id="networkEquipmentTypeId" formControlName="networkEquipmentTypeId" class="form-control form-control-sm">
-            <option [value]="netEquipmentType.ROUTER">{{'ROUTER'}}</option>
-            <option  [value]="netEquipmentType.SWITCH">{{'SWITCH'}}</option>
+            <option [value]="netEquipmentType.ROUTER">{{ 'ROUTER' }}</option>
+            <option [value]="netEquipmentType.SWITCH">{{ 'SWITCH' }}</option>
           </select>
         </div>
       </div>

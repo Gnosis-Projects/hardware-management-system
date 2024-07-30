@@ -26,6 +26,10 @@
 
 
 <mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="editItem(item?.id)">
+    <mat-icon>edit</mat-icon>
+    <span>{{ 'edit.device' | translate }}</span>
+  </button>
   <button mat-menu-item (click)="viewItemDetail(item?.id)">
     <mat-icon>visibility</mat-icon>
     <span>{{ 'view' | translate }}</span>

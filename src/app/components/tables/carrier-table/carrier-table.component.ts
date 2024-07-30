@@ -12,7 +12,7 @@ import { take } from 'rxjs';
 import { CarrierTableHeaders } from '../../../enums/table-headers.enum';
 import { ExcelColumnNames } from '../../../enums/excel-column-names';
 import { CommonModule } from '@angular/common';
-import { FilterSearchComponent } from '../../filter-search/filter-search.component';
+import { QuickSearchComponent } from '../../quick-search/quick-search.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,13 +21,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ExportDataButtonComponent } from '../../export-data-button/export-data-button.component';
 import { Helper } from '../../../shared/helpers';
 import { AuthStateService } from '../../../services/state-management/auth-state.service';
+import { AddCarrierDialogComponent } from '../../admin-components/add-carrier-dialog/add-carrier-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-carrier-table',
   standalone: true,
   templateUrl: './carrier-table.component.html',
   styleUrls: ['./carrier-table.component.scss'],
-  imports: [CommonModule, MatTableModule, MatButtonModule, MatIconModule, ExportDataButtonComponent, MatMenuModule, MatTooltipModule, TranslateModule, FilterSearchComponent],
+  imports: [CommonModule, MatTableModule, MatButtonModule, MatIconModule, ExportDataButtonComponent, MatMenuModule, MatTooltipModule, TranslateModule, QuickSearchComponent],
 })
 export class CarrierTableComponent implements OnInit {
   carriers: CommonResponse[] = [];
@@ -46,7 +48,8 @@ export class CarrierTableComponent implements OnInit {
     private aUnitStateService: AUnitStateService,
     private alertService: AlertService,
     private authStateService: AuthStateService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -87,17 +90,21 @@ export class CarrierTableComponent implements OnInit {
   }
 
   onSearch(term: string): void {
-      this.dataSource.data = term ? Helper.filterCarriers(term, this.carriers) : this.carriers;
+    this.dataSource.data = term ? Helper.filterCarriers(term, this.carriers) : this.carriers;
   }
 
-  editCarrier(id: number, currentName: string): void {
-    this.alertService.showAddOrEditUnitAlert(currentName).then((result) => {
-      if (result.isConfirmed) {
-        const carrierName = result.value?.unitName;
+  editCarrier(carrier?: CommonResponse): void {
+    const dialogRef = this.dialog.open(AddCarrierDialogComponent, {
+      width: '400px',
+      data: { carrierName: carrier ? carrier.name : '' }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.isConfirmed) {
+        const carrierName = result.value.carrierName;
         if (carrierName) {
-          this.carrierService
-            .updateCarrier(id, carrierName)
-            .subscribe((response) => {
+          if (carrier) {
+            this.carrierService.updateCarrier(carrier.id, carrierName).subscribe((response) => {
               this.utilityService.handleResponse(
                 response.success,
                 'successMessages.carrier.updated.successfully',
@@ -109,6 +116,7 @@ export class CarrierTableComponent implements OnInit {
                 this.fetchData();
               }
             });
+          }
         }
       }
     });

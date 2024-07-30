@@ -82,51 +82,46 @@ export class CreateUserComponent {
   }
 
   getCarrierName(): string {
-    const role = this.carrierForm.get('role')?.value;
-    if (role === 'SuperAdmin') {
-      return this.carriers.map(c => c.name).join(', ');
-    } else {
-      const carrier = this.carriers.find(c => c.id === this.carrierForm.value.carrier);
-      return carrier ? carrier.name : '';
-    }
-  }
+    const carrier = this.carriers.find(c => c.id === this.carrierForm.value.carrier);
+    return carrier ? carrier.name : '';
+}
 
-  submit() {
-    if (this.carrierForm.valid && this.userForm.valid && this.passwordForm.valid) {
-      let carrierIds = this.carrierForm.value.carrier;
-      const role = this.carrierForm.value.role;
-      const { email, username,active } = this.userForm.value;
-      const { password } = this.passwordForm.value;
+submit() {
+  if (this.carrierForm.valid && this.userForm.valid && this.passwordForm.valid) {
+    let carrierIds = this.carrierForm.value.carrier;
+    const role = this.carrierForm.value.role;
+    const { email, username, active } = this.userForm.value;
+    const { password } = this.passwordForm.value;
 
-      carrierIds = Array.isArray(carrierIds) ? carrierIds : [carrierIds];
+    carrierIds = Array.isArray(carrierIds) ? carrierIds : [carrierIds];
 
-      const registerRequest: RegisterRequest = {
-        carrierIds: role === 'SuperAdmin' ? this.carriers.map(carrier => carrier.id) : carrierIds,
-        roles: [role],
-        email,
-        active,
-        username,
-        password
-      };
+    const registerRequest: RegisterRequest = {
+      carrierIds: role === 'SuperAdmin' ? this.carriers.map(carrier => carrier.id) : carrierIds,
+      roles: [role],
+      email,
+      active,
+      username,
+      password
+    };
 
-      this.authService.register(registerRequest).subscribe({
-        next: (response: GetAllUsersResponse) => {
-          if (response.success) {
-            this.dialogRef.close({ success: true });
-            this.toastr.success(this.translate.instant('successMessages.user.created.successfully'));
-          } else {
-            alert(response.message)
-          }
-        },
-        error: (error) => {
-          alert(error)
+    this.authService.register(registerRequest).subscribe({
+      next: (response: GetAllUsersResponse) => {
+        if (response.success) {
+          this.dialogRef.close({ success: true });
+          this.toastr.success(this.translate.instant('successMessages.user.created.successfully'));
+        } else {
+          alert(response.message)
         }
-      });
-    } else {
-      this.carrierForm.markAllAsTouched();
-      this.userForm.markAllAsTouched();
-      this.passwordForm.markAllAsTouched();
-    }
+      },
+      error: (error) => {
+        alert(error)
+      }
+    });
+  } else {
+    this.carrierForm.markAllAsTouched();
+    this.userForm.markAllAsTouched();
+    this.passwordForm.markAllAsTouched();
   }
+}
 
 }

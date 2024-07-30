@@ -8,8 +8,10 @@
           <mat-icon>more_vert</mat-icon>
         </button>
       </div>
-      <p class="card-text"><strong>{{ 'employeeFirstName' | translate }}:</strong> {{ workstation.data.employeeFirstName }}</p>
-      <p class="card-text"><strong>{{ 'employeeLastName' | translate }}:</strong> {{ workstation.data.employeeLastName }}</p>
+      <p class="card-text"><strong>{{ 'employeeFirstName' | translate }}:</strong> {{ workstation.data.employeeFirstName
+        }}</p>
+      <p class="card-text"><strong>{{ 'employeeLastName' | translate }}:</strong> {{ workstation.data.employeeLastName
+        }}</p>
       <p class="card-text"><strong>{{ 'labels.department' | translate }}:</strong> {{ workstation.data.department }}</p>
       <p class="card-text"><strong>{{ 'labels.city' | translate }}:</strong> {{ workstation.data.city }}</p>
       <p class="card-text"><strong>{{ 'labels.unit' | translate }}:</strong> {{ workstation.data.aUnit.name }}</p>
@@ -29,7 +31,8 @@
   </mat-menu>
 
   <div class="section-header">
-    <button mat-mini-fab color="primary" class="add-button" [matMenuTriggerFor]="addDeviceMenu" matTooltip="{{ 'add.device' | translate }}">
+    <button mat-mini-fab color="primary" class="add-button" [matMenuTriggerFor]="addDeviceMenu"
+      matTooltip="{{ 'add.device' | translate }}">
       <mat-icon>add</mat-icon>
     </button>
     <mat-menu #addDeviceMenu="matMenu">
@@ -52,38 +55,50 @@
     </mat-menu>
   </div>
 
+  <app-export-data-button [data]="[workstation.data]" fileName="workstation-report"
+    [columnNames]="columnNames">
+  </app-export-data-button>
+
   <div class="device-buttons">
-    <button mat-fab (click)="setView('COMPUTER')">{{ 'computerDevices' | translate }}</button>
-    <button mat-fab (click)="setView('PHONE')">{{ 'phoneDevices' | translate }}</button>
-    <button mat-fab (click)="setView('PRINTER')">{{ 'printerDevices' | translate }}</button>
-    <button mat-fab (click)="setView('NETWORK_EQUIPMENT')">{{ 'networkEquipmentDevices' | translate }}</button>
+    <button mat-fab *ngIf="workstation.data.computers_list.length > 0" (click)="setView('COMPUTER')">{{
+      'computerDevices' | translate }}</button>
+    <button mat-fab *ngIf="workstation.data.phones_list.length > 0" (click)="setView('PHONE')">{{ 'phoneDevices' |
+      translate }}</button>
+    <button mat-fab *ngIf="workstation.data.printers_list.length > 0" (click)="setView('PRINTER')">{{ 'printerDevices' |
+      translate }}</button>
+    <button mat-fab *ngIf="workstation.data.network_equipment_list.length > 0" (click)="setView('NETWORK_EQUIPMENT')">{{
+      'networkEquipmentDevices' | translate }}</button>
   </div>
   <mat-divider></mat-divider>
   <div *ngIf="currentView === 'COMPUTER' && workstation.data.computers_list.length > 0">
     <div class="row mb-4">
       <p class="item-description mt-4">{{ 'computerDevices' | translate }}</p>
-      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name" [items]="workstation.data.computers_list" [deviceType]="deviceType.COMPUTER"></app-item-table>
+      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name"
+        [items]="workstation.data.computers_list" [deviceType]="deviceType.COMPUTER"></app-item-table>
     </div>
   </div>
 
   <div *ngIf="currentView === 'PHONE' && workstation.data.phones_list.length > 0">
     <div class="row mb-4">
       <p class="item-description mt-4">{{ 'phoneDevices' | translate }}</p>
-      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name" [items]="workstation.data.phones_list" [deviceType]="deviceType.PHONE"></app-item-table>
+      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name"
+        [items]="workstation.data.phones_list" [deviceType]="deviceType.PHONE"></app-item-table>
     </div>
   </div>
 
   <div *ngIf="currentView === 'PRINTER' && workstation.data.printers_list.length > 0">
     <div class="row mb-4">
       <p class="item-description mt-4">{{ 'printerDevices' | translate }}</p>
-      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name" [items]="workstation.data.printers_list" [deviceType]="deviceType.PRINTER"></app-item-table>
+      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name"
+        [items]="workstation.data.printers_list" [deviceType]="deviceType.PRINTER"></app-item-table>
     </div>
   </div>
 
   <div *ngIf="currentView === 'NETWORK_EQUIPMENT' && workstation.data.network_equipment_list.length > 0">
     <div class="row mb-4">
       <p class="item-description mt-4">{{ 'networkEquipmentDevices' | translate }}</p>
-      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name" [items]="workstation.data.network_equipment_list" [deviceType]="deviceType.NETWORK_EQUIPMENT"></app-item-table>
+      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name"
+        [items]="workstation.data.network_equipment_list" [deviceType]="deviceType.NETWORK_EQUIPMENT"></app-item-table>
     </div>
   </div>
 

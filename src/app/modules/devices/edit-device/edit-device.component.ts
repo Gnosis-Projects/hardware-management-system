@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -21,6 +21,7 @@ import { operationSystems } from '../../../shared/os';
 @Component({
   selector: 'app-edit-device',
   standalone: true,
+  encapsulation: ViewEncapsulation.None,
   imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule],
   templateUrl: './edit-device.component.html',
   styleUrls: ['./edit-device.component.scss'],
@@ -69,6 +70,8 @@ export class EditDeviceComponent implements OnInit {
       networkEquipmentTypeId: [null],
     });
 
+    this.editForm.get('comments')?.setValue('');
+
     router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
@@ -106,6 +109,7 @@ export class EditDeviceComponent implements OnInit {
         next: (response) => {
           if (response.success) {
             this.editForm.patchValue(response.data);
+            this.editForm.get('comments')?.setValue('');
             if (response.data.remoteDesktopApps && response.data.remoteDesktopApps.length) {
               response.data.remoteDesktopApps.forEach(app => {
                 this.remoteDesktopApps.push(this.fb.group({
@@ -115,6 +119,7 @@ export class EditDeviceComponent implements OnInit {
                 }));
               });
             }
+
             if (deviceType === DeviceType.PRINTER && response.data.printerType) {
               this.editForm.get('printerTypeId')?.setValue(response.data.printerType.id);
             }

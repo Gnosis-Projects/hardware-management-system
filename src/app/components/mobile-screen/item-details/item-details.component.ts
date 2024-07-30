@@ -57,7 +57,7 @@ export class ItemDetailsComponent {
 
   deleteItem(id: number | undefined): void {
     if (id) {
-      console.log('deleteItem:', id);
+
       this.deviceService.deleteDevice(id, this.deviceType).subscribe({
         next: response => {
           if (response.success) {

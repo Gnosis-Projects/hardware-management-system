@@ -1,6 +1,6 @@
 <div class="container mt-4">
   <h2 class="text-primary mb-4">{{ 'carriers' | translate }}</h2>
-  <app-filter-search (search)="onSearch($event)"></app-filter-search>
+  <app-quick-search (search)="onSearch($event)"></app-quick-search>
   <span class="text-danger" *ngIf="dataSource && dataSource.data.length === 0">{{ 'results.not.found' | translate
     }}</span>
   <mat-table [dataSource]="dataSource" class="custom-table mat-elevation-z8" *ngIf="dataSource.data.length > 0">
@@ -31,7 +31,7 @@
             <mat-icon>visibility</mat-icon> {{ 'view_carrier' | translate }}
           </button>
           <ng-container *ngIf="isSuperAdmin">
-            <button mat-menu-item (click)="editCarrier(carrier.id, carrier.name)">
+            <button mat-menu-item (click)="editCarrier(carrier)">
               <mat-icon>edit</mat-icon> {{ 'edit_carrier' | translate }}
             </button>
             <button mat-menu-item (click)="deleteCarrier(carrier.id, carrier.name)">

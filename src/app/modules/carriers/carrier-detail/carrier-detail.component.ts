@@ -179,7 +179,7 @@ export class CarrierDetailComponent implements OnInit {
       width: '500px',
       data: { unitName: unit ? unit.name : '' }
     });
-
+  
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.isConfirmed) {
         const unitName = result.value?.unitName;

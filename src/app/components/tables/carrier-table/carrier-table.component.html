@@ -31,7 +31,7 @@
             <mat-icon>visibility</mat-icon> {{ 'view_carrier' | translate }}
           </button>
           <ng-container *ngIf="isSuperAdmin">
-            <button mat-menu-item (click)="editCarrier(carrier)">
+            <button mat-menu-item (click)="openAddEditDialog(carrier)">
               <mat-icon>edit</mat-icon> {{ 'edit_carrier' | translate }}
             </button>
             <button mat-menu-item (click)="deleteCarrier(carrier.id, carrier.name)">

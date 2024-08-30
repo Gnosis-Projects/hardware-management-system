@@ -34,7 +34,7 @@ export const ApiInterceptor: HttpInterceptorFn = (
       } else if (error.status === 404) {
         message = translate.instant('errorMessages.notFound');
       } else if (error.status === 400) {
-        message = translate.instant('Badrequest');
+        message = translate.instant('errorMessages.Badrequest');
       } else if (error.status === 0) {
         message = translate.instant('errorMessages.noInternetConnection');
       } else if (error.error instanceof ErrorEvent) {

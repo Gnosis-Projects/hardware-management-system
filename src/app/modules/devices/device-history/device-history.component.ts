@@ -16,40 +16,44 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-device-history',
   standalone: true,
-  imports: [CommonModule, MatButtonModule,MatIconModule,ItemHistoryComponent,TranslateModule,ExportDataButtonComponent,LoadingSpinnerComponent],
+  imports: [
+    CommonModule, 
+    MatButtonModule,
+    MatIconModule,
+    ItemHistoryComponent,
+    TranslateModule,
+    ExportDataButtonComponent,
+    LoadingSpinnerComponent
+  ],
   templateUrl: './device-history.component.html',
   styleUrls: ['./device-history.component.scss']
 })
-
 export class DeviceHistoryComponent implements OnInit {
   
   deviceHistory: DeviceHistoryResponse | null = null;
   columnNames = ExcelColumnNames;
   isLoading: boolean = false;
+  deviceType: DeviceType | undefined;
 
   constructor(
     private deviceStateService: DeviceStateService,
     private deviceService: DeviceService,
     private router: Router
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
     this.deviceHistory = this.deviceStateService.getDeviceHistory();
+    const selectedDeviceType = this.deviceStateService.getSelectedDeviceType();
+    this.deviceType = selectedDeviceType !== null ? selectedDeviceType : undefined;
+  
     if (!this.deviceHistory) {
       const deviceId = this.deviceStateService.getSelectedDeviceId();
-      const deviceType = this.deviceStateService.getSelectedDeviceType();
-      if (deviceId !== null && deviceType !== null) {
-        this.fetchDeviceHistory(deviceId, deviceType);
+      if (deviceId !== null && this.deviceType !== undefined) {
+        this.fetchDeviceHistory(deviceId, this.deviceType);
       }
     } else {
       this.isLoading = false; 
     }
-  }
-
-  isComputer(deviceHistory: any): boolean {
-    return deviceHistory.data.some((item: any) => 'ram' in item);
   }
 
   goBack(){

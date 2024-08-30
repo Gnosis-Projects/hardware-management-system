@@ -4,6 +4,8 @@ export interface EditWorkStationRequest {
     employeeFirstName: string;
     email: string;
     personalPhone: string;
+    socketNumber: string;
+    workstationNumber: string;
     department: string;
     city: string;
 }

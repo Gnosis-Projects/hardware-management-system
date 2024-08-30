@@ -36,6 +36,7 @@ export class ItemDetailsComponent {
   viewItemDetail(id: number | undefined): void {
     if (id) {
       this.deviceStateService.setSelectedDeviceId(id, this.deviceType);
+    
       this.router.navigate(['/selectedDevice']);
     }
   }
@@ -43,13 +44,13 @@ export class ItemDetailsComponent {
   editItem(id: number | undefined): void {
     if (id) {
       this.deviceStateService.setSelectedDeviceId(id, this.deviceType);
+     
       this.router.navigate(['/selectedDevice/edit']);
     }
   }
 
   viewItemHistory(id: number | undefined): void {
     if (id) {
-      console.log(id)
       this.deviceStateService.setSelectedDeviceId(id, this.deviceType);
       this.router.navigate(['/view-history']);
     }

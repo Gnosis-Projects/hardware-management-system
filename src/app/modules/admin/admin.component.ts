@@ -33,6 +33,7 @@ import { AUnitService } from '../../services/aunit.service';
 import { Helper } from '../../shared/helpers';
 import { AddCarrierDialogComponent } from '../../components/admin-components/add-carrier-dialog/add-carrier-dialog.component';
 import { AddAunitDialogComponent } from '../../components/admin-components/add-aunit-dialog/add-aunit-dialog.component';
+import { DropdownOptionDialogComponent } from '../../components/dropdowns/dropdown-option-dialog/dropdown-option-dialog.component';
 
 @Component({
   standalone: true,
@@ -143,27 +144,16 @@ export class AdminComponent implements OnInit {
         width: '400px',
         data: { carrierName: '' }
       });
-  
+  }
+
+  addDropDownOptions(): void {
+    const dialogRef = this.dialog.open(DropdownOptionDialogComponent, {
+      width: '400px',
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result?.isConfirmed) {
-        const carrierName = result.value.carrierName;
-        if (carrierName) {
-          this.carrierService.createCarrier(carrierName).subscribe((response) => {
-            if (response.message && response.data === null) {
-              this.toastr.error(this.translate.instant(response.message));
-              return;
-            }
-            if (response.success) {
-              this.toastr.success(
-                this.translate.instant('successMessages.carrier.created.successfully')
-              );
-              this.fetchCarriersAndUnits();
-            } else {
-              this.toastr.error(response.message);
-            }
-          });
-        }
+      if (result) {
+        this.toastr.success(this.translate.instant('successMessages.option.added.successfully'));
       }
     });
   }
@@ -177,7 +167,7 @@ export class AdminComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.toastr.success('successMessages.workstation.added.successfully')  
+        this.toastr.success(this.translate.instant('successMessages.workstation.added.successfully'));
       }
     });
   }
@@ -210,7 +200,7 @@ export class AdminComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log('User created:', result);
+
       }
     });
   }
@@ -263,6 +253,11 @@ export class AdminComponent implements OnInit {
         case DeviceType.NETWORK_EQUIPMENT:
           this.adminService
             .getAllNetworkEquipments(searchParams)
+            .subscribe((response) => handleResponse(response));
+          break;
+          case DeviceType.SERVER:
+          this.adminService
+            .getAllServers(searchParams)
             .subscribe((response) => handleResponse(response));
           break;
       case DeviceType.WORKSTATION:

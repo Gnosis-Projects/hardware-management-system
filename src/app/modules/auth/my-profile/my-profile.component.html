@@ -7,35 +7,27 @@
     </mat-card-header>
     <mat-card-content>
       <div class="user-info">
-        <p *ngIf="user?.userId">
-          <mat-icon class="info-icon">badge</mat-icon>
-          <strong>User ID:</strong> {{ user?.userId }}
-        </p>
         <p>
           <mat-icon class="info-icon">account_circle</mat-icon>
           <strong>{{ 'username' | translate }}:</strong> {{ user?.username }}
         </p>
         <p>
           <mat-icon class="info-icon">email</mat-icon>
-          <strong>{{ 'email' | translate }}:</strong> {{ user?.email }}
+          <strong>{{ 'email' | translate }}:</strong>{{ user?.email }}
         </p>
         <p>
           <mat-icon class="info-icon">verified_user</mat-icon>
-          <strong>{{ 'roles' | translate }}:</strong>
-          <ng-container *ngIf="user?.roles?.[0] as role">
-            {{ role | translate }}
-          </ng-container>
+          <strong>{{ 'roles' | translate }}:</strong> 
+          <ng-container *ngIf="user?.roles?.[0] as role">{{ role | translate }}</ng-container>
         </p>
         <p>
           <mat-icon class="info-icon">business</mat-icon>
-          <strong>{{ 'carriers' | translate }}:</strong>
-        </p>
-        <ul class="carriers-list">
-          <mat-chip-set aria-label="Carriers" *ngFor="let carrier of user?.carriers">
-            <mat-chip>{{ carrier.name }}</mat-chip>
-          </mat-chip-set>
-        </ul>
-        
+          <strong>{{ 'carriers' | translate }}</strong>
+          <ul class="carriers-list">
+            <mat-chip-set aria-label="Carriers" *ngFor="let carrier of user?.carriers">
+              <mat-chip>{{ carrier.name }}</mat-chip>
+            </mat-chip-set>
+          </ul>
       </div>
     </mat-card-content>
     <mat-card-actions class="actions">

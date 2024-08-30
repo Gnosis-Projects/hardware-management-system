@@ -49,6 +49,8 @@ export class AddWorkStationDialogComponent implements OnInit {
       aUnitId: ['', Validators.required],
       employeeFirstName: ['', Validators.required],
       employeeLastName: ['', Validators.required],
+      workstationNumber:[''],
+      socketNumber: [''],
       email: ['', [Validators.required, Validators.email]],
       personalPhone: ['', Validators.required],
       department: ['', Validators.required],
@@ -94,6 +96,8 @@ export class AddWorkStationDialogComponent implements OnInit {
         employeeLastName: formData.employeeLastName,
         employeeFirstName: formData.employeeFirstName,
         email: formData.email,
+        socketNumber: formData.socketNumber,
+        workstationNumber: formData.workstationNumber,
         personalPhone: formData.personalPhone,
         department: formData.department,
         city: formData.city

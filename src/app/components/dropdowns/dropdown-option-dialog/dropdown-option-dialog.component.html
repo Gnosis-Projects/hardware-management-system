@@ -1,0 +1,26 @@
+<h3 mat-dialog-title>{{ 'add.dropdown.option' | translate }}</h3>
+<div mat-dialog-content>
+  <form [formGroup]="addOptionForm" class="workstation-form">
+    <mat-form-field class="full-width">
+      <mat-label>{{ 'select.dropdown.type' | translate }}</mat-label>
+      <mat-select formControlName="dropdownType">
+        <mat-option *ngFor="let type of dropdownTypes" [value]="type.value">{{ type.label | translate }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="addOptionForm.get('dropdownType')?.hasError('required')">
+        {{ 'This field is required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width" *ngIf="addOptionForm.get('dropdownType')?.value">
+      <mat-label>{{ 'labels.name' | translate }}</mat-label>
+      <input matInput formControlName="name">
+      <mat-error *ngIf="addOptionForm.get('name')?.hasError('required')">
+        {{ 'This field is required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button color="primary" (click)="onSave()" [disabled]="addOptionForm.invalid">{{ 'save' | translate }}</button>
+  <button mat-button color="warn" (click)="onCancel()">{{ 'cancel' | translate }}</button>
+</div>

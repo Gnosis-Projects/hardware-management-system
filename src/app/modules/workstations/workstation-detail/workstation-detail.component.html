@@ -11,7 +11,6 @@
           <mat-icon>more_vert</mat-icon>
         </button>
       </div>
-<<<<<<< HEAD
       <p class="card-text">
         <strong>{{ "employeeFirstName" | translate }}:</strong>
         {{ workstation.data.employeeFirstName }}
@@ -44,16 +43,6 @@
         <strong>{{ "labels.carrier" | translate }}:</strong>
         {{ workstation.data.carrier.name }}
       </p>
-=======
-      <p class="card-text"><strong>{{ 'employeeFirstName' | translate }}:</strong> {{ workstation.data.employeeFirstName
-        }}</p>
-      <p class="card-text"><strong>{{ 'employeeLastName' | translate }}:</strong> {{ workstation.data.employeeLastName
-        }}</p>
-      <p class="card-text"><strong>{{ 'labels.department' | translate }}:</strong> {{ workstation.data.department }}</p>
-      <p class="card-text"><strong>{{ 'labels.city' | translate }}:</strong> {{ workstation.data.city }}</p>
-      <p class="card-text"><strong>{{ 'labels.unit' | translate }}:</strong> {{ workstation.data.aUnit.name }}</p>
-      <p class="card-text"><strong>{{ 'labels.carrier' | translate }}:</strong> {{ workstation.data.carrier.name }}</p>
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
     </div>
   </div>
 
@@ -69,7 +58,6 @@
   </mat-menu>
 
   <div class="section-header">
-<<<<<<< HEAD
     <button
       mat-mini-fab
       color="primary"
@@ -77,10 +65,6 @@
       [matMenuTriggerFor]="addDeviceMenu"
       matTooltip="{{ 'add.device' | translate }}"
     >
-=======
-    <button mat-mini-fab color="primary" class="add-button" [matMenuTriggerFor]="addDeviceMenu"
-      matTooltip="{{ 'add.device' | translate }}">
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
       <mat-icon>add</mat-icon>
     </button>
     <mat-menu #addDeviceMenu="matMenu">
@@ -111,10 +95,9 @@
         <mat-icon>dns</mat-icon>
         <span>{{ "add.server" | translate }}</span>
       </button>
-    </mat-menu> 
+    </mat-menu>
   </div>
 
-<<<<<<< HEAD
   <app-export-data-button
     [data]="[workstation.data]"
     fileName="θέση εργασίας"
@@ -151,21 +134,6 @@
     >
       {{ "networkEquipmentDevices" | translate }}
     </button>
-=======
-  <app-export-data-button [data]="[workstation.data]" fileName="workstation-report"
-    [columnNames]="columnNames">
-  </app-export-data-button>
-
-  <div class="device-buttons">
-    <button mat-fab *ngIf="workstation.data.computers_list.length > 0" (click)="setView('COMPUTER')">{{
-      'computerDevices' | translate }}</button>
-    <button mat-fab *ngIf="workstation.data.phones_list.length > 0" (click)="setView('PHONE')">{{ 'phoneDevices' |
-      translate }}</button>
-    <button mat-fab *ngIf="workstation.data.printers_list.length > 0" (click)="setView('PRINTER')">{{ 'printerDevices' |
-      translate }}</button>
-    <button mat-fab *ngIf="workstation.data.network_equipment_list.length > 0" (click)="setView('NETWORK_EQUIPMENT')">{{
-      'networkEquipmentDevices' | translate }}</button>
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
   </div>
   <mat-divider></mat-divider>
   <div
@@ -174,7 +142,6 @@
     "
   >
     <div class="row mb-4">
-<<<<<<< HEAD
       <p class="item-description mt-4">{{ "computerDevices" | translate }}</p>
       <app-item-table
         [carrierName]="workstation.data.carrier.name"
@@ -182,11 +149,6 @@
         [items]="workstation.data.computers_list"
         [deviceType]="deviceType.COMPUTER"
       ></app-item-table>
-=======
-      <p class="item-description mt-4">{{ 'computerDevices' | translate }}</p>
-      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name"
-        [items]="workstation.data.computers_list" [deviceType]="deviceType.COMPUTER"></app-item-table>
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
     </div>
   </div>
 
@@ -194,7 +156,6 @@
     *ngIf="currentView === 'PHONE' && workstation.data.phones_list.length > 0"
   >
     <div class="row mb-4">
-<<<<<<< HEAD
       <p class="item-description mt-4">{{ "phoneDevices" | translate }}</p>
       <app-item-table
         [carrierName]="workstation.data.carrier.name"
@@ -202,11 +163,6 @@
         [items]="workstation.data.phones_list"
         [deviceType]="deviceType.PHONE"
       ></app-item-table>
-=======
-      <p class="item-description mt-4">{{ 'phoneDevices' | translate }}</p>
-      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name"
-        [items]="workstation.data.phones_list" [deviceType]="deviceType.PHONE"></app-item-table>
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
     </div>
   </div>
 
@@ -216,7 +172,6 @@
     "
   >
     <div class="row mb-4">
-<<<<<<< HEAD
       <p class="item-description mt-4">{{ "printerDevices" | translate }}</p>
       <app-item-table
         [carrierName]="workstation.data.carrier.name"
@@ -224,11 +179,6 @@
         [items]="workstation.data.printers_list"
         [deviceType]="deviceType.PRINTER"
       ></app-item-table>
-=======
-      <p class="item-description mt-4">{{ 'printerDevices' | translate }}</p>
-      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name"
-        [items]="workstation.data.printers_list" [deviceType]="deviceType.PRINTER"></app-item-table>
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
     </div>
   </div>
 
@@ -239,7 +189,6 @@
     "
   >
     <div class="row mb-4">
-<<<<<<< HEAD
       <p class="item-description mt-4">
         {{ "networkEquipmentDevices" | translate }}
       </p>
@@ -252,13 +201,3 @@
     </div>
   </div>
 </div>
-=======
-      <p class="item-description mt-4">{{ 'networkEquipmentDevices' | translate }}</p>
-      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name"
-        [items]="workstation.data.network_equipment_list" [deviceType]="deviceType.NETWORK_EQUIPMENT"></app-item-table>
-    </div>
-  </div>
-
-
-</div>
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1

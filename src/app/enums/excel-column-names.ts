@@ -47,12 +47,9 @@ export enum ExcelColumnNames {
   'workStation.personalPhone' = 'Τηλέφωνο',
   'workStation.department' = 'Τμήμα',
   'workStation.city' = 'Πόλη',
-<<<<<<< HEAD
   'workStation.workstationNumber' = 'Αριθμός θέσης εργασίας',
   'workStation.socketNumber' = 'Αριθμός πρίζας θέσης εργασίας',
   supplier = 'Προμηθευτής',
-=======
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
   'computer.ram' = 'Μνήμη RAM',
   'computer.ip' = 'IP Διεύθυνση',
   'computer.disks' = 'Δίσκοι',
@@ -91,14 +88,13 @@ export enum ExcelColumnNames {
   'network_equipment.checkDateTime' = 'Ημερομηνία Ελέγχου Δικτυακού Εξοπλισμού',
   'network_equipment.purchaseDate' = 'Ημερομηνία Αγοράς Δικτυακού Εξοπλισμού',
   'network_equipment.comments' = 'Σχόλια Δικτυακού Εξοπλισμού',
-<<<<<<< HEAD
   'network_equipment.username' = 'Όνομα Χρήστη Δικτυακού Εξοπλισμού',
   'networkEquipmentFloor' = 'Όροφος Δικτυακού Εξοπλισμού',
   'routerUsername' = 'Όνομα Χρήστη Ρουτερ',
   'routerPassword' = 'Κωδικός Ρουτερ',
   'switchAddress' = 'Διεύθυνση Switch',
   'actionType.name' = 'Ενέργεια',
-  
+
   // New Printer Columns
   'printer.printerType.id' = 'ID Τύπου Εκτυπωτή',
   'printer.printerType.name' = 'Όνομα Τύπου Εκτυπωτή',
@@ -110,7 +106,7 @@ export enum ExcelColumnNames {
   'printer.purchaseDate' = 'Ημερομηνία Αγοράς Εκτυπωτή',
   'printer.comments' = 'Σχόλια Εκτυπωτή',
   'printer.username' = 'Όνομα Χρήστη Εκτυπωτή',
-  
+
   // Additional Fields
   'operatingSystem.id' = 'ID Λειτουργικού Συστήματος',
   'operatingSystem.name' = 'Όνομα Λειτουργικού Συστήματος',
@@ -120,7 +116,3 @@ export enum ExcelColumnNames {
   networkDisk = 'Δίσκος Δικτύου',
   networkDiskInfo = 'Πληροφορίες Δίσκου Δικτύου',
 }
-=======
-  'network_equipment.username' = 'Όνομα Χρήστη Δικτυακού Εξοπλισμού'
-}
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1

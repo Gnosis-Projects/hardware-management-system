@@ -101,11 +101,7 @@
   "ram": "Μνήμη RAM",
   "general.info": "Γενικές πληροφορίες",
   "type": "Τύπος",
-<<<<<<< HEAD
   "add_unit": "Νέα Διοικητικής Μονάδας",
-=======
-  "add_unit": "Προσθήκη Διοικητικής Μονάδας",
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
   "disable.user": "Απενεργοποίηση χρήστη",
   "view_units": "Προβολή διοικητικών μονάδων",
   "checkDateTime": "Ημερομηνία Ελέγχου",
@@ -179,11 +175,7 @@
     "userId": "ID Χρήστη",
     "email": "Email",
     "active": "Κατάσταση",
-<<<<<<< HEAD
     "roles": "Ρόλος",
-=======
-    "roles":"Ρόλος",
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
     "carriers": "Διαχειριστής Φορέα",
     "userName": "Όνομα Χρήστη"
   },
@@ -318,16 +310,10 @@
     "networkDiskArray": "Συστοιχεία",
     "networkEquipmentTypeId":"Τύπος δικτυακού εξοπλισμού",
     "hdd": "HDD",
-<<<<<<< HEAD
     "refurbished": "Εκθεσιακό",
     "aUnit": "Διοικητική Μονάδα",
     "selectAUnit": "Επιλέξτε διοικητική μονάδα",
     "selectCarrier": "Επιλέξτε φορέα",
-=======
-    "aUnit":"Διοικητική Μονάδα",
-    "selectAUnit":"Επιλέξτε διοικητική μονάδα",
-    "selectCarrier":"Επιλέξτε φορέα",
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
     "disks": "Δίσκοι",
     "serverDiskType": "Τύπος δίσκου",
     "diskRotations": "Συστοιχεία δίσκου",
@@ -347,17 +333,11 @@
     "outlet": "Πρίζα",
     "monitorType": "Τύπος οθόνης",
     "operatingSystem": "Λειτουργικό σύστημα",
-<<<<<<< HEAD
     "userId": "ID Χρήστη",
     "password": "Κωδικός πρόσβασης",
     "purchaseDate": "Ημερομηνία αγοράς",
     "routerUsername": "'Ονομα χρήστη Router",
     "routerPassword": "Κωδικός πρόσβασης Router"
-=======
-    "userId":"ID Χρήστη",
-    "password":"Κωδικός πρόσβασης",
-    "purchaseDate": "Ημερομηνία αγοράς"
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
   },
   "admin": {
     "sidebar.title": "Επιλογές Διαχεριστή",

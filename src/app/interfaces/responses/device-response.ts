@@ -1,3 +1,4 @@
+import { NetworkDiskInfo, OperatingSystem, PhoneType, ServerDiskType } from "../requests/device-request";
 import { CommonResponse } from "./common-response";
 import { WorkStation } from "./workstation-response";
 
@@ -15,16 +16,25 @@ export interface PrinterType {
   id: number;
   name: string;
 }
-export interface NetworkEquipmentType{
+
+export interface NetworkEquipmentType {
   id: number;
   name: string;
 }
 
 export interface RemoteDesktopApp {
+  name: string;
   typeId: number;
   userId: string;
   password: string;
 }
+
+export interface NetworkEquipmentIpResponse{
+  id: number;
+  ip: string;
+  name: string;
+}
+
 
 export interface Device {
   id: number;
@@ -36,12 +46,19 @@ export interface Device {
   phoneNumber?: string;
   disks?: Disk[];
   printerType?: PrinterType;
+  phoneType?:PhoneType;
   networkEquipmentType?: NetworkEquipmentType;
+  networkEquipmentIP?: NetworkEquipmentIpResponse;
   floor?: string;
   workGroupDomain?: string;
+  refurbished?: boolean;
+  networkEquipmentFloor?: string;
+  serverDiskType?: ServerDiskType;
+  paperSize?: string;
   macAddress?: string;
   machineType?: string;
-  operatingSystem?: string;
+  operatingSystem?: OperatingSystem
+  netWorkDisk?:boolean;
   monitorType?: string;
   outlet?: string;
   antivirus?: string;
@@ -51,7 +68,12 @@ export interface Device {
   aUnit: CommonResponse;
   carrier: CommonResponse;
   workStation?: WorkStation;
+<<<<<<< HEAD
+  networkDiskInfo?: NetworkDiskInfo;
+  comments?: string;
+=======
   comments?: string;  
+>>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
 }
 
 export interface SingleDeviceResponse {
@@ -72,11 +94,12 @@ export interface DeviceHistory {
   model: string;
   serialNumber: string;
   actionType: ActionType;
-  
+  paperSize?: string;
   checkDateTime: string;
   comments: string;
   ip?: string;
   macAddress?: string;
+  operatingSystemId?: number;
   operatingSystem?: string;
   monitorType?: string;
   outlet?: string;

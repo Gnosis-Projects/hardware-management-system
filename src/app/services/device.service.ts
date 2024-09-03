@@ -3,9 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/enrivonment';
 import { Observable } from 'rxjs';
 import { DeviceListResponse, SingleDeviceResponse, DeviceHistoryResponse } from '../interfaces/responses/device-response';
-import { EditDeviceRequest } from '../interfaces/requests/device-request';
-import { AddDeviceRequest } from '../interfaces/requests/device-request';
-import { DeviceType } from '../enums/device-type';
+import { EditDeviceRequest, AddDeviceRequest } from '../interfaces/requests/device-request';
+import { DeviceType, NetEquipmentType } from '../enums/device-type';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +54,8 @@ export class DeviceService {
         return `Printer/${action}`;
       case DeviceType.NETWORK_EQUIPMENT:
         return `NetworkEquipment/${action}`;
+      case DeviceType.SERVER:
+        return `Server/${action}`;
       default:
         throw new Error('Unsupported device type');
     }

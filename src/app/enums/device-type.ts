@@ -4,6 +4,7 @@ export enum DeviceType {
   WORKSTATION = 'workstation',
   PRINTER = 'printer',
   NETWORK_EQUIPMENT = 'network_equipment',
+  SERVER = 'server'
 }
 
 export enum RemoteDesktopAppType {

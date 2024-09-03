@@ -1,0 +1,29 @@
+.full-width {
+    width: 100%;
+  }
+  .workstation-form {
+    display: flex;
+    flex-direction: column;
+  
+    .mat-form-field {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+  }
+
+  .display-none {
+    display: none;
+  }
+  
+  .mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px;
+    border-top: 1px solid #e0e0e0;
+  
+    button {
+      margin-left: 8px;
+    }
+  }
+  
+  

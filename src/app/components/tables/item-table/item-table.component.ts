@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSort,MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { Device } from '../../../interfaces/responses/device-response';
 import { SingleWorkStationResponse, WorkStation } from '../../../interfaces/responses/workstation-response';
@@ -20,6 +20,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { PaginatorEnum } from '../../../enums/paginatorEnum';
 import { Helper } from '../../../shared/helpers';
+
 @Component({
   selector: 'app-item-table',
   templateUrl: './item-table.component.html',
@@ -42,7 +43,7 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
   displayedColumns: string[] = [];
   dataSource = new MatTableDataSource<Device | WorkStation | SingleWorkStationResponse>(this.items);
   ItemColumnNames = ItemColumnNames;
-  
+
   constructor(
     private deviceStateService: DeviceStateService,
     private deviceService: DeviceService,
@@ -60,6 +61,7 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['items']) {
+
       this.dataSource.data = this.items;
     }
   }
@@ -68,7 +70,6 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-
 
   setDisplayedColumns(): void {
     if (this.deviceType === DeviceType.COMPUTER) {
@@ -81,7 +82,8 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
         ItemColumnNames.ram,
         ItemColumnNames.actions
       ];
-    } else if (this.deviceType === DeviceType.PHONE || this.deviceType === DeviceType.PRINTER || this.deviceType === DeviceType.NETWORK_EQUIPMENT) {
+    }  
+    if (this.deviceType !== DeviceType.COMPUTER && this.deviceType !== DeviceType.WORKSTATION) {
       this.displayedColumns = [
         ItemColumnNames.carrierName,
         ItemColumnNames.aUnitName,
@@ -90,7 +92,8 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
         ItemColumnNames.serialNumber,
         ItemColumnNames.actions
       ];
-    } else if (this.deviceType === DeviceType.WORKSTATION) {
+    } 
+     if (this.deviceType === DeviceType.WORKSTATION) {
       this.displayedColumns = [
         ItemColumnNames.carrierName,
         ItemColumnNames.aUnitName,
@@ -103,7 +106,22 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
         ItemColumnNames.actions
       ];
     }
+
+    if (this.deviceType === DeviceType.NETWORK_EQUIPMENT) {
+      this.displayedColumns = [
+        ItemColumnNames.carrierName,
+        ItemColumnNames.aUnitName,
+        ItemColumnNames.deviceName,
+        ItemColumnNames.model,
+        ItemColumnNames.serialNumber,
+        'networkEquipmentType', 
+        ItemColumnNames.actions
+      ];
+    }
+    
   }
+
+  
 
   deleteItem(id: number): void {
     if (this.deviceType === DeviceType.WORKSTATION) {
@@ -146,6 +164,7 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.router.navigate(['/workstation']);
       } else {
         this.deviceStateService.setSelectedDeviceId(id, this.deviceType);
+
         this.router.navigate(['/selectedDevice']);
       }
     }

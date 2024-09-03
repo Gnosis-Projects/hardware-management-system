@@ -33,6 +33,10 @@ import { AUnitService } from '../../services/aunit.service';
 import { Helper } from '../../shared/helpers';
 import { AddCarrierDialogComponent } from '../../components/admin-components/add-carrier-dialog/add-carrier-dialog.component';
 import { AddAunitDialogComponent } from '../../components/admin-components/add-aunit-dialog/add-aunit-dialog.component';
+<<<<<<< HEAD
+import { DropdownOptionDialogComponent } from '../../components/dropdowns/dropdown-option-dialog/dropdown-option-dialog.component';
+=======
+>>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
 
 @Component({
   standalone: true,
@@ -143,6 +147,18 @@ export class AdminComponent implements OnInit {
         width: '400px',
         data: { carrierName: '' }
       });
+<<<<<<< HEAD
+  }
+
+  addDropDownOptions(): void {
+    const dialogRef = this.dialog.open(DropdownOptionDialogComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.toastr.success(this.translate.instant('successMessages.option.added.successfully'));
+=======
   
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -164,6 +180,7 @@ export class AdminComponent implements OnInit {
             }
           });
         }
+>>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
       }
     });
   }
@@ -177,7 +194,11 @@ export class AdminComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+<<<<<<< HEAD
+        this.toastr.success(this.translate.instant('successMessages.workstation.added.successfully'));
+=======
         this.toastr.success('successMessages.workstation.added.successfully')  
+>>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
       }
     });
   }
@@ -210,7 +231,7 @@ export class AdminComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log('User created:', result);
+
       }
     });
   }
@@ -263,6 +284,11 @@ export class AdminComponent implements OnInit {
         case DeviceType.NETWORK_EQUIPMENT:
           this.adminService
             .getAllNetworkEquipments(searchParams)
+            .subscribe((response) => handleResponse(response));
+          break;
+          case DeviceType.SERVER:
+          this.adminService
+            .getAllServers(searchParams)
             .subscribe((response) => handleResponse(response));
           break;
       case DeviceType.WORKSTATION:

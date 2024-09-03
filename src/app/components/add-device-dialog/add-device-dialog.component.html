@@ -1,6 +1,20 @@
 <h2 mat-dialog-title>{{ 'add.device' | translate }} ({{deviceType!.toString() | translate}}) </h2>
 <div mat-dialog-content>
   <form [formGroup]="deviceForm" class="device-form">
+    
+    <!-- Network Equipment Selection -->
+    <div class="row" *ngIf="deviceType === 'network_equipment'">
+      <div class="col-md-6">
+        <mat-form-field class="full-width">
+          <mat-label>{{ 'labels.networkEquipmentTypeId' | translate }}</mat-label>
+          <mat-select formControlName="networkEquipmentTypeId">
+            <mat-option *ngFor="let net of netTypes" [value]="net.id">{{ net.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    
+    <!-- General Information -->
     <div class="row">
       <div class="col-md-6">
         <mat-form-field class="full-width">
@@ -21,6 +35,8 @@
         </mat-form-field>
       </div>
     </div>
+
+    <!-- Serial Number -->
     <div class="row">
       <div class="col-md-6">
         <mat-form-field class="full-width">
@@ -31,23 +47,50 @@
           </mat-error>
         </mat-form-field>
       </div>
+    </div>
 
-        <div class="col-md-6" *ngIf="deviceType === 'phone'">
-          <mat-form-field class="full-width">
-            <mat-label>{{ 'labels.phoneNumber' | translate }}</mat-label>
-            <input matInput formControlName="phoneNumber">
-            <mat-error *ngIf="deviceForm.get('phoneNumber')?.hasError('required')">
-              {{ 'This field is required' | translate }}
-            </mat-error>
-          </mat-form-field>
+    <!-- Phone Specific Fields -->
+    <div class="row" *ngIf="deviceType === 'phone'">
+      <div class="col-md-6">
+        <mat-form-field class="full-width">
+          <mat-label>{{ 'labels.phoneNumber' | translate }}</mat-label>
+          <input matInput formControlName="phoneNumber">
+          <mat-error *ngIf="deviceForm.get('phoneNumber')?.hasError('required')">
+            {{ 'This field is required' | translate }}
+          </mat-error>
+        </mat-form-field>
       </div>
 
-      <div class="col-md-6" *ngIf="deviceType === 'printer'">
+      <div class="col-md-6">
+        <mat-form-field class="full-width">
+          <mat-label>{{ 'labels.phoneSocket' | translate }}</mat-label>
+          <input matInput formControlName="phoneSocket">
+          <mat-error *ngIf="deviceForm.get('phoneSocket')?.hasError('required')">
+            {{ 'This field is required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-6">
+        <mat-form-field class="full-width">
+          <mat-label>{{ 'labels.phoneType' | translate }}</mat-label>
+          <mat-select formControlName="phoneTypeId">
+            <mat-option *ngFor="let type of phoneTypes" [value]="type.id">{{ type.name | translate }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="deviceForm.get('phoneTypeId')?.hasError('required')">
+            {{ 'This field is required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Printer Specific Fields -->
+    <div class="row" *ngIf="deviceType === 'printer'">
+      <div class="col-md-6">
         <mat-form-field class="full-width">
           <mat-label>{{ 'labels.printerType' | translate }}</mat-label>
           <mat-select formControlName="printerTypeId">
-            <mat-option [value]="printerType.BASIC">{{'basic.printer' | translate}}</mat-option>
-            <mat-option [value]="printerType.NETWORK">{{'network.printer' | translate}}</mat-option>
+            <mat-option *ngFor="let type of printerTypes" [value]="type.id">{{ type.name | translate }}</mat-option>
           </mat-select>
           <mat-error *ngIf="deviceForm.get('printerTypeId')?.hasError('required')">
             {{ 'This field is required' | translate }}
@@ -55,144 +98,320 @@
         </mat-form-field>
       </div>
 
-      <div class="row" *ngIf="deviceType === 'network_equipment'">
-        <div class="col-md-6" >
+      <div class="col-md-6">
+        <mat-form-field class="full-width">
+          <mat-label>{{ 'labels.paperSize' | translate }}</mat-label>
+          <input matInput formControlName="paperSize">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Network Equipment Specific Fields -->
+    <ng-container *ngIf="deviceType === 'network_equipment'">
+      <div class="row">
+        <div class="col-md-6">
           <mat-form-field class="full-width">
-            <mat-label>{{ 'labels.netEquipmentType' | translate }}</mat-label>
-            <mat-select formControlName="networkEquipmentTypeId">
-              <mat-option [value]="netEquipmentType.ROUTER">{{'Router'}}</mat-option>
-              <mat-option [value]="netEquipmentType.SWITCH">{{'Switch'}}</mat-option>
+            <mat-label>{{ 'labels.ipType' | translate }}</mat-label>
+            <mat-select formControlName="networkEquipmentIp.ipTypeId">
+              <mat-option *ngFor="let type of ipTypes" [value]="type.id">{{ type.name | translate }}</mat-option>
             </mat-select>
-            <mat-error *ngIf="deviceForm.get('networkEquipmentTypeId')?.hasError('required')">
+            <mat-error *ngIf="deviceForm.get('networkEquipmentIp.ipTypeId')?.hasError('required')">
               {{ 'This field is required' | translate }}
             </mat-error>
           </mat-form-field>
         </div>
-          <div class="col-md-6" >
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.ip' | translate }}</mat-label>
+            <input matInput formControlName="networkEquipmentIp.ip">
+            <mat-error *ngIf="deviceForm.get('networkEquipmentIp.ip')?.hasError('required')">
+              {{ 'This field is required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6" *ngIf="deviceForm.get('networkEquipmentTypeId')?.value === 1">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.routerUsername' | translate }}</mat-label>
+            <input matInput formControlName="routerUsername">
+            <mat-error *ngIf="deviceForm.get('routerUsername')?.hasError('required')">
+              {{ 'This field is required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6" *ngIf="deviceForm.get('networkEquipmentTypeId')?.value === 1">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.routerPassword' | translate }}</mat-label>
+            <input matInput formControlName="routerPassword">
+            <mat-error *ngIf="deviceForm.get('routerPassword')?.hasError('required')">
+              {{ 'This field is required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.switchAddress' | translate }}</mat-label>
+            <input matInput formControlName="switchAddress">
+            <mat-error *ngIf="deviceForm.get('switchAddress')?.hasError('required')">
+              {{ 'This field is required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.floor' | translate }}</mat-label>
+            <input matInput formControlName="floor">
+          </mat-form-field>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Refurbished Checkbox for Printers and Computers -->
+    <div class="col-md-6" *ngIf="deviceType === 'printer' || deviceType === 'computer'">
+      <mat-checkbox formControlName="refurbished">{{ 'labels.refurbished' | translate }}</mat-checkbox>
+    </div>
+
+    <!-- Computer Specific Fields -->
+    <ng-container *ngIf="deviceType === 'computer'">
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.ram' | translate }}</mat-label>
+            <input matInput type="number" formControlName="ram">
+            <mat-error *ngIf="deviceForm.get('ram')?.hasError('required')">
+              {{ 'This field is required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.ip' | translate }}</mat-label>
+            <input matInput formControlName="ip">
+            <mat-error *ngIf="deviceForm.get('ip')?.hasError('required')">
+              {{ 'This field is required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.workGroupDomain' | translate }}</mat-label>
+            <input matInput formControlName="workGroupDomain">
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.macAddress' | translate }}</mat-label>
+            <input matInput formControlName="macAddress">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.machineType' | translate }}</mat-label>
+            <input matInput formControlName="machineType">
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.operatingSystem' | translate }}</mat-label>
+            <mat-select formControlName="operatingSystemId">
+              <mat-option *ngFor="let os of operatingSystems" [value]="os.id">{{ os.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.monitorType' | translate }}</mat-label>
+            <input matInput formControlName="monitorType">
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.outlet' | translate }}</mat-label>
+            <input matInput formControlName="outlet">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.antivirus' | translate }}</mat-label>
+            <input matInput formControlName="antivirus">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.remote.desktop.app' | translate }}</mat-label>
+            <mat-select (selectionChange)="onRemoteDesktopAppChange($event.value)">
+              <mat-option *ngFor="let type of remoteDesktopAppTypes" [value]="type.id">{{ type.name | translate }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div formArrayName="remoteDesktopApps">
+        <div *ngFor="let app of remoteDesktopApps.controls; let i = index" [formGroupName]="i" class="row">
+          <div class="col-md-6">
             <mat-form-field class="full-width">
-              <mat-label>{{ 'labels.floor' | translate }}</mat-label>
-              <input matInput formControlName="floor">
+              <mat-label>{{ 'labels.connection.id' | translate }}</mat-label>
+              <input matInput formControlName="userId">
             </mat-form-field>
           </div>
-      </div>
-      
-      
-      <div class="col-md-6" *ngIf="deviceType === 'computer'">
-        <mat-form-field class="full-width">
-          <mat-label>{{ 'labels.ram' | translate }}</mat-label>
-          <input matInput type="number" formControlName="ram">
-          <mat-error *ngIf="deviceForm.get('ram')?.hasError('required')">
-            {{ 'This field is required' | translate }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row" *ngIf="deviceType === 'computer'">
-      <div class="col-md-6">
-        <mat-form-field class="full-width">
-          <mat-label>{{ 'labels.ip' | translate }}</mat-label>
-          <input matInput formControlName="ip">
-          <mat-error *ngIf="deviceForm.get('ip')?.hasError('required')">
-            {{ 'This field is required' | translate }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <div class="col-md-6">
-        <mat-form-field class="full-width">
-          <mat-label>{{ 'labels.workGroupDomain' | translate }}</mat-label>
-          <input matInput formControlName="workGroupDomain">
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row" *ngIf="deviceType === 'computer'">
-      <div class="col-md-6">
-        <mat-form-field class="full-width">
-          <mat-label>{{ 'Διευθυνση Mac' }}</mat-label>
-          <input matInput formControlName="macAddress">
-        </mat-form-field>
-      </div>
-      <div class="col-md-6">
-        <mat-form-field class="full-width">
-          <mat-label>{{ 'labels.machineType' | translate }}</mat-label>
-          <input matInput formControlName="machineType">
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row" *ngIf="deviceType === 'computer'">
-      <div class="col-md-6">
-        <mat-form-field class="full-width">
-          <mat-label>{{ 'labels.operatingSystem' | translate }}</mat-label>
-          <mat-select formControlName="operatingSystem">
-            <mat-option *ngFor="let os of operationSystems" [value]="os">{{ os }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="col-md-6">
-        <mat-form-field class="full-width">
-          <mat-label>{{ 'labels.monitorType' | translate }}</mat-label>
-          <input matInput formControlName="monitorType">
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row" *ngIf="deviceType === 'computer'">
-      <div class="col-md-6">
-        <mat-form-field class="full-width">
-          <mat-label>{{ 'labels.outlet' | translate }}</mat-label>
-          <input matInput formControlName="outlet">
-        </mat-form-field>
-      </div>
-      <div class="col-md-6">
-        <mat-form-field class="full-width">
-          <mat-label>{{ 'labels.antivirus' | translate }}</mat-label>
-          <input matInput formControlName="antivirus">
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row" *ngIf="deviceType === 'computer'">
-      <div class="col-md-6">
-        <mat-form-field class="full-width">
-          <mat-label>{{ 'labels.remote.desktop.app' | translate }}</mat-label>
-          <mat-select (selectionChange)="onRemoteDesktopAppChange($event.value)">
-            <mat-option [value]="RemoteDesktopAppType.TeamViewer">TeamViewer</mat-option>
-            <mat-option [value]="RemoteDesktopAppType.AnyDesk">AnyDesk</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div formArrayName="remoteDesktopApps" *ngIf="deviceType === 'computer'">
-      <div *ngFor="let app of remoteDesktopApps.controls; let i = index" [formGroupName]="i" class="row">
-        <div class="col-md-6">
-          <mat-form-field class="full-width">
-            <mat-label>{{ 'labels.connection.id' | translate }}</mat-label>
-            <input matInput formControlName="userId">
-          </mat-form-field>
-        </div>
-        <div class="col-md-6">
-          <mat-form-field class="full-width">
-            <mat-label>{{ 'labels.connection.password' | translate }}</mat-label>
-            <input matInput formControlName="password" type="password">
-          </mat-form-field>
+          <div class="col-md-6">
+            <mat-form-field class="full-width">
+              <mat-label>{{ 'labels.connection.password' | translate }}</mat-label>
+              <input matInput formControlName="password" type="password">
+            </mat-form-field>
+          </div>
         </div>
       </div>
-    </div>
-    <div formArrayName="disks" *ngIf="deviceType === 'computer'">
-      <div *ngFor="let disk of disks.controls; let i = index" [formGroupName]="i" class="row disk-group">
+      <div formArrayName="disks">
+        <div *ngFor="let disk of disks.controls; let i = index" [formGroupName]="i" class="row disk-group">
+          <div class="col-md-6">
+            <mat-form-field class="full-width">
+              <mat-label>{{ 'labels.HDD.capacity' | translate }}</mat-label>
+              <input matInput type="number" formControlName="capacity">
+              <mat-error *ngIf="disk.get('capacity')?.hasError('required')">
+                {{ 'This field is required' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-checkbox formControlName="ssd">{{ 'labels.has.SSD' | translate }}</mat-checkbox>
+          </div>
+        </div>
+      </div>
+
+      <div formArrayName="computerPrinters">
+        <div *ngFor="let printer of computerPrinters.controls; let i = index" [formGroupName]="i" class="row">
+          <div class="col-md-6">
+            <mat-form-field class="full-width">
+              <mat-label>{{ 'labels.printerType' | translate }}</mat-label>
+              <mat-select formControlName="typeId">
+                <mat-option *ngFor="let type of printerTypes" [value]="type.id">{{ type.name | translate }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="printer.get('typeId')?.hasError('required')">
+                {{ 'This field is required' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+      
+          <div class="col-md-6" *ngIf="isNetworkPrinter(printer.get('typeId')?.value)">
+            <mat-form-field class="full-width">
+              <mat-label>{{ 'labels.IPaddress' | translate }}</mat-label>
+              <input matInput formControlName="ipAddress">
+              <mat-error *ngIf="printer.get('ipAddress')?.hasError('required')">
+                {{ 'This field is required' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+      
+          <div class="col-md-6">
+            <button mat-icon-button color="warn" (click)="removePrinter(i)">
+              <mat-icon>remove_circle</mat-icon>
+            </button>
+          </div>
+        </div>
+        <button mat-button (click)="addPrinter()">+ {{ 'addPrinter' | translate }}</button>
+      </div>
+    </ng-container>
+
+    <!-- Server Specific Fields -->
+    <ng-container *ngIf="deviceType === 'server'">
+      <div class="row">
         <div class="col-md-6">
           <mat-form-field class="full-width">
-            <mat-label>{{ 'labels.HDD.capacity' | translate }}</mat-label>
-            <input matInput type="number" formControlName="capacity">
-            <mat-error *ngIf="disks.at(i).get('capacity')?.hasError('required')">
+            <mat-label>{{ 'labels.serverDiskType' | translate }}</mat-label>
+            <mat-select formControlName="serverDiskTypeId">
+              <mat-option *ngFor="let type of diskTypes" [value]="type.id">{{ type.name | translate }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="deviceForm.get('serverDiskTypeId')?.hasError('required')">
               {{ 'This field is required' | translate }}
             </mat-error>
           </mat-form-field>
         </div>
         <div class="col-md-6">
-          <mat-checkbox formControlName="ssd">{{ 'labels.has.SSD' | translate }}</mat-checkbox>
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.diskRotations' | translate }}</mat-label>
+            <input matInput type="number" formControlName="diskRotations">
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-checkbox formControlName="networkDisk">{{ 'labels.networkDisk' | translate }}</mat-checkbox>
         </div>
       </div>
-    </div>
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'labels.operatingSystem' | translate }}</mat-label>
+            <mat-select formControlName="operatingSystemId">
+              <mat-option *ngFor="let os of operatingSystems" [value]="os.id">{{ os.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <ng-container *ngIf="deviceForm.get('networkDisk')?.value">
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field class="full-width">
+              <mat-label>{{ 'labels.networkDiskName' | translate }}</mat-label>
+              <input matInput formControlName="networkDiskInfo.name">
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field class="full-width">
+              <mat-label>{{ 'labels.networkDiskArray' | translate }}</mat-label>
+              <input matInput formControlName="networkDiskInfo.diskArray">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field class="full-width">
+              <mat-label>{{ 'labels.networkDiskSize' | translate }}</mat-label>
+              <input matInput type="number" formControlName="networkDiskInfo.diskSize">
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field class="full-width">
+              <mat-label>{{ 'labels.IPaddress' | translate }}</mat-label>
+              <input matInput formControlName="networkDiskInfo.ip">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field class="full-width">
+              <mat-label>{{ 'labels.networkDiskBrand' | translate }}</mat-label>
+              <input matInput formControlName="networkDiskInfo.brand">
+            </mat-form-field>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <!-- Supplier and Purchase Date -->
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-6">
+        <mat-form-field class="full-width">
+          <mat-label>{{ 'labels.supplier' | translate }}</mat-label>
+          <input matInput formControlName="supplier" type="text">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
         <mat-form-field class="full-width">
           <mat-label>{{ 'labels.purchaseDate' | translate }}</mat-label>
           <input matInput [matDatepicker]="picker" formControlName="purchaseDate">
@@ -202,16 +421,21 @@
         </mat-form-field>
       </div>
     </div>
+
+    <!-- Comments -->
     <div class="row">
       <div class="col-md-12">
         <mat-form-field class="full-width">
-          <mat-label>{{'comments' |translate }}</mat-label>
+          <mat-label>{{ 'comments' | translate }}</mat-label>
           <textarea matInput formControlName="comments"></textarea>
         </mat-form-field>
       </div>
     </div>
+    
   </form>
 </div>
+
+<!-- Action Buttons -->
 <div mat-dialog-actions class="dialog-actions">
   <button mat-button color="primary" (click)="onSave()">{{ 'save' | translate }}</button>
   <button mat-button color="warn" (click)="onCancel()">{{ 'cancel' | translate }}</button>

@@ -18,11 +18,14 @@ export class ExportDataService {
   exportDataToExcel(json: any, excelFileName: string, columnNames: any): void {
     const flattenedData = this.flattenData(json);
     const mappedData = this.renameColumns(flattenedData, columnNames);
+<<<<<<< HEAD
+=======
   
     mappedData.push({ 'Sum of Computers': `Sum of computers: ${this.computersLength}` });
     mappedData.push({ 'Sum of Phones': `Sum of phones: ${this.phonesLength}` });
     mappedData.push({ 'Sum of Printers': `Sum of printers: ${this.printersLength}` });
     mappedData.push({ 'Sum of Network Equipment': `Sum of network equipment: ${this.netLength}` });
+>>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
     
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mappedData);
     const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };

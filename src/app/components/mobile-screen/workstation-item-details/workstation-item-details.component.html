@@ -15,6 +15,12 @@
     <p class="workstation-card-text">
       <strong>{{ "labels.department" | translate }}:</strong> {{ workstation.department }}
     </p>
+    <p class="workstation-card-text"  *ngIf="workstation.aUnit?.name">
+      <strong>{{ "workstationNumber" | translate }}:</strong> {{ workstation.workstationNumber }}
+    </p>
+    <p class="workstation-card-text"  *ngIf="workstation.aUnit?.name">
+      <strong>{{ "socketNumber" | translate }}:</strong> {{ workstation.socketNumber }}
+    </p>
     <p class="workstation-card-text" *ngIf="workstation.carrier?.name">
       <strong>{{ "labels.carrier" | translate }}:</strong> {{ workstation.carrier.name }}
     </p>

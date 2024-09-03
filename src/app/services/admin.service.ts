@@ -26,6 +26,12 @@ export class AdminService {
     getAllNetworkEquipments(searchParams: any): Observable<DeviceListResponse> {
         return this.http.post<DeviceListResponse>(`${this.apiUrl}/NetworkEquipment/GetAll`, searchParams);
     }
+
+
+    getAllServers(searchParams: any): Observable<DeviceListResponse> {
+        return this.http.post<DeviceListResponse>(`${this.apiUrl}/Server/GetAll`, searchParams);
+    }
+
     
     getAllPrinters(searchParams: any): Observable<DeviceListResponse> {
         return this.http.post<DeviceListResponse>(`${this.apiUrl}/Printer/GetAll`, searchParams);

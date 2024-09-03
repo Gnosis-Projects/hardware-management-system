@@ -62,5 +62,6 @@ export const AuthStateGuard: CanActivateFn = (route, state) => {
     return isSuperAdmin ? redirectTo('/admin') : redirectTo('/selectedCarrier');
   }
 
+
   return true;
 };

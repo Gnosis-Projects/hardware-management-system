@@ -30,7 +30,7 @@
 
       <ng-container matColumnDef="carrier">
         <mat-header-cell *matHeaderCellDef> {{ 'table-headers.carriers' | translate }} </mat-header-cell>
-        <mat-cell *matCellDef="let user"> {{ user.carriers[0].name }} </mat-cell>
+        <mat-cell *matCellDef="let user"> {{ user.carriers[0]?.name }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="actions">

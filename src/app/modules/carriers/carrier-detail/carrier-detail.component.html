@@ -15,7 +15,7 @@
             {{ showAUnits ? ('close.units' | translate) : ('view_units' | translate) }}
           </button>
           <button mat-menu-item (click)="openUnitDialog()" *ngIf="isSuperAdmin">
-            <mat-icon>add_circle</mat-icon> {{ 'add_unit' | translate }}
+            <mat-icon>add_circle</mat-icon> {{ 'add.Unit' | translate }}
           </button>
           <button mat-menu-item (click)="addWorkStation()" [disabled]="aUnits.length === 0">
             <mat-icon>add_circle</mat-icon> {{ 'addWorkStation' | translate }}
@@ -50,6 +50,11 @@
           (click)="setSearchType(DeviceType.NETWORK_EQUIPMENT)">
           {{ 'networkEquipmentDevices' | translate }}
         </button>
+        <button class="btn"
+        [ngClass]="{'btn-primary': searchType === DeviceType.SERVER, 'btn-outline-primary': searchType !== DeviceType.SERVER}"
+        (click)="setSearchType(DeviceType.SERVER)">
+        {{ 'server' | translate }}
+      </button>
         </div>
       </div>
 

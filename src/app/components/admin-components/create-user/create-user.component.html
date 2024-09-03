@@ -7,7 +7,7 @@
         <mat-form-field class="full-width">
           <mat-label>{{ 'roles' | translate }}</mat-label>
           <mat-select formControlName="role">
-            <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+            <mat-option *ngFor="let role of roles" [value]="role">{{ role | translate}}</mat-option>
           </mat-select>
         </mat-form-field>
         

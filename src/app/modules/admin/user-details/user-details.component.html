@@ -2,7 +2,6 @@
   <mat-card>
     <mat-card-title>{{ 'user.details' | translate }}</mat-card-title>
     <mat-card-content>
-      <p *ngIf="user?.userId"><strong>User ID:</strong> {{ user?.userId }}</p>
       <p><strong>{{ 'username' | translate }}:</strong> {{ user?.username }} </p>
       <p><strong>{{ 'email' | translate }}:</strong> {{ user?.email }}</p>
       <p>

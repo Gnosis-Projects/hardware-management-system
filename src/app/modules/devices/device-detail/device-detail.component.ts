@@ -64,7 +64,7 @@ export class DeviceDetailComponent implements OnInit {
   onSuccess(updatedDeviceResponse: SingleDeviceResponse): void {
     if (updatedDeviceResponse) {
       this.device = updatedDeviceResponse;
-      console.log(this.device)
+
     }
     this.showEdit = false;
   }

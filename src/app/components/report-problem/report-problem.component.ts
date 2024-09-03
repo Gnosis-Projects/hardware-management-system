@@ -44,7 +44,7 @@ constructor(
         from_name: this.authStateService.user()?.username,
       };
 
-      emailjs.send(environment.SERVIDE_ID, environment.TEMPLATE_ID, templateParams, environment.PUBLIC_KEY)
+      emailjs.send(environment.SERVICE_ID, environment.TEMPLATE_ID, templateParams, environment.PUBLIC_KEY)
         .then((result: EmailJSResponseStatus) => {
           this.toastr.success(this.translate.instant('successMessages.report.sent.successfully'));
           this.dialogRef.close();

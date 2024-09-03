@@ -15,16 +15,12 @@ export class AdminService {
 
     constructor(private http: HttpClient) { }
 
-    getAllPhones(searchParams: any): Observable<DeviceListResponse> {
-        return this.http.post<DeviceListResponse>(`${this.apiUrl}/Phone/GetAll`, searchParams);
-    }
-
     getAllComputers(searchParams: any): Observable<DeviceListResponse> {
         return this.http.post<DeviceListResponse>(`${this.apiUrl}/Computer/GetAll`, searchParams);
     }
-
-    getAllPrinters(searchParams: any): Observable<DeviceListResponse> {
-        return this.http.post<DeviceListResponse>(`${this.apiUrl}/Printer/GetAll`, searchParams);
+    
+    getAllPhones(searchParams: any): Observable<DeviceListResponse> {
+        return this.http.post<DeviceListResponse>(`${this.apiUrl}/Phone/GetAll`, searchParams);
     }
 
     getAllNetworkEquipments(searchParams: any): Observable<DeviceListResponse> {
@@ -36,6 +32,12 @@ export class AdminService {
         return this.http.post<DeviceListResponse>(`${this.apiUrl}/Server/GetAll`, searchParams);
     }
 
+    
+    getAllPrinters(searchParams: any): Observable<DeviceListResponse> {
+        return this.http.post<DeviceListResponse>(`${this.apiUrl}/Printer/GetAll`, searchParams);
+    }
+
+  
     
     getAllWorkStations(searchParams: any): Observable<WorkStationResponse> {
         return this.http.post<WorkStationResponse>(`${this.apiUrl}/WorkStation/GetAll`, searchParams);

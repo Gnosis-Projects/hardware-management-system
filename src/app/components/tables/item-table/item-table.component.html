@@ -79,6 +79,14 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #itemMenu="matMenu">
+              <button  mat-menu-item *ngIf="deviceType !== 'workstation'" (click)="editItem(item?.id)">
+                <mat-icon>edit</mat-icon>
+                <span>{{ 'edit.device' | translate }}</span>
+              </button>
+              <button mat-menu-item *ngIf="this.deviceType !== 'workstation' "
+              (click)="viewItemHistory(item?.id)">
+              <mat-icon>list_alt</mat-icon> {{ 'view.device.history' | translate }}
+            </button>
               <button mat-menu-item (click)="viewItemDetail(item?.id)">
                 <mat-icon>visibility</mat-icon> {{ 'view' | translate }}
               </button>

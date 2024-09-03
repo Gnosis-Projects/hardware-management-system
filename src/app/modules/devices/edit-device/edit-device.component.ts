@@ -1,5 +1,9 @@
 import { CommonModule } from '@angular/common';
+<<<<<<< HEAD
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+=======
+import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
+>>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
 import {
   FormBuilder,
   FormGroup,
@@ -93,6 +97,17 @@ export class EditDeviceComponent implements OnInit {
       remoteDesktopApps: this.fb.array([]),
       refurbished: [false],
     });
+<<<<<<< HEAD
+=======
+
+    this.editForm.get('comments')?.setValue('');
+
+    router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.previousPath = event.url;
+      });
+>>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
   }
 
   ngOnInit(): void {
@@ -137,6 +152,7 @@ export class EditDeviceComponent implements OnInit {
     return this.editForm.get('remoteDesktopApps') as FormArray;
   }
 
+<<<<<<< HEAD
   get disks(): FormArray {
     return this.editForm.get('disks') as FormArray;
   }
@@ -201,6 +217,17 @@ export class EditDeviceComponent implements OnInit {
             if (response.data.remoteDesktopApps && response.data.remoteDesktopApps.length > 0) {
               this.remoteDesktopApps.clear();
               response.data.remoteDesktopApps.forEach((app: any) => {
+=======
+  loadDeviceData(deviceId: number | null, deviceType: DeviceType): void {
+    if (deviceId !== null && deviceType !== null) {
+      this.deviceService.getDeviceById(deviceId, deviceType).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.editForm.patchValue(response.data);
+            this.editForm.get('comments')?.setValue('');
+            if (response.data.remoteDesktopApps && response.data.remoteDesktopApps.length) {
+              response.data.remoteDesktopApps.forEach(app => {
+>>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
                 this.remoteDesktopApps.push(this.fb.group({
                   typeId: [app.typeId],
                   userId: [app.userId],
@@ -208,6 +235,22 @@ export class EditDeviceComponent implements OnInit {
                 }));
               });
             }
+<<<<<<< HEAD
+=======
+
+            if (deviceType === DeviceType.PRINTER && response.data.printerType) {
+              this.editForm.get('printerTypeId')?.setValue(response.data.printerType.id);
+            }
+            if (deviceType === DeviceType.NETWORK_EQUIPMENT && response.data.networkEquipmentType) {
+              this.editForm.get('networkEquipmentTypeId')?.setValue(response.data.networkEquipmentType.id);
+              this.editForm.get('floor')?.setValue(response.data.floor);
+            }
+            if (deviceType === DeviceType.PHONE && response.data.phoneNumber) {
+              this.editForm.get('phoneNumber')?.setValue(response.data.phoneNumber);
+            }
+          } else {
+            console.error(response.message);
+>>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
           }
 
           if (this.deviceType === DeviceType.SERVER && response.data.networkDiskInfo) {

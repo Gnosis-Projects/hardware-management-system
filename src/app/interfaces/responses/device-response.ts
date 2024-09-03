@@ -68,12 +68,8 @@ export interface Device {
   aUnit: CommonResponse;
   carrier: CommonResponse;
   workStation?: WorkStation;
-<<<<<<< HEAD
   networkDiskInfo?: NetworkDiskInfo;
   comments?: string;
-=======
-  comments?: string;  
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
 }
 
 export interface SingleDeviceResponse {

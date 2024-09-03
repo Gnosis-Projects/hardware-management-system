@@ -1,6 +1,6 @@
 <div class="dynamic-filter-container">
   <form [formGroup]="filterForm" (ngSubmit)="onFilter()" class="filter-form">
-    
+
     <!-- Row 1: Common Filters and Carrier/AUnit Filters -->
     <div class="form-row">
       <!-- Carrier Filter -->
@@ -11,31 +11,13 @@
           <option *ngFor="let carrier of carriers" [value]="carrier.id">{{ carrier.name }}</option>
         </select>
       </div>
-<<<<<<< HEAD
 
       <!-- AUnit Filter -->
-=======
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
       <div class="form-group">
         <label for="aUnitId">{{ 'labels.aUnit' | translate }}</label>
         <select id="aUnitId" formControlName="aUnitId" class="form-control form-control-sm">
           <option [value]="null">{{ 'labels.selectAUnit' | translate }}</option>
           <option *ngFor="let aUnit of aUnits" [value]="aUnit.id">{{ aUnit.name }}</option>
-<<<<<<< HEAD
-=======
-        </select>
-      </div>
-      <div class="form-group" *ngFor="let control of filterForm.controls | keyvalue">
-        <div *ngIf="control.key !== 'carrierId' && control.key !== 'aUnitId' && control.key !== 'operatingSystem'">
-          <label [for]="control.key">{{ control.key | translate }}</label>
-          <input [id]="control.key" [formControlName]="control.key" class="form-control form-control-sm" type="text">
-        </div>
-      </div>
-      <div class="form-group" *ngIf="filterType === FilterType.Computer">
-        <label for="operatingSystem">{{ 'labels.operatingSystem' | translate }}</label>
-        <select id="operatingSystem" formControlName="operatingSystem" class="form-control form-control-sm">
-          <option *ngFor="let os of operationSystems" [value]="os">{{ os }}</option>
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
         </select>
       </div>
 
@@ -56,7 +38,7 @@
 
     <!-- Row 2: Conditional Filters based on FilterType -->
     <div class="form-row">
-      
+
       <!-- Phone Filters -->
       <ng-container *ngIf="filterType === FilterType.Phone">
         <div class="form-group">

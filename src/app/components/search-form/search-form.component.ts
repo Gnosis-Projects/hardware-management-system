@@ -10,8 +10,9 @@ import { DeviceType, NetEquipmentType } from '../../enums/device-type';
 import { HttpClient } from '@angular/common/http';
 import { operationSystems } from '../../shared/os';
 import { updateFormControls } from '../../shared/form-control';
-import { OperatingSystem, PhoneType, PrinterType, ServerDiskType } from '../../interfaces/requests/device-request';
+import { NetworkEquipmentType, OperatingSystem, PhoneType, PrinterType, RemoteDesktopApp, RemoteDesktopAppType, ServerDiskType } from '../../interfaces/requests/device-request';
 import { DropdownService } from '../../services/dropdown.service';
+import { Helper } from '../../shared/helpers';
 
 @Component({
   selector: 'app-search-form',
@@ -26,15 +27,15 @@ export class SearchFormComponent implements OnInit, OnChanges {
   @Output() search = new EventEmitter<any>();
   @Output() close = new EventEmitter<void>();
 
-  operationSystems = operationSystems;
   searchForm: FormGroup;
   sorting = Sorting;
-  netEquipmentType = NetEquipmentType;
 
+  netEqs: NetworkEquipmentType[] = [];
   printerTypes: PrinterType[] = [];
   serverDiskTypes: ServerDiskType[] = [];
   operatingSystems: OperatingSystem[] = [];
   phoneTypes: PhoneType[] = [];
+  remoteDesktopAppTypes: RemoteDesktopAppType[] = []
 
   constructor(private fb: FormBuilder, private http: HttpClient, private dropdownService: DropdownService) {
     this.searchForm = this.fb.group({
@@ -49,10 +50,12 @@ export class SearchFormComponent implements OnInit, OnChanges {
         ssd: [false],
         operatingSystemId: [0],
         remoteDesktopAppId: [0],
+        networkEquipmentTypeId: [0],
         printerTypeId: [0],
         phoneNumber: [''],
         phoneSocket: [''],
         phoneTypeId: [0],
+        refurbished: [false],
         floor: [''],
         serverDiskTypeId: [0],
         diskRotations: [0],
@@ -77,6 +80,13 @@ export class SearchFormComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.updateFormControls();
     this.loadDropdownData();
+    this.loadFormState();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['searchType']) {
+      this.updateFormControls();
+    }
   }
 
   loadDropdownData(): void {
@@ -95,64 +105,73 @@ export class SearchFormComponent implements OnInit, OnChanges {
     this.dropdownService.getPhoneTypes().subscribe(types => {
       this.phoneTypes = types.data;
     });
-  }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['searchType']) {
-      this.updateFormControls();
-    }
+    this.dropdownService.getRemoteDesktopAppTypes().subscribe(types => {
+      this.remoteDesktopAppTypes = types.data;
+    });
+
+    this.dropdownService.getNetEquipments().subscribe(types => {
+      this.netEqs = types.data;
+    });
   }
 
   updateFormControls(): void {
     updateFormControls(this.searchForm, this.searchType);
   }
 
+
+
+
   onSubmit(): void {
     if (this.searchForm.valid) {
-      let searchParams: any = {
-        aUnitId: null,
+      const searchParams: any = {
+        aUnitId: this.searchForm.value.aUnitId !== null ? Number(this.searchForm.value.aUnitId) : null,
         sorting: this.searchForm.value.sorting
       };
 
-      const aUnitId = Number(this.searchForm.value.aUnitId);
-      if (aUnitId !== null) {
-        searchParams.aUnitId = aUnitId;
-      }
+      const filterDtoValue = this.searchForm.value.filterDto ? { ...this.searchForm.value.filterDto } : null;
 
-      const filterDtoValue = this.searchForm.value.filterDto;
+      if (filterDtoValue) {
+        Object.keys(filterDtoValue).forEach(key => {
+          if (key !== 'macAddress' && (filterDtoValue[key] === null || filterDtoValue[key] === '' || filterDtoValue[key] === 0 || filterDtoValue[key] === false)) {
+            delete filterDtoValue[key];
+          }
+        });
+      }
 
       switch (this.searchType) {
         case DeviceType.COMPUTER:
           searchParams.computerFilterDto = filterDtoValue;
-          if (searchParams.computerFilterDto && searchParams.computerFilterDto.ram === null) {
-            searchParams.computerFilterDto.ram = 0;
-          }
           break;
         case DeviceType.PHONE:
           searchParams.phoneFilterDto = filterDtoValue;
           break;
         case DeviceType.PRINTER:
           searchParams.printerFilterDto = filterDtoValue;
-          if (searchParams.printerFilterDto.printerTypeId !== null) {
-            searchParams.printerFilterDto.printerTypeId = Number(searchParams.printerFilterDto.printerTypeId);
-          }
           break;
         case DeviceType.WORKSTATION:
-          searchParams.workstationFilterDto = this.searchForm.value.workstationFilterDto;
+          searchParams.workstationFilterDto = { ...this.searchForm.value.workstationFilterDto };
           break;
         case DeviceType.SERVER:
           searchParams.serverFilterDto = filterDtoValue;
           break;
         case DeviceType.NETWORK_EQUIPMENT:
-          if (filterDtoValue.networkEquipmentTypeId === this.netEquipmentType.ROUTER) {
-            searchParams.routerFilterDto = filterDtoValue;
-          } else if (filterDtoValue.networkEquipmentTypeId === this.netEquipmentType.SWITCH) {
-            searchParams.switchFilterDto = filterDtoValue;
-          }
+          searchParams.networkEquipmentFilterDto = filterDtoValue;
           break;
       }
 
+      this.saveFormState();
       this.search.emit(searchParams);
+    }
+  }
+  saveFormState(): void {
+    localStorage.setItem('searchFormState', Helper.encode(JSON.stringify(this.searchForm.value)));
+  }
+
+  loadFormState(): void {
+    const savedState = localStorage.getItem('searchFormState');
+    if (savedState) {
+      this.searchForm.patchValue(JSON.parse(Helper.decode(savedState)));
     }
   }
 }

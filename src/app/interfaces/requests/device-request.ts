@@ -45,6 +45,12 @@ export interface ServerDiskType {
   name: string;
 }
 
+export interface NetworkEquipmentType {
+  id: number;
+  name: string;
+}
+
+
 export interface IpType{
   id:number;
   name:string;
@@ -52,6 +58,12 @@ export interface IpType{
 export interface NetworkEquipmentIp{
   ipTypeId: number;
   ip: string;
+}
+
+export interface ComputerPrinter{
+  id: number;
+  typeId: number;
+  ipAddress?: string;
 }
 
 export interface AddDeviceRequest {
@@ -79,10 +91,12 @@ export interface AddDeviceRequest {
   phoneSocket?: string;
   phoneTypeId?: number;
   outlet?: string;
+  computerPrinters?: ComputerPrinter[];
   antivirus?: string;
   remoteDesktopApps?: RemoteDesktopApp[];
   purchaseDate?: string;
   networkEquipmentIp?: NetworkEquipmentIp;
+  networkDiskInfo?: NetworkDiskInfo;
   serverDiskTypeId?: number;
   diskRotations?: number;
   networkDisk?: boolean;
@@ -109,11 +123,16 @@ export interface EditDeviceRequest {
   paperSize?: string;
   machineType?: string;
   refurbished?: boolean;
+  newWorkstationId?: number;
   operatingSystemId?: number;
+  routerPassword?: string;
+  routerUsername?: string;
+  computerPrinters?: ComputerPrinter[];
   monitorType?: string;
   outlet?: string;
   antivirus?: string;
   remoteDesktopApps?: RemoteDesktopApp[];
+  networkDiskInfo?: NetworkDiskInfo;
   remoteDesktopApp?: number;
   purchaseDate?: string;
   comments?: string;

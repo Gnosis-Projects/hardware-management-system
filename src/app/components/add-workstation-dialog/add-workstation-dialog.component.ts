@@ -1,10 +1,10 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CommonResponse } from '../../interfaces/responses/common-response';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
@@ -12,7 +12,7 @@ import { AuthStateService } from '../../services/state-management/auth-state.ser
 import { AUnitService } from '../../services/aunit.service';
 import { WorkStationService } from '../../services/workstation.service';
 import { WorkstationRequest } from '../../interfaces/requests/workstation/add-workstation-request';
-import { take } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 
 @Component({
@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
     MatInputModule,
     TranslateModule,
   ],
+  encapsulation: ViewEncapsulation.None,
   templateUrl: './add-workstation-dialog.component.html',
   styleUrls: ['./add-workstation-dialog.component.scss']
 })
@@ -36,20 +37,29 @@ export class AddWorkStationDialogComponent implements OnInit {
   fb = inject(FormBuilder);
   dialogRef = inject(MatDialogRef<AddWorkStationDialogComponent>);
   data = inject(MAT_DIALOG_DATA);
+
   @Input() aUnits: CommonResponse[] = [];
   @Input() carriers: CommonResponse[] = [];
   filteredAUnits: CommonResponse[] = [];
   isSuperAdmin: boolean = false;
   addWorkStationForm: FormGroup;
   disableCarrierInput: boolean = false;
+  isSubmitting: boolean = false;
 
-  constructor(private authStateService: AuthStateService, private router: Router, private aUnitService: AUnitService, private workstationService:WorkStationService) {
+  constructor(
+    private authStateService: AuthStateService, 
+    private router: Router, 
+    private aUnitService: AUnitService,
+    private workStationService: WorkStationService,
+    private toastr: ToastrService,
+    private translate: TranslateService
+  ) {
     this.addWorkStationForm = this.fb.group({
       carrierId: [''],
       aUnitId: ['', Validators.required],
       employeeFirstName: ['', Validators.required],
       employeeLastName: ['', Validators.required],
-      workstationNumber:[''],
+      workstationNumber: [''],
       socketNumber: [''],
       email: ['', [Validators.required, Validators.email]],
       personalPhone: ['', Validators.required],
@@ -72,13 +82,12 @@ export class AddWorkStationDialogComponent implements OnInit {
     if (this.data) {
       this.addWorkStationForm.patchValue(this.data);
     }
-    if(this.router.url == '/selectedCarrier'){
-      this.disableCarrierInput = true
+    if (this.router.url === '/selectedCarrier') {
+      this.disableCarrierInput = true;
     }
-
   }
 
-  onCarrierChange(carrierId: number) {
+  onCarrierChange(carrierId: number): void {
     this.aUnitService.getAUnitsByCarrierId(carrierId).subscribe((response) => {
       if (response.success) {
         this.filteredAUnits = response.data;
@@ -87,9 +96,9 @@ export class AddWorkStationDialogComponent implements OnInit {
     });
   }
 
-  onSave() {
-
-    if (this.addWorkStationForm.valid) {
+  onSave(): void {
+    if (this.addWorkStationForm.valid && !this.isSubmitting) {
+      this.isSubmitting = true;
       const formData = this.addWorkStationForm.value;
 
       const workstationRequest: WorkstationRequest = {
@@ -100,23 +109,28 @@ export class AddWorkStationDialogComponent implements OnInit {
         workstationNumber: formData.workstationNumber,
         personalPhone: formData.personalPhone,
         department: formData.department,
-        city: formData.city
+        city: formData.city,
       };
-      this.workstationService.addWorkStation(Number(formData.aUnitId), workstationRequest)
-        .pipe(take(1))
+
+      this.workStationService.addWorkStation(Number(formData.aUnitId), workstationRequest)
         .subscribe((response) => {
+          this.isSubmitting = false;
           if (response.success) {
-            this.dialogRef.close(response.data);
-            this.disableCarrierInput = false;
+            this.toastr.success(this.translate.instant('successMessages.workstation.added.successfully'));
+            this.dialogRef.close({ isConfirmed: true, value: response.data[response.data.length - 1].id });
           } else {
-            console.error('error');
+            this.toastr.error(this.translate.instant('errorMessages.unexpected.error'));
           }
+        }, error => {
+          this.isSubmitting = false;
+          this.toastr.error(this.translate.instant('errorMessages.unexpected.error'));
         });
+    } else {
+      console.log('Form is invalid or already submitting.');
     }
   }
 
-  
-  onCancel() {
+  onCancel(): void {
     this.dialogRef.close();
   }
 }

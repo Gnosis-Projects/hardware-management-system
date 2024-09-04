@@ -14,7 +14,7 @@
             <mat-icon>{{ showAUnits ? 'visibility_off' : 'visibility' }}</mat-icon>
             {{ showAUnits ? ('close.units' | translate) : ('view_units' | translate) }}
           </button>
-          <button mat-menu-item (click)="openUnitDialog()" *ngIf="isSuperAdmin">
+          <button mat-menu-item (click)="openAddUnitDialog()" *ngIf="isSuperAdmin">
             <mat-icon>add_circle</mat-icon> {{ 'add.Unit' | translate }}
           </button>
           <button mat-menu-item (click)="addWorkStation()" [disabled]="aUnits.length === 0">
@@ -62,7 +62,7 @@
         (close)="onClose()"></app-search-form>
 
       <app-quick-search
-        *ngIf="devices.length > 0 && (searchType === DeviceType.COMPUTER || searchType === DeviceType.PHONE)"
+        *ngIf="devices.length > 0 && (searchType !== DeviceType.WORKSTATION)"
         (search)="onSearch($event)"></app-quick-search>
       <app-quick-search *ngIf="workstations.length > 0 && searchType === DeviceType.WORKSTATION"
         (search)="onSearch($event)"></app-quick-search>
@@ -108,7 +108,7 @@
       </ng-container>
 
       <div class="aunits-text" *ngIf="showAUnits">{{ 'labels.aUnits' | translate }}</div>
-      <app-aunit-table *ngIf="showAUnits" [aunits]="aUnits" (close)="onClose()" (edit)="openUnitDialog($event)"
+      <app-aunit-table *ngIf="showAUnits" [aunits]="aUnits" (close)="onClose()" (edit)="openEditUnitDialog($event)"
         (delete)="onDeleteUnit($event)"></app-aunit-table>
 
       <app-export-data-button class="mt-4" *ngIf="showAUnits && aUnits.length > 0" [data]="aUnits" fileName="μονάδες"

@@ -171,12 +171,14 @@ export class Utils {
       data: { deviceType }
     });
   
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       if (result) {
         const deviceData = result;
-        this.deviceService.addDevice(deviceData, workstationId, deviceType).pipe(take(1)).subscribe(response => {
-          callback(response);
-        });
+        if (deviceData) {
+          this.deviceService.addDevice(deviceData, workstationId, deviceType).pipe(take(1)).subscribe(response => {
+            callback(response);
+          });
+        }
       }
     });
   }

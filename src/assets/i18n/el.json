@@ -47,6 +47,7 @@
   "add.Unit": "Προσθήκη Δ. Μονάδας",
   "admin.view": "Προβολή διαχειριστή",
   "are.you.sure.delete": "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτο το στοιχείο;",
+  "enter.unit.name": "Όνομα μονάδας",
   "view_carrier": "Προβολή φορέα",
   "edit_carrier": "Επεξεργασία φορέα",
   "delete_carrier": "Διαγραφή φορέα",
@@ -101,11 +102,7 @@
   "ram": "Μνήμη RAM",
   "general.info": "Γενικές πληροφορίες",
   "type": "Τύπος",
-<<<<<<< HEAD
   "add_unit": "Νέα Διοικητικής Μονάδας",
-=======
-  "add_unit": "Προσθήκη Διοικητικής Μονάδας",
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
   "disable.user": "Απενεργοποίηση χρήστη",
   "view_units": "Προβολή διοικητικών μονάδων",
   "checkDateTime": "Ημερομηνία Ελέγχου",
@@ -142,6 +139,7 @@
   "phoneDevices": "Τηλεφωνικές συσκευές",
   "printerDevices": "Εκτυπωτές",
   "networkEquipmentDevices": "Δικτυακός εξοπλισμός",
+  "serverDevices" :"Servers",
   "workstations": "Θέσεις εργασίας",
   "workstation.text": "Θέση εργασίας",
   "change.password.warning": "Μετά την επιτυχή αλλαγή του κωδικού πρόσβασης, θα πρέπει να συνδεθείτε ξανά.",
@@ -156,6 +154,7 @@
   "enter.your.username": "Εισάγετε το όνομα χρήστη σας",
   "enter.your.password": "Εισάγετε τον κωδικό πρόσβασης σας",
   "new.password": "Νέος κωδικός πρόσβασης",
+  "unit.name": "Όνομα διοικητικής μονάδας",
   "current.password.required": "Ο τρέχων κωδικός πρόσβασης είναι υποχρεωτικός",
   "new.password.required": "Ο νέος κωδικός πρόσβασης είναι υποχρεωτικός",
   "current.password": "Τρέχων κωδικός πρόσβασης",
@@ -179,11 +178,7 @@
     "userId": "ID Χρήστη",
     "email": "Email",
     "active": "Κατάσταση",
-<<<<<<< HEAD
     "roles": "Ρόλος",
-=======
-    "roles":"Ρόλος",
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
     "carriers": "Διαχειριστής Φορέα",
     "userName": "Όνομα Χρήστη"
   },
@@ -281,6 +276,8 @@
     "printerType": "Τύπος εκτυπωτή",
     "macAddress": "Διεύθυνση MAC",
     "RAM": "Μνήμη RAM",
+    "typeOfDevice": "Τύπος συσκευής",
+    "remoteDesktopApps": "Εφαρμογή Απομακρυσμένης Επιφάνειας",
     "checkDateTime": "Ημερομηνία Ελέγχου",
     "paperSize": "Μέγεθος χαρτιού",
     "selectNetworkEquipmentType":"Επιλέξτε τύπο δικτυακού εξοπλισμού",
@@ -318,16 +315,10 @@
     "networkDiskArray": "Συστοιχεία",
     "networkEquipmentTypeId":"Τύπος δικτυακού εξοπλισμού",
     "hdd": "HDD",
-<<<<<<< HEAD
     "refurbished": "Εκθεσιακό",
     "aUnit": "Διοικητική Μονάδα",
     "selectAUnit": "Επιλέξτε διοικητική μονάδα",
     "selectCarrier": "Επιλέξτε φορέα",
-=======
-    "aUnit":"Διοικητική Μονάδα",
-    "selectAUnit":"Επιλέξτε διοικητική μονάδα",
-    "selectCarrier":"Επιλέξτε φορέα",
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
     "disks": "Δίσκοι",
     "serverDiskType": "Τύπος δίσκου",
     "diskRotations": "Συστοιχεία δίσκου",
@@ -346,18 +337,13 @@
     "machineType": "Τύπος μηχανήματος",
     "outlet": "Πρίζα",
     "monitorType": "Τύπος οθόνης",
+    "networkTypeIp" : "Τύπος IP",
     "operatingSystem": "Λειτουργικό σύστημα",
-<<<<<<< HEAD
     "userId": "ID Χρήστη",
     "password": "Κωδικός πρόσβασης",
     "purchaseDate": "Ημερομηνία αγοράς",
     "routerUsername": "'Ονομα χρήστη Router",
     "routerPassword": "Κωδικός πρόσβασης Router"
-=======
-    "userId":"ID Χρήστη",
-    "password":"Κωδικός πρόσβασης",
-    "purchaseDate": "Ημερομηνία αγοράς"
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
   },
   "admin": {
     "sidebar.title": "Επιλογές Διαχεριστή",

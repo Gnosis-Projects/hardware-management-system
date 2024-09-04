@@ -2,37 +2,39 @@
 <div *ngIf="showGeneralInfo" class="card mt-4 border-0 shadow-sm rounded-lg">
   <div class="card-body">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-12">
         <div class="info-box mb-3">
-          <p class="card-text"><strong>{{ 'labels.model' | translate }}:</strong> {{ device.data.model }}</p>
-        </div>
-        <div class="info-box mb-3">
-          <p class="card-text"><strong>{{ 'labels.serialNumber' | translate }}:</strong> {{ device.data.serialNumber }}</p>
-        </div>
-        <div class="info-box mb-3" *ngIf="device.data.supplier">
-          <p class="card-text"><strong>{{ 'labels.supplier' | translate }}:</strong> {{ device.data.supplier }}</p>
-        </div>
-        <div class="info-box mb-3" *ngIf="device.data.purchaseDate">
-          <p class="card-text"><strong>{{ 'labels.purchaseDate' | translate }}:</strong> {{ device.data.purchaseDate | date:'dd MMM yyyy' : 'el' }}</p>
-        </div>
-        <div class="info-box mb-3">
-          <p class="card-text"><strong>{{ 'labels.carrier' | translate }}:</strong> {{ device.data.workStation.carrier.name }}</p>
+          <p class="card-text text-center"><strong>{{ 'labels.typeOfDevice' | translate }}:</strong> {{ deviceType! | translate }}</p>
         </div>
       </div>
       <div class="col-md-6">
         <div class="info-box mb-3">
-          <p class="card-text"><strong>{{ 'labels.unit' | translate }}:</strong> {{ device.data.workStation.aUnit.name }}</p>
+          <p class="card-text text-center"><strong>{{ 'labels.model' | translate }}:</strong> {{ device?.data?.model }}</p>
         </div>
-        <div class="info-box mb-3" *ngIf="device.data.checkDateTime">
-          <p class="card-text"><strong>{{ 'labels.checkDateTime' | translate }}:</strong> {{ device.data.checkDateTime | date:'dd MMM yyyy hh:mm' : 'el' }}</p>
+        <div class="info-box mb-3">
+          <p class="card-text text-center"><strong>{{ 'labels.serialNumber' | translate }}:</strong> {{ device?.data?.serialNumber }}</p>
+        </div>
+        <div class="info-box mb-3" *ngIf="device?.data?.purchaseDate">
+          <p class="card-text text-center"><strong>{{ 'labels.purchaseDate' | translate }}:</strong> {{ device?.data?.purchaseDate | date:'dd MMM yyyy' : 'el' }}</p>
+        </div>
+        <div class="info-box mb-3">
+          <p class="card-text text-center"><strong>{{ 'labels.carrier' | translate }}:</strong> {{ device?.data?.workStation?.carrier?.name }}</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="info-box mb-3">
+          <p class="card-text text-center"><strong>{{ 'labels.unit' | translate }}:</strong> {{ device?.data?.workStation?.aUnit?.name }}</p>
+        </div>
+        <div class="info-box mb-3" *ngIf="device?.data?.checkDateTime">
+          <p class="card-text text-center"><strong>{{ 'labels.checkDateTime' | translate }}:</strong> {{ device?.data?.checkDateTime | date:'dd MMM yyyy hh:mm' : 'el' }}</p>
         </div>
         <div *ngIf="deviceType === 'computer'" class="info-box mb-3">
-          <p class="card-text" *ngIf="device.data.remoteDesktopApps && device.data.remoteDesktopApps.length">
+          <p class="card-text text-center" *ngIf="device?.data?.remoteDesktopApps?.length">
             <strong>{{ 'labels.remote.desktop.app' | translate }}:</strong>
           </p>
-          <ul class="list-unstyled">
-            <li *ngFor="let app of device.data.remoteDesktopApps">
-              <b>{{app.name}}</b>
+          <ul class="list-unstyled text-center">
+            <li *ngFor="let app of device?.data?.remoteDesktopApps">
+              <b>{{ app.name }}</b>
               <span>: {{ app.userId }} / {{ app.password }}</span>
             </li>
           </ul>
@@ -42,124 +44,172 @@
   </div>
 </div>
 
+
 <!-- Technical Information -->
 <div *ngIf="showTechnicalInfo" class="card mt-4 border-0 shadow-sm rounded-lg">
   <div class="card-body">
-
-    <!-- First Row -->
     <div class="row">
+      
+      <!-- COMMON FIELDS -->
       <div class="col-md-6">
-        <div class="info-box mb-3" *ngIf="device.data.phoneNumber">
-          <p class="card-text"><strong>{{ 'labels.phoneNumber' | translate }}:</strong> {{ device.data.phoneNumber }}</p>
+        <div class="info-box mb-3">
+          <p class="card-text text-center"><strong>{{ 'labels.model' | translate }}:</strong> {{ device?.data?.model }}</p>
         </div>
-        <div class="info-box mb-3" *ngIf="device.data.phoneSocket">
-          <p class="card-text"><strong>{{ 'labels.phoneSocket' | translate }}:</strong> {{ device.data.phoneSocket }}</p>
+        <div class="info-box mb-3">
+          <p class="card-text text-center"><strong>{{ 'labels.serialNumber' | translate }}:</strong> {{ device?.data?.serialNumber }}</p>
         </div>
-        <div class="info-box mb-3" *ngIf="device.data.phoneType">
-          <p class="card-text"><strong>{{ 'labels.phoneType' | translate }}:</strong> {{ device.data.phoneType.name }}</p>
+        <div class="info-box mb-3">
+          <p class="card-text text-center"><strong>{{ 'labels.deviceName' | translate }}:</strong> {{ device?.data?.deviceName }}</p>
         </div>
-        <div class="info-box mb-3" *ngIf="device.data.floor">
-          <p class="card-text"><strong>{{ 'labels.floor' | translate }}:</strong> {{ device.data.floor }}</p>
+        <div class="info-box mb-3">
+          <p class="card-text text-center"><strong>{{ 'labels.comments' | translate }}:</strong> {{ device?.data?.comments }}</p>
         </div>
-        <div class="info-box mb-3" *ngIf="device.data.networkEquipmentType">
-          <p class="card-text"><strong>{{ 'labels.netEquipmentType' | translate }}:</strong> {{ device.data.networkEquipmentType.name }}</p>
+        <div class="info-box mb-3">
+          <p class="card-text text-center"><strong>{{ 'labels.supplier' | translate }}:</strong> {{ device?.data?.supplier }}</p>
         </div>
-        <div class="info-box mb-3" *ngIf="device.data.routerUsername">
-          <p class="card-text"><strong>{{ 'labels.routerUsername' | translate }}:</strong> {{ device.data.routerUsername }}</p>
+        <div class="info-box mb-3">
+          <p class="card-text text-center"><strong>{{ 'labels.purchaseDate' | translate }}:</strong> {{ device?.data?.purchaseDate | date:'dd MMM yyyy' : 'el' }}</p>
         </div>
-        <div class="info-box mb-3" *ngIf="device.data.routerPassword">
-          <p class="card-text"><strong>{{ 'labels.routerPassword' | translate }}:</strong> {{ device.data.routerPassword }}</p>
-        </div>
-        <ng-container *ngIf="device.data.networkEquipmentType.id === 1; else showSwitchAddress">
+      </div>
+
+      <!-- COMPUTER SPECIFIC FIELDS -->
+      <ng-container *ngIf="deviceType === 'computer'">
+        <div class="col-md-6">
           <div class="info-box mb-3">
-            <p class="card-text"><strong>{{ 'labels.switchAddress' | translate }}:</strong> Φλέμινγκ</p>
+            <p class="card-text text-center"><strong>{{ 'labels.ram' | translate }}:</strong> {{ device?.data?.ram }} GB</p>
           </div>
-        </ng-container>
-        
-        <ng-template #showSwitchAddress>
-          <div class="info-box mb-3" *ngIf="device.data.switchAddress">
-            <p class="card-text"><strong>{{ 'labels.switchAddress' | translate }}:</strong> {{ device.data.switchAddress }}</p>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.ip' | translate }}:</strong> {{ device?.data?.ip }}</p>
           </div>
-        </ng-template>
-      </div>
-      <div class="col-md-6">
-        <div class="info-box mb-3" *ngIf="device.data.networkEquipmentFloor">
-          <p class="card-text"><strong>{{ 'labels.networkEquipmentFloor' | translate }}:</strong> {{ device.data.networkEquipmentFloor }}</p>
+          <div class="info-box mb-3" *ngIf="device?.data?.workGroupDomain">
+            <p class="card-text text-center"><strong>{{ 'labels.workGroupDomain' | translate }}:</strong> {{ device?.data?.workGroupDomain }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.macAddress' | translate }}:</strong> {{ device?.data?.macAddress }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.machineType' | translate }}:</strong> {{ device?.data?.machineType }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.monitorType' | translate }}:</strong> {{ device?.data?.monitorType }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.outlet' | translate }}:</strong> {{ device?.data?.outlet }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.antivirus' | translate }}:</strong> {{ device?.data?.antivirus }}</p>
+          </div>
+          <div class="info-box mb-3" *ngIf="device?.data?.refurbished === true || device?.data?.refurbished === false">
+            <p class="card-text text-center"><strong>{{ 'labels.refurbished' | translate }}:</strong> {{ device?.data?.refurbished ? 'Ναι' : 'Οχι' }}</p>
+          </div>
         </div>
-        <div class="info-box mb-3" *ngIf="device.data.printerType">
-          <p class="card-text"><strong>{{ 'labels.printerType' | translate }}:</strong> {{ device.data.printerType.name | translate }}</p>
+        <!-- Disks -->
+        <div class="col-md-6">
+          <div *ngIf="device?.data?.disks?.length" class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.disks' | translate }}:</strong></p>
+            <ul class="list-unstyled text-center">
+              <li *ngFor="let disk of device?.data?.disks">
+                <p class="card-text"><strong>{{ 'labels.diskCapacity' | translate }}:</strong> {{ disk.capacity }} GB</p>
+                <p class="card-text"><strong>{{ 'labels.ssd' | translate }}:</strong> {{ disk.ssd ? 'Ναι' : 'Οχι' }}</p>
+              </li>
+            </ul>
+          </div>
+          <!-- Computer Printers -->
+          <div *ngIf="device?.data?.computerPrinters?.length" class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.computerPrinters' | translate }}:</strong></p>
+            <ul class="list-unstyled text-center">
+              <li *ngFor="let printer of device?.data?.computerPrinters; let i = index">
+                <b>{{ i + 1 }}. {{ printer.typeId }}</b>
+                <span>- <b>IP:</b>{{ printer.ipAddress }}</span>
+              </li>
+            </ul>
+          </div>
+          <!-- Remote Desktop Apps -->
+          <div *ngIf="device?.data?.remoteDesktopApps?.length" class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.remoteDesktopApps' | translate }}:</strong></p>
+            <ul class="list-unstyled text-center">
+              <li *ngFor="let app of device?.data?.remoteDesktopApps">
+                <b>{{ app.typeId }}</b>
+                <span>: {{ app.userId }} / {{ app.password }}</span>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="info-box mb-3" *ngIf="device.data.ram">
-          <p class="card-text"><strong>{{ 'labels.RAM' | translate }}:</strong> {{ device.data.ram }} GB</p>
-        </div>
-        <div class="info-box mb-3" *ngIf="device.data.ip">
-          <p class="card-text"><strong>{{ 'labels.ip' | translate }}:</strong> {{ device.data.ip }}</p>
-        </div>
-      </div>
-    </div>
+      </ng-container>
 
-    <!-- Second Row -->
-    <div class="row">
-      <div class="col-md-6">
-        <div class="info-box mb-3" *ngIf="device.data.workGroupDomain">
-          <p class="card-text"><strong>{{ 'labels.workGroupDomain' | translate }}:</strong> {{ device.data.workGroupDomain }}</p>
-        </div>
-        <div class="info-box mb-3" *ngIf="device.data.macAddress">
-          <p class="card-text"><strong>{{ 'labels.macAddress' | translate }}:</strong> {{ device.data.macAddress }}</p>
-        </div>
-        <div class="info-box mb-3" *ngIf="device.data.paperSize">
-          <p class="card-text"><strong>{{ 'labels.paperSize' | translate }}:</strong> {{ device.data.paperSize }}</p>
-        </div>
-        <div class="info-box mb-3" *ngIf="device.data.diskRotations">
-          <p class="card-text"><strong>{{ 'labels.diskRotations' | translate }}:</strong> {{ device.data.diskRotations }}</p>
-        </div>
-        <div *ngIf="device.data.refurbished === false || device.data.refurbished === true" class="info-box mb-3">
-          <p class="card-text"><u>{{'labels.refurbished' | translate}}</u>:{{ device.data.refurbished ? 'Ναι' : 'Οχι' }}</p>
-        </div>
-        <div *ngIf="device.data.networkDisk === false || device.data.networkDisk === true" class="info-box mb-3">
-          <p class="card-text"><u>{{'labels.networkDisk' | translate}}</u>:{{ device.data.networkDisk ? 'Ναι' : 'Οχι' }}</p>
-        </div>
-        <div *ngIf="device.data.serverDiskType" class="info-box mb-3">
-          <p class="card-text">{{'labels.serverDiskType' | translate}}: {{ device.data.serverDiskType.name }}</p>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div *ngIf="device.data.disks && device.data.disks.length > 0" class="info-box mb-3">
-          <p><strong>{{ 'labels.disks' | translate }}:</strong></p>
-          <div *ngFor="let disk of device.data.disks">
-            <p class="card-text"><u>{{'Σκληρός Δίσκος' | translate}}</u>: {{ disk.capacity }} GB</p>
-            <p class="card-text"><u>{{'labels.ssd' | translate}}</u>: {{ disk.ssd ? 'Ναι' : 'Οχι' }}</p>
+      <!-- PHONE SPECIFIC FIELDS -->
+      <ng-container *ngIf="deviceType === 'phone'">
+        <div class="col-md-6">
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.phoneNumber' | translate }}:</strong> {{ device?.data?.phoneNumber }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.phoneSocket' | translate }}:</strong> {{ device?.data?.phoneSocket }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.phoneType' | translate }}:</strong> {{ device?.data?.phoneTypeId }}</p>
           </div>
         </div>
-        <div class="info-box mb-3" *ngIf="device.data.machineType">
-          <p class="card-text"><strong>{{ 'labels.machineType' | translate }}:</strong> {{ device.data.machineType }}</p>
-        </div>
-        <div class="info-box mb-3" *ngIf="device.data.operatingSystem">
-          <p class="card-text"><strong>{{ 'labels.operatingSystem' | translate }}:</strong> {{ device.data.operatingSystem.name }}</p>
-        </div>
-        <div class="info-box mb-3" *ngIf="device.data.monitorType">
-          <p class="card-text"><strong>{{ 'labels.monitorType' | translate }}:</strong> {{ device.data.monitorType }}</p>
-        </div>
-        <div class="info-box mb-3" *ngIf="device.data.outlet">
-          <p class="card-text"><strong>{{ 'labels.outlet' | translate }}:</strong> {{ device.data.outlet }}</p>
-        </div>
-        <div class="info-box mb-3" *ngIf="device.data.antivirus">
-          <p class="card-text"><strong>{{ 'labels.antivirus' | translate }}:</strong> {{ device.data.antivirus }}</p>
-        </div>
-        <div *ngIf="device.data.computerPrinters && device.data.computerPrinters.length > 0" class="info-box mb-3">
-          <p><strong>{{ 'labels.computerPrinters' | translate }}:</strong></p>
-          <ul class="list-unstyled">
-            <li *ngFor="let printer of device.data.computerPrinters; let i = index">
-              <b>{{ i + 1 }}. {{ printer.name }}</b>
-              <ng-container *ngIf="printer.name === 'Δικτυακός'">
-                - <span><b>IP:</b>{{ printer.ipAddress }}</span>
-              </ng-container>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+      </ng-container>
 
+      <!-- PRINTER SPECIFIC FIELDS -->
+      <ng-container *ngIf="deviceType === 'printer'">
+        <div class="col-md-6">
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.printerType' | translate }}:</strong> {{ device?.data?.printerTypeId }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.paperSize' | translate }}:</strong> {{ device?.data?.paperSize }}</p>
+          </div>
+          <div class="info-box mb-3" *ngIf="device?.data?.refurbished === true || device?.data?.refurbished === false">
+            <p class="card-text text-center"><strong>{{ 'labels.refurbished' | translate }}:</strong> {{ device?.data?.refurbished ? 'Ναι' : 'Οχι' }}</p>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- SERVER SPECIFIC FIELDS -->
+      <ng-container *ngIf="deviceType === 'server'">
+        <div class="col-md-6">
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.operatingSystem' | translate }}:</strong> {{ device?.data?.operatingSystemId }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.serverDiskType' | translate }}:</strong> {{ device?.data?.serverDiskTypeId }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.diskRotations' | translate }}:</strong> {{ device?.data?.diskRotations }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.networkDisk' | translate }}:</strong> {{ device?.data?.networkDisk ? 'Ναι' : 'Οχι' }}</p>
+          </div>
+        </div>
+        <!-- Network Disk Information -->
+        <div class="col-md-6" *ngIf="device?.data?.networkDiskInfo">
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.networkDiskName' | translate }}:</strong> {{ device?.data?.networkDiskInfo?.name }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.diskArray' | translate }}:</strong> {{ device?.data?.networkDiskInfo?.diskArray }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.diskSize' | translate }}:</strong> {{ device?.data?.networkDiskInfo?.diskSize }} GB</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.ip' | translate }}:</strong> {{ device?.data?.networkDiskInfo?.ip }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.brand' | translate }}:</strong> {{ device?.data?.networkDiskInfo?.brand }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.supplier' | translate }}:</strong> {{ device?.data?.networkDiskInfo?.supplier }}</p>
+          </div>
+          <div class="info-box mb-3">
+            <p class="card-text text-center"><strong>{{ 'labels.purchaseDate' | translate }}:</strong> {{ device?.data?.networkDiskInfo?.purchaseDate | date:'dd MMM yyyy' : 'el' }}</p>
+          </div>
+        </div>
+      </ng-container>
+      
+    </div>
   </div>
 </div>
 
@@ -169,28 +219,21 @@
     <div class="row">
       <div class="col-md-6">
         <div class="info-box mb-3">
-          <p class="card-text"><strong>{{ 'labels.employeeName' | translate }}:</strong> {{ device.data.workStation.employeeFirstName }} {{ device.data.workStation.employeeLastName }}</p>
+          <p class="card-text text-center"><strong>{{ 'labels.employeeName' | translate }}:</strong> {{ device?.data?.workStation?.employeeFirstName }} {{ device?.data?.workStation?.employeeLastName }}</p>
         </div>
         <div class="info-box mb-3">
-          <p class="card-text"><strong>{{ 'labels.email' | translate }}:</strong> {{ device.data.workStation.email }}</p>
+          <p class="card-text text-center"><strong>{{ 'labels.email' | translate }}:</strong> {{ device?.data?.workStation?.email }}</p>
         </div>
-        <div class="info-box mb-3" *ngIf="device.data.workStation.personalPhone">
-          <p class="card-text"><strong>{{ 'labels.phone' | translate }}:</strong> {{ device.data.workStation.personalPhone }}</p>
-        </div>
-        <div class="info-box mb-3" *ngIf="device.data.workStation.workstationNumber">
-          <p class="card-text"><strong>{{ 'workstationNumber' | translate }}:</strong> {{ device.data.workStation.workstationNumber }}</p>
+        <div class="info-box mb-3" *ngIf="device?.data?.workStation?.personalPhone">
+          <p class="card-text text-center"><strong>{{ 'labels.phone' | translate }}:</strong> {{ device?.data?.workStation?.personalPhone }}</p>
         </div>
       </div>
       <div class="col-md-6">
-        <div class="info-box mb-3" *ngIf="device.data.workStation.socketNumber">
-          <p class="card-text"><strong>{{ 'socketNumber' | translate }}:</strong> {{ device.data.workStation.socketNumber }}</p>
-        </div>
-        <hr>
         <div class="info-box mb-3">
-          <p class="card-text"><strong>{{ 'labels.department' | translate }}:</strong> {{ device.data.workStation.department }}</p>
+          <p class="card-text text-center"><strong>{{ 'labels.department' | translate }}:</strong> {{ device?.data?.workStation?.department }}</p>
         </div>
         <div class="info-box mb-3">
-          <p class="card-text"><strong>{{ 'labels.city' | translate }}:</strong> {{ device.data.workStation.city }}</p>
+          <p class="card-text text-center"><strong>{{ 'labels.city' | translate }}:</strong> {{ device?.data?.workStation?.city }}</p>
         </div>
       </div>
     </div>

@@ -12,6 +12,10 @@
     display: none;
   }
   
+  .mat-mdc-dialog-content {
+
+    max-height: 85vh !important;
+  }
   .mat-dialog-actions {
     display: flex;
     justify-content: flex-end;

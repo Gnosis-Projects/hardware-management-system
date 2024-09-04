@@ -18,6 +18,7 @@
     printers_list: Device[];
     phones_list: Device[];
     network_equipment_list: Device[];
+    servers_list: Device[];
   }
 
   export interface WorkStationResponse {

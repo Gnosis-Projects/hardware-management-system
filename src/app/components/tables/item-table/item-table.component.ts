@@ -14,6 +14,7 @@ import { WorkStationService } from '../../../services/workstation.service';
 import { ToastrService } from 'ngx-toastr';
 import { DeviceService } from '../../../services/device.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
 import { ItemColumnNames } from '../../../enums/table-headers.enum';
 import { MatMenuModule } from '@angular/material/menu';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -21,6 +22,7 @@ import { CommonModule } from '@angular/common';
 import { PaginatorEnum } from '../../../enums/paginatorEnum';
 import { Helper } from '../../../shared/helpers';
 import Swal from 'sweetalert2';
+import { QuickSearchComponent } from '../../quick-search/quick-search.component';
 
 @Component({
   selector: 'app-item-table',
@@ -32,10 +34,13 @@ import Swal from 'sweetalert2';
     MatSort,
     MatPaginator,
     TranslateModule,
+    MatSortModule,
     MatIconModule,
     MatTableModule,
     MatMenuModule,
-    MatButtonModule
+    MatChipsModule,
+    MatButtonModule,
+    QuickSearchComponent
   ],
 })
 export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
@@ -44,7 +49,7 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input() unitName?: string | null = null;
   @Input() carrierName?: string | null = null;
-  @Input() items: (Device | WorkStation | SingleWorkStationResponse)[] = [];
+  @Input() items: (Device| WorkStation | SingleWorkStationResponse)[] = [];
   @Input() deviceType: DeviceType = DeviceType.COMPUTER;
 
 
@@ -82,8 +87,18 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
+  
+  onSearch(term: string): void {
+    // Check the device type and use appropriate filtering logic based on the type of items
+    if (this.deviceType === DeviceType.WORKSTATION) {
+      this.dataSource.data = term ? Helper.filterWorkStations(term, this.items as WorkStation[]) : this.items as WorkStation[];
+    } else {
+      this.dataSource.data = term ? Helper.filterDevices(term, this.items as Device[]) : this.items as Device[];
+    }
+  }
+  
+
   setDisplayedColumns(): void {
-    // Adjust the displayed columns based on the deviceType
     switch (this.deviceType) {
       case DeviceType.COMPUTER:
         this.displayedColumns = [
@@ -111,6 +126,7 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
         break;
       case DeviceType.WORKSTATION:
         this.displayedColumns = [
+          ItemColumnNames.carrierName,
           ItemColumnNames.aUnitName,
           ItemColumnNames.employeeLastName,
           ItemColumnNames.employeeFirstName,
@@ -152,6 +168,7 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
           ItemColumnNames.serialNumber,
           ItemColumnNames.serverDiskType,
           ItemColumnNames.networkDisk,
+          ItemColumnNames.diskRotations,
           ItemColumnNames.actions
         ];
         break;

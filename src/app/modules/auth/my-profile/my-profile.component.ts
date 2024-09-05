@@ -31,7 +31,6 @@ export class MyProfileComponent implements OnInit {
 
 
     if (!this.user) {
-      console.error('User not found');
       this.router.navigate(['/login']);
     }
   }

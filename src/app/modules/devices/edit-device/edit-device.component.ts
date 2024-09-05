@@ -1,12 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-  FormArray,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { DeviceService } from '../../../services/device.service';
 import { DeviceStateService } from '../../../services/state-management/device-state.service';
@@ -21,15 +15,22 @@ import { WorkStationStateService } from '../../../services/state-management/work
 import { WorkStationService } from '../../../services/workstation.service';
 import { CarrierStateService } from '../../../services/state-management/carrier-state.service';
 import { WorkStation } from '../../../interfaces/responses/workstation-response';
+
+// Angular Material Modules
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-edit-device',
   standalone: true,
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule, ReactiveFormsModule, MatButtonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, MatAutocompleteModule,MatInputModule,MatFormFieldModule,MatSelectModule,MatCheckboxModule, ReactiveFormsModule, MatGridListModule,MatIconModule,MatButtonModule, RouterModule, TranslateModule],
   templateUrl: './edit-device.component.html',
   styleUrls: ['./edit-device.component.scss'],
 })
@@ -87,7 +88,7 @@ export class EditDeviceComponent implements OnInit {
         purchaseDate: [''],
       }),
       networkEquipmentIp: this.fb.group({
-        ipTypeId: [null, Validators.required],
+        ipTypeId: [null],
         ip: ['']
       }),
       newWorkstationId: [0],
@@ -138,10 +139,8 @@ export class EditDeviceComponent implements OnInit {
     this.editForm.get('networkEquipmentTypeId')?.valueChanges.subscribe((value) => {
       this.onNetworkEquipmentTypeChange(value);
     });
-
-
   }
-
+  
   toggleNetworkDiskInfo(show: boolean): void {
     const networkDiskInfo = this.editForm.get('networkDiskInfo');
     if (show) {
@@ -179,12 +178,10 @@ export class EditDeviceComponent implements OnInit {
                   .filter(ws => ws.id !== this.newId)
                   .sort((a, b) => a.employeeLastName.localeCompare(b.employeeLastName));;
               },
-              error: (error) => {
-                console.error('Error loading workstations:', error);
-                this.toastr.error('Error loading available workstations');
-              }
             });
           }
+
+          this.editForm.get('comments')?.setValue('')
 
           if (this.deviceType === DeviceType.PHONE && response.data.phoneType) {
             this.editForm.get('phoneTypeId')?.setValue(response.data.phoneType.id);
@@ -276,8 +273,7 @@ export class EditDeviceComponent implements OnInit {
               });
             }
           }
-
-          // Format and set purchase date
+          
           if (response.data.purchaseDate) {
             const formattedDate = new Date(response.data.purchaseDate).toISOString().substring(0, 10);
             this.editForm.get('purchaseDate')?.setValue(formattedDate);
@@ -298,21 +294,20 @@ export class EditDeviceComponent implements OnInit {
   }
 
   submitEdit(): void {
-
     if (this.editForm.valid && this.deviceId && this.deviceType) {
+      
       const editRequest: EditDeviceRequest = {
         id: this.deviceId,
         ...this.editForm.value,
       };
-
+  
       const newWorkstationId = this.editForm.get('newWorkstationId')?.value;
       this.editForm.removeControl('newWorkstationId');
-
-
+  
       if (newWorkstationId && newWorkstationId !== 0) {
         editRequest.newWorkstationId = newWorkstationId;
       }
-
+  
       switch (this.deviceType) {
         case DeviceType.COMPUTER:
           this.removeNonComputerFields(editRequest);
@@ -330,7 +325,7 @@ export class EditDeviceComponent implements OnInit {
           this.removeNonNetworkEquipmentFields(editRequest);
           break;
       }
-
+  
       this.deviceService.editDevice(editRequest, this.deviceType, newWorkstationId).subscribe({
         next: (response) => {
           if (response.success) {
@@ -342,20 +337,23 @@ export class EditDeviceComponent implements OnInit {
             }
             this.router.navigate(['/workstation']);
           } else {
-            console.error('Failed to update device:', response.message);
             this.toastr.error(response.message);
           }
         },
         error: (error) => {
-          console.error('Error updating device:', error);
           this.toastr.error(this.translate.instant('errorMessages.error.editing.device'));
         },
       });
+
     } else {
       this.editForm.markAllAsTouched();
-      this.toastr.error(this.translate.instant('invalid.form'));
+      const invalidControls = this.findInvalidControls();
+      
+      
+      this.toastr.error(this.translate.instant('form.errors'));
     }
   }
+  
 
 
   findInvalidControls(): string[] {
@@ -393,6 +391,7 @@ export class EditDeviceComponent implements OnInit {
     delete editRequest.phoneTypeId;
     delete editRequest.networkDiskInfo;
     delete editRequest.printerTypeId;
+    delete editRequest.computerPrinters;
     delete editRequest.paperSize;
     delete editRequest.serverDiskTypeId;
     delete editRequest.diskRotations;

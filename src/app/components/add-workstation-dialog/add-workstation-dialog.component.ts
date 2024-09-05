@@ -61,10 +61,10 @@ export class AddWorkStationDialogComponent implements OnInit {
       employeeLastName: ['', Validators.required],
       workstationNumber: [''],
       socketNumber: [''],
-      email: ['', [Validators.required, Validators.email]],
-      personalPhone: ['', Validators.required],
+      email: ['', [ Validators.email]],
+      personalPhone: [''],
       department: ['', Validators.required],
-      city: ['', Validators.required]
+      city: ['']
     });
 
     this.carriers = this.data.carriers;

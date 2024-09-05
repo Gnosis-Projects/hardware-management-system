@@ -128,6 +128,15 @@ export class CarrierDetailComponent implements OnInit {
       this.fetchAUnits(carrier.id);
 
     }
+    this.checkSearchFormState();
+  }
+
+  checkSearchFormState(): void {
+    const savedState = localStorage.getItem('searchFormState');
+    if (savedState) {
+      this.showForm = true;
+      this.showSearchOptions = true;
+    }
   }
 
   @HostListener('window:resize')
@@ -147,7 +156,8 @@ export class CarrierDetailComponent implements OnInit {
     this.router.navigate(['/workstation']);
   }
 
-  onSearch(term: string): void { if (
+  onSearch(term: string): void { 
+    if (
     this.searchType === DeviceType.COMPUTER ||
     this.searchType === DeviceType.PHONE ||
     this.searchType === DeviceType.PRINTER ||
@@ -281,6 +291,7 @@ export class CarrierDetailComponent implements OnInit {
       case DeviceType.COMPUTER:
       case DeviceType.PHONE:
       case DeviceType.PRINTER:
+      case DeviceType.NETWORK_EQUIPMENT:
       case DeviceType.SERVER:
         this.searchForDevices(searchParams);
         break;

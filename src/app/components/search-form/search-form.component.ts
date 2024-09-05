@@ -63,7 +63,9 @@ export class SearchFormComponent implements OnInit, OnChanges {
         ipTypeId: [0],
         routerUsername: [''],
         routerPassword: [''],
-        switchAddress: ['']
+        switchAddress: [''],
+        ipAddress: [''],
+        paperSize: ['']  
       }),
       workstationFilterDto: this.fb.group({
         employeeLastName: [''],
@@ -160,8 +162,9 @@ export class SearchFormComponent implements OnInit, OnChanges {
           break;
       }
 
-      this.saveFormState();
+     
       this.search.emit(searchParams);
+      this.saveFormState();
     }
   }
   saveFormState(): void {

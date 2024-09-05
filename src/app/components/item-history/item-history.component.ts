@@ -26,8 +26,7 @@ export class ItemHistoryComponent implements OnInit {
   @Input() deviceType: DeviceType | undefined;
 
   displayedColumns: string[] = [
-    'actionType', 'username', 'checkDateTime', 'deviceName', 'model',
-    'serialNumber', 'employeeName', 'email'
+    'actionType', 'username', 'checkDateTime', 'deviceName','employeeName'
   ];
   dataSource: MatTableDataSource<DeviceHistory> = new MatTableDataSource();
 
@@ -36,24 +35,30 @@ export class ItemHistoryComponent implements OnInit {
     this.dataSource.data = this.deviceHistory?.data || [];
   }
 
+  
+
   addDeviceSpecificColumns(): void {
     switch (this.deviceType) {
       case DeviceType.COMPUTER:
-        this.displayedColumns.push('ram', 'ip', 'macAddress', 'operatingSystem', 'outlet', 'antivirus');
+        this.displayedColumns.push('ram', 'ip', 'macAddress', 'operatingSystem', 'outlet', 'antivirus', 'remoteDesktopApps'  );
         break;
       case DeviceType.PHONE:
         this.displayedColumns.push('phoneNumber', 'phoneSocket', 'phoneType');
         break;
       case DeviceType.PRINTER:
-        this.displayedColumns.push('printerType', 'paperSize', 'refurbished');
+        this.displayedColumns.push('printerType', 'paperSize');
         break;
       case DeviceType.SERVER:
-        this.displayedColumns.push('serverDiskType', 'diskRotations', 'networkDisk');
+        this.displayedColumns.push('operatingSystem','serverDiskType', 'diskRotations', 'networkDisk');
         break;
       case DeviceType.NETWORK_EQUIPMENT:
-        this.displayedColumns.push('networkEquipmentType','routerUsername', 'routerPassword', 'switchAddress', 'networkEquipmentIp');
+        this.displayedColumns.push('networkEquipmentType', 'routerUsername', 'routerPassword', 'switchAddress', 'networkEquipmentIp');
         break;
     }
     this.displayedColumns.push('comments');
   }
+
+  
 }
+
+

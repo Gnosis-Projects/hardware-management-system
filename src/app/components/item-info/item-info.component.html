@@ -62,9 +62,6 @@
           <p class="card-text text-center"><strong>{{ 'labels.deviceName' | translate }}:</strong> {{ device?.data?.deviceName }}</p>
         </div>
         <div class="info-box mb-3">
-          <p class="card-text text-center"><strong>{{ 'labels.comments' | translate }}:</strong> {{ device?.data?.comments }}</p>
-        </div>
-        <div class="info-box mb-3">
           <p class="card-text text-center"><strong>{{ 'labels.supplier' | translate }}:</strong> {{ device?.data?.supplier }}</p>
         </div>
         <div class="info-box mb-3">
@@ -75,28 +72,28 @@
       <!-- COMPUTER SPECIFIC FIELDS -->
       <ng-container *ngIf="deviceType === 'computer'">
         <div class="col-md-6">
-          <div class="info-box mb-3">
+          <div class="info-box mb-3"  *ngIf="device?.data?.ram">
             <p class="card-text text-center"><strong>{{ 'labels.ram' | translate }}:</strong> {{ device?.data?.ram }} GB</p>
           </div>
-          <div class="info-box mb-3">
+          <div class="info-box mb-3"  *ngIf="device?.data?.ip">
             <p class="card-text text-center"><strong>{{ 'labels.ip' | translate }}:</strong> {{ device?.data?.ip }}</p>
           </div>
           <div class="info-box mb-3" *ngIf="device?.data?.workGroupDomain">
             <p class="card-text text-center"><strong>{{ 'labels.workGroupDomain' | translate }}:</strong> {{ device?.data?.workGroupDomain }}</p>
           </div>
-          <div class="info-box mb-3">
+          <div class="info-box mb-3"  *ngIf="device?.data?.macAddress">
             <p class="card-text text-center"><strong>{{ 'labels.macAddress' | translate }}:</strong> {{ device?.data?.macAddress }}</p>
           </div>
-          <div class="info-box mb-3">
+          <div class="info-box mb-3"  *ngIf="device?.data?.machineType">
             <p class="card-text text-center"><strong>{{ 'labels.machineType' | translate }}:</strong> {{ device?.data?.machineType }}</p>
           </div>
-          <div class="info-box mb-3">
+          <div class="info-box mb-3"  *ngIf="device?.data?.monitorType">
             <p class="card-text text-center"><strong>{{ 'labels.monitorType' | translate }}:</strong> {{ device?.data?.monitorType }}</p>
           </div>
-          <div class="info-box mb-3">
+          <div class="info-box mb-3"  *ngIf="device?.data?.outlet">
             <p class="card-text text-center"><strong>{{ 'labels.outlet' | translate }}:</strong> {{ device?.data?.outlet }}</p>
           </div>
-          <div class="info-box mb-3">
+          <div class="info-box mb-3"  *ngIf="device?.data?.antivirus">
             <p class="card-text text-center"><strong>{{ 'labels.antivirus' | translate }}:</strong> {{ device?.data?.antivirus }}</p>
           </div>
           <div class="info-box mb-3" *ngIf="device?.data?.refurbished === true || device?.data?.refurbished === false">
@@ -119,8 +116,8 @@
             <p class="card-text text-center"><strong>{{ 'labels.computerPrinters' | translate }}:</strong></p>
             <ul class="list-unstyled text-center">
               <li *ngFor="let printer of device?.data?.computerPrinters; let i = index">
-                <b>{{ i + 1 }}. {{ printer.typeId }}</b>
-                <span>- <b>IP:</b>{{ printer.ipAddress }}</span>
+                <b>{{ i + 1 }}. {{ printer.name }}</b>
+                <span *ngIf="printer.name === 'Δικτυακός'">- <b>IP:</b>{{ printer.ipAddress }}</span>
               </li>
             </ul>
           </div>
@@ -139,14 +136,14 @@
 
       <!-- PHONE SPECIFIC FIELDS -->
       <ng-container *ngIf="deviceType === 'phone'">
-        <div class="col-md-6">
+        <div class="col-md-6" *ngIf="device?.data?.phoneNumber">
           <div class="info-box mb-3">
             <p class="card-text text-center"><strong>{{ 'labels.phoneNumber' | translate }}:</strong> {{ device?.data?.phoneNumber }}</p>
           </div>
-          <div class="info-box mb-3">
+          <div class="info-box mb-3" *ngIf="device?.data?.phoneSocket">
             <p class="card-text text-center"><strong>{{ 'labels.phoneSocket' | translate }}:</strong> {{ device?.data?.phoneSocket }}</p>
           </div>
-          <div class="info-box mb-3">
+          <div class="info-box mb-3" *ngIf="device?.data?.phoneTypeId">
             <p class="card-text text-center"><strong>{{ 'labels.phoneType' | translate }}:</strong> {{ device?.data?.phoneTypeId }}</p>
           </div>
         </div>
@@ -155,10 +152,10 @@
       <!-- PRINTER SPECIFIC FIELDS -->
       <ng-container *ngIf="deviceType === 'printer'">
         <div class="col-md-6">
-          <div class="info-box mb-3">
+          <div class="info-box mb-3" *ngIf="device?.data?.printerTypeId">
             <p class="card-text text-center"><strong>{{ 'labels.printerType' | translate }}:</strong> {{ device?.data?.printerTypeId }}</p>
           </div>
-          <div class="info-box mb-3">
+          <div class="info-box mb-3" *ngIf="device?.data?.paperSize">
             <p class="card-text text-center"><strong>{{ 'labels.paperSize' | translate }}:</strong> {{ device?.data?.paperSize }}</p>
           </div>
           <div class="info-box mb-3" *ngIf="device?.data?.refurbished === true || device?.data?.refurbished === false">
@@ -170,16 +167,16 @@
       <!-- SERVER SPECIFIC FIELDS -->
       <ng-container *ngIf="deviceType === 'server'">
         <div class="col-md-6">
-          <div class="info-box mb-3">
+          <div class="info-box mb-3" *ngIf="device?.data?.operatingSystemId">
             <p class="card-text text-center"><strong>{{ 'labels.operatingSystem' | translate }}:</strong> {{ device?.data?.operatingSystemId }}</p>
           </div>
-          <div class="info-box mb-3">
+          <div class="info-box mb-3" *ngIf="device?.data?.serverDiskTypeId">
             <p class="card-text text-center"><strong>{{ 'labels.serverDiskType' | translate }}:</strong> {{ device?.data?.serverDiskTypeId }}</p>
           </div>
-          <div class="info-box mb-3">
+          <div class="info-box mb-3" *ngIf="device?.data?.diskRotations">
             <p class="card-text text-center"><strong>{{ 'labels.diskRotations' | translate }}:</strong> {{ device?.data?.diskRotations }}</p>
           </div>
-          <div class="info-box mb-3">
+          <div class="info-box mb-3" >
             <p class="card-text text-center"><strong>{{ 'labels.networkDisk' | translate }}:</strong> {{ device?.data?.networkDisk ? 'Ναι' : 'Οχι' }}</p>
           </div>
         </div>

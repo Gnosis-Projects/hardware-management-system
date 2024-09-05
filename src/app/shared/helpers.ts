@@ -25,7 +25,6 @@ export abstract class Helper {
       device.deviceName.toLowerCase().includes(lowerTerm) ||
       (device.ram?.toString().toLowerCase().includes(lowerTerm)) ||
       device.serialNumber.toLowerCase().includes(lowerTerm) ||
-      device.aUnit.name.toLowerCase().includes(lowerTerm) ||
       device.model.toLowerCase().includes(lowerTerm)
     );
   }

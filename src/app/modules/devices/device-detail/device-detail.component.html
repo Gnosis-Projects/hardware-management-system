@@ -48,6 +48,9 @@
           </app-item-info>
 
           <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="goToWorkstation()">
+              <mat-icon>desktop_windows</mat-icon> {{ 'workstation.of.device' | translate }}
+            </button>
             <button mat-menu-item (click)="editDevice()">
               <mat-icon>edit</mat-icon> {{ 'edit.device' | translate }}
             </button>

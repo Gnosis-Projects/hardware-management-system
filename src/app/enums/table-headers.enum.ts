@@ -6,7 +6,7 @@ export enum CarrierTableHeaders {
   }
   
   export enum ItemColumnNames {
-    carrierName = 'Όνομα Φορέα',
+    carrierName = 'Φορέας',
     aUnitName = 'Διοικητική Μονάδα',
     deviceName = 'Όνομα Συσκευής',
     model = 'Μοντέλο',
@@ -23,6 +23,7 @@ export enum CarrierTableHeaders {
     networkEquipmentType = 'Τύπος δικτυακού εξοπλισμού',
     networkEquipmentIP = 'Τύπος IP',
     networkDisk = 'Δικτυακός δίσκος',
+    diskRotations = 'Συστοιχία',
     ssd = 'Δίσκος SSD',
     serverDiskType = 'Τύπος δίσκου server',
     department = 'Τμήμα',

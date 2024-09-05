@@ -125,9 +125,7 @@ export class AddWorkStationDialogComponent implements OnInit {
           this.isSubmitting = false;
           this.toastr.error(this.translate.instant('errorMessages.unexpected.error'));
         });
-    } else {
-      console.log('Form is invalid or already submitting.');
-    }
+    } 
   }
 
   onCancel(): void {

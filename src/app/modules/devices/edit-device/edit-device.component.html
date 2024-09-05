@@ -2,22 +2,41 @@
   <h2 class="text-primary mb-4">{{ 'edit.device' | translate }}</h2>
   <form [formGroup]="editForm" (ngSubmit)="submitEdit()">
     <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="newWorkstationId">{{ 'labels.newWorkstation' | translate }} (Φορέας {{carrier}})</label>
+          <select id="newWorkstationId" formControlName="newWorkstationId" class="form-control form-control-sm">
+            <option *ngFor="let ws of availableWorkstations" [value]="ws.id">
+              {{ ws.employeeFirstName.toLowerCase() === 'warehouse' ? 'Αποθήκη ' + ws.aUnit.name : ws.employeeFirstName + ' ' + ws.employeeLastName + ' | ' + ws.aUnit.name + ' | ' + ws.department }}
+            </option>
+          </select>
+          </div>
+          </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="model">{{ 'labels.model' | translate }}</label>
           <input id="model" type="text" formControlName="model" class="form-control" />
+          <div *ngIf="editForm.get('model')?.invalid && editForm.get('model')?.touched" class="text-danger">
+            {{ 'This field is required' | translate }}
+          </div>
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="serialNumber">{{ 'labels.serialNumber' | translate }}</label>
           <input id="serialNumber" type="text" formControlName="serialNumber" class="form-control" />
+          <div *ngIf="editForm.get('serialNumber')?.invalid && editForm.get('serialNumber')?.touched" class="text-danger">
+            {{ 'This field is required' | translate }}
+          </div>
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="deviceName">{{ 'labels.deviceName' | translate }}</label>
           <input id="deviceName" type="text" formControlName="deviceName" class="form-control" />
+          <div *ngIf="editForm.get('deviceName')?.invalid && editForm.get('deviceName')?.touched" class="text-danger">
+            {{ 'This field is required' | translate }}
+          </div>
         </div>
       </div>
 
@@ -27,6 +46,9 @@
           <div class="form-group">
             <label for="ram">{{ 'labels.RAM' | translate }}</label>
             <input id="ram" type="number" formControlName="ram" class="form-control" />
+            <div *ngIf="editForm.get('ram')?.invalid && editForm.get('ram')?.touched" class="text-danger">
+              {{ 'This field is required' | translate }}
+            </div>
           </div>
         </div>
         <div class="col-md-4">
@@ -101,6 +123,9 @@
               (change)="onRemoteDesktopAppChange($event)">
               <option *ngFor="let type of remoteDesktopAppTypes" [value]="type.id">{{ type.name | translate }}</option>
             </select>
+            <div *ngIf="editForm.get('remoteDesktopApp')?.invalid && editForm.get('remoteDesktopApp')?.touched" class="text-danger">
+              {{ 'This field is required' | translate }}
+            </div>
           </div>
           <div formArrayName="remoteDesktopApps">
             <div [formGroupName]="i" *ngFor="let app of remoteDesktopApps.controls; let i = index">
@@ -202,6 +227,9 @@
             <select id="printerTypeId" formControlName="printerTypeId" class="form-control form-control-sm">
               <option *ngFor="let type of printerTypes" [value]="type.id">{{ type.name | translate }}</option>
             </select>
+            <div *ngIf="editForm.get('printerTypeId')?.invalid && editForm.get('printerTypeId')?.touched" class="text-danger">
+              {{ 'This field is required' | translate }}
+            </div>
           </div>
         </div>
         <div class="col-md-6">
@@ -226,6 +254,9 @@
             <select id="serverDiskTypeId" formControlName="serverDiskTypeId" class="form-control form-control-sm">
               <option *ngFor="let type of diskTypes" [value]="type.id">{{ type.name | translate }}</option>
             </select>
+            <div *ngIf="editForm.get('serverDiskTypeId')?.invalid && editForm.get('serverDiskTypeId')?.touched" class="text-danger">
+              {{ 'This field is required' | translate }}
+            </div>
           </div>
         </div>
         <div class="col-md-6">
@@ -279,7 +310,7 @@
                 <label for="brand">{{ 'labels.networkDiskBrand' | translate }}</label>
                 <input id="brand" type="text" formControlName="brand" class="form-control" />
               </div>
-            </div>f
+            </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="purchaseDate">{{ 'labels.purchaseDate' | translate }}</label>
@@ -310,6 +341,6 @@
         </div>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary mt-4">{{ 'save' | translate }}</button>
+    <button type="submit" class="btn btn-warning mt-4">{{ 'save' | translate }}</button>
   </form>
 </div>

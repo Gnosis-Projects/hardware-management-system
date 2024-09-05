@@ -2,6 +2,10 @@
   position: relative;
 }
 
+.navbar-brand{
+  font-size:1.2em !important;
+}
+
 .type-user{
   color:white !important;
   font-weight: 100 !important;
@@ -12,6 +16,11 @@
     font-weight:500
   }
 }
+
+.brand-icon{
+  margin:5px !important;
+}
+
 .notification-badge {
   position: absolute;
   top: -5px;

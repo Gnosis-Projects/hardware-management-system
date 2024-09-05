@@ -1,101 +1,170 @@
 <div class="mat-elevation-z8 mt-4">
-    <div class="table-responsive">
-      <table mat-table matSort [dataSource]="dataSource" class="full-width-table">
+  <div class="table-responsive">
+    <table mat-table matSort [dataSource]="dataSource" class="full-width-table">
 
-        <ng-container [matColumnDef]="ItemColumnNames.carrierName">
-          <th mat-header-cell *matHeaderCellDef> {{ ItemColumnNames.carrierName }} </th>
-          <td mat-cell *matCellDef="let item"> {{item?.carrier?.name || carrierName}} </td>
-        </ng-container>
-        
-        <ng-container [matColumnDef]="ItemColumnNames.aUnitName">
-          <th mat-header-cell *matHeaderCellDef> {{ ItemColumnNames.aUnitName }} </th>
-          <td mat-cell *matCellDef="let item"> {{item?.aUnit?.name || unitName}} </td>
-        </ng-container>
-  
-        <ng-container [matColumnDef]="ItemColumnNames.deviceName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="deviceName"> {{ ItemColumnNames.deviceName }} </th>
-          <td mat-cell *matCellDef="let item"> {{item?.deviceName}} </td>
-        </ng-container>
-  
-        <ng-container [matColumnDef]="ItemColumnNames.model">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="model"> {{ ItemColumnNames.model }} </th>
-          <td mat-cell *matCellDef="let item"> {{item?.model}} </td>
-        </ng-container>
-  
-        <ng-container [matColumnDef]="ItemColumnNames.serialNumber">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="serialNumber"> {{ ItemColumnNames.serialNumber }} </th>
-          <td mat-cell *matCellDef="let item"> {{item?.serialNumber}} </td>
-        </ng-container>
-  
-        <ng-container [matColumnDef]="ItemColumnNames.ram">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="ram"> {{ ItemColumnNames.ram }} </th>
-          <td mat-cell *matCellDef="let item"> {{item?.ram ? item.ram + ' GB' : 'N/A'}} </td>
-        </ng-container>
-  
-        <ng-container [matColumnDef]="ItemColumnNames.employeeLastName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="employeeLastName"> {{ ItemColumnNames.employeeLastName }} </th>
-          <td mat-cell *matCellDef="let item"> {{item?.employeeLastName}} </td>
-        </ng-container>
-  
-        <ng-container [matColumnDef]="ItemColumnNames.employeeFirstName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="employeeFirstName"> {{ ItemColumnNames.employeeFirstName }} </th>
-          <td mat-cell *matCellDef="let item"> {{item?.employeeFirstName}} </td>
-        </ng-container>
-  
-        <ng-container [matColumnDef]="ItemColumnNames.email">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="email"> {{ ItemColumnNames.email }} </th>
-          <td mat-cell *matCellDef="let item"> {{item?.email}} </td>
-        </ng-container>
-  
-        <ng-container [matColumnDef]="ItemColumnNames.personalPhone">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="personalPhone"> {{ ItemColumnNames.personalPhone }} </th>
-          <td mat-cell *matCellDef="let item"> {{item?.personalPhone}} </td>
-        </ng-container>
-  
-        <ng-container [matColumnDef]="ItemColumnNames.department">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="department"> {{ ItemColumnNames.department }} </th>
-          <td mat-cell *matCellDef="let item"> {{item?.department}} </td>
-        </ng-container>
-  
-        <ng-container [matColumnDef]="ItemColumnNames.city">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="city"> {{ ItemColumnNames.city }} </th>
-          <td mat-cell *matCellDef="let item"> {{item?.city}} </td>
-        </ng-container>
-  
-        <ng-container [matColumnDef]="ItemColumnNames.checkDateTime">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="checkDateTime"> {{ ItemColumnNames.checkDateTime }} </th>
-          <td mat-cell *matCellDef="let item"> {{item?.data?.checkDateTime}} </td>
-        </ng-container>
-  
-        <ng-container [matColumnDef]="ItemColumnNames.actions">
-          <th mat-header-cell *matHeaderCellDef> {{ ItemColumnNames.actions }} </th>
-          <td mat-cell *matCellDef="let item">
-            <button mat-icon-button [matMenuTriggerFor]="itemMenu">
-              <mat-icon>more_vert</mat-icon>
+      <!-- Carrier Name Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.carrierName">
+        <th mat-header-cell *matHeaderCellDef> {{ ItemColumnNames.carrierName }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.carrier?.name || carrierName }} </td>
+      </ng-container>
+      
+      <!-- Unit Name Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.aUnitName">
+        <th mat-header-cell *matHeaderCellDef> {{ ItemColumnNames.aUnitName }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.aUnit?.name || unitName }} </td>
+      </ng-container>
+
+      <!-- Network Equipment Type Column (Conditional) -->
+      <ng-container *ngIf="deviceType === 'network_equipment'" [matColumnDef]="ItemColumnNames.networkEquipmentType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="networkEquipmentType"> {{ ItemColumnNames.networkEquipmentType }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.networkEquipmentType?.name }} </td>
+      </ng-container>
+
+      <ng-container *ngIf="deviceType === 'network_equipment'" [matColumnDef]="ItemColumnNames.networkEquipmentIP">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="networkEquipmentIP"> {{ ItemColumnNames.networkEquipmentIP }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.networkEquipmentIP?.name }} </td>
+      </ng-container>
+
+
+      <!-- Device Name Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.deviceName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="deviceName"> {{ ItemColumnNames.deviceName }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.deviceName }} </td>
+      </ng-container>
+
+      <!-- Model Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.model">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="model"> {{ ItemColumnNames.model }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.model }} </td>
+      </ng-container>
+
+      <!-- Serial Number Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.serialNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="serialNumber"> {{ ItemColumnNames.serialNumber }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.serialNumber }} </td>
+      </ng-container>
+
+      <!-- RAM Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.ram">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="ram"> {{ ItemColumnNames.ram }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.ram ? item.ram + ' GB' : 'N/A' }} </td>
+      </ng-container>
+
+      <!-- Employee Last Name Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.employeeLastName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="employeeLastName"> {{ ItemColumnNames.employeeLastName }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.employeeLastName }} </td>
+      </ng-container>
+
+      <!-- Employee First Name Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.employeeFirstName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="employeeFirstName"> {{ ItemColumnNames.employeeFirstName }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.employeeFirstName }} </td>
+      </ng-container>
+
+      <!-- Email Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="email"> {{ ItemColumnNames.email }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.email }} </td>
+      </ng-container>
+
+      <!-- Personal Phone Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.personalPhone">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="personalPhone"> {{ ItemColumnNames.personalPhone }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.personalPhone }} </td>
+      </ng-container>
+
+      <!-- Printer Type Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.printerType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="printerType"> {{ ItemColumnNames.printerType }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.printerType?.name }} </td>
+      </ng-container>
+
+
+      <!-- Server Disk Type Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.serverDiskType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="serverDiskType"> {{ ItemColumnNames.serverDiskType }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.serverDiskType?.name }} </td>
+      </ng-container>
+
+      <!-- Phone Type Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.phoneType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="phoneType"> {{ ItemColumnNames.phoneType }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.phoneType?.name }} </td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="ItemColumnNames.ssd">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="ssd"> {{ ItemColumnNames.ssd }} </th>
+        <td mat-cell *matCellDef="let item">
+          <ng-container *ngIf="item?.ssd; else noSsd">
+            <mat-icon color="primary" matTooltip="Network Disk">check_circle</mat-icon>
+          </ng-container>
+          <ng-template #noSsd>
+            <mat-icon color="warn" matTooltip="Not a Network Disk">cancel</mat-icon>
+          </ng-template>
+        </td>
+      </ng-container>
+      
+      <ng-container [matColumnDef]="ItemColumnNames.networkDisk">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="networkDisk"> {{ ItemColumnNames.networkDisk }} </th>
+        <td mat-cell *matCellDef="let item">
+          <ng-container *ngIf="item?.networkDisk; else noNetworkDisk">
+            <mat-icon color="primary" matTooltip="Network Disk">check_circle</mat-icon>
+          </ng-container>
+          <ng-template #noNetworkDisk>
+            <mat-icon color="warn" matTooltip="Not a Network Disk">cancel</mat-icon>
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <!-- Department Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.department">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="department"> {{ ItemColumnNames.department }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.department }} </td>
+      </ng-container>
+
+      <!-- City Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.city">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="city"> {{ ItemColumnNames.city }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.city }} </td>
+      </ng-container>
+
+      <!-- Check Date Time Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.checkDateTime">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="checkDateTime"> {{ ItemColumnNames.checkDateTime }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.data?.checkDateTime }} </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.actions">
+        <th mat-header-cell *matHeaderCellDef> {{ ItemColumnNames.actions }} </th>
+        <td mat-cell *matCellDef="let item">
+          <button mat-icon-button [matMenuTriggerFor]="itemMenu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #itemMenu="matMenu">
+            <button mat-menu-item (click)="viewItemDetail(item?.id)">
+              <mat-icon>visibility</mat-icon> {{ 'view' | translate }}
             </button>
-            <mat-menu #itemMenu="matMenu">
-              <button  mat-menu-item *ngIf="deviceType !== 'workstation'" (click)="editItem(item?.id)">
-                <mat-icon>edit</mat-icon>
-                <span>{{ 'edit.device' | translate }}</span>
-              </button>
-              <button mat-menu-item *ngIf="this.deviceType !== 'workstation' "
-              (click)="viewItemHistory(item?.id)">
+            <button mat-menu-item *ngIf="deviceType !== 'workstation'" (click)="editItem(item?.id)">
+              <mat-icon>edit</mat-icon>
+              <span>{{ 'edit.device' | translate }}</span>
+            </button>
+            <button mat-menu-item *ngIf="deviceType !== 'workstation'" (click)="viewItemHistory(item?.id)">
               <mat-icon>list_alt</mat-icon> {{ 'view.device.history' | translate }}
             </button>
-              <button mat-menu-item (click)="viewItemDetail(item?.id)">
-                <mat-icon>visibility</mat-icon> {{ 'view' | translate }}
-              </button>
-              <button mat-menu-item (click)="deleteItem(item?.id)">
-                <mat-icon>delete</mat-icon> {{ 'delete' | translate }}
-              </button>
-            </mat-menu>
-          </td>
-        </ng-container>
-  
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-      <mat-paginator [pageSizeOptions]="Helper.getPageSizeOptions(dataSource)" showFirstLastButtons></mat-paginator>
-    </div>
+            <button mat-menu-item (click)="deleteItem(item?.id)">
+              <mat-icon>delete</mat-icon> {{ 'delete' | translate }}
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <!-- Header Row -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <!-- Data Row -->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="Helper.getPageSizeOptions(dataSource)" showFirstLastButtons></mat-paginator>
   </div>
-  
+</div>

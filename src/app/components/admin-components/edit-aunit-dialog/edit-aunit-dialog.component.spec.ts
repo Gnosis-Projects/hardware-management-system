@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FilterSearchComponent } from './filter-search.component';
+import { EditAunitDialogComponent } from './edit-aunit-dialog.component';
 
-describe('FilterSearchComponent', () => {
-  let component: FilterSearchComponent;
-  let fixture: ComponentFixture<FilterSearchComponent>;
+describe('EditAunitDialogComponent', () => {
+  let component: EditAunitDialogComponent;
+  let fixture: ComponentFixture<EditAunitDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FilterSearchComponent]
+      imports: [EditAunitDialogComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(FilterSearchComponent);
+    fixture = TestBed.createComponent(EditAunitDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -4,9 +4,9 @@
   <div *ngIf="deviceHistory && deviceHistory.data.length > 0; else noHistory">
     <app-export-data-button *ngIf="deviceHistory.data.length > 0" [data]="deviceHistory.data" fileName="{{'export.device.history.report' | translate}}" [columnNames]="columnNames"></app-export-data-button>
     <app-item-history 
-    [isTypeComputer]="isComputer(deviceHistory)" 
-    [deviceHistory]="deviceHistory">
-  </app-item-history>
+      [deviceType]="deviceType" 
+      [deviceHistory]="deviceHistory">
+    </app-item-history>
   </div>
   <ng-template #noHistory>
     <p class="text-warning">{{ 'no.device.history.found' | translate }}</p>

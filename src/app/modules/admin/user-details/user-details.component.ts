@@ -41,8 +41,15 @@ export class UserDetailsComponent implements OnInit {
 
   openEditUserDialog(): void {
     if (this.user) {
-      this.dialog.open(EditUserComponent, {
+      const dialogRef = this.dialog.open(EditUserComponent, {
         data: { user: this.user }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result && result.success && result.updatedUser) {
+          // Update the local user data with the updated user data returned from the dialog
+          this.user = result.updatedUser;
+        }
       });
     }
   }

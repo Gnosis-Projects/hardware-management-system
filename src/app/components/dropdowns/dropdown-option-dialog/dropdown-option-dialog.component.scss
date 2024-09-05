@@ -1,4 +1,7 @@
-.workstation-form {
+.full-width {
+    width: 100%;
+  }
+  .workstation-form {
     display: flex;
     flex-direction: column;
   
@@ -12,10 +15,6 @@
     display: none;
   }
   
-  .mat-mdc-dialog-content {
-
-    max-height: 85vh !important;
-  }
   .mat-dialog-actions {
     display: flex;
     justify-content: flex-end;
@@ -26,4 +25,5 @@
       margin-left: 8px;
     }
   }
+  
   

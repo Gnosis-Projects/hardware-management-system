@@ -1,4 +1,3 @@
-<!-- search-form.component.html -->
 <div class="position-relative">
   <div class="search-container">
     <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
@@ -11,24 +10,25 @@
           'Αναζήτηση εκτυπωτών' : 
           (searchType === 'network_equipment' ? 
           'Αναζήτηση δικτυακού εξοπλισμού' : 
-          'Αναζήτηση σταθμών εργασίας'))) }}
+          (searchType === 'server' ? 
+          'Αναζήτηση server' : 
+          'Αναζήτηση σταθμών εργασίας')))) }}
       </h3>
+
       <div class="row mb-3">
         <div class="col-md-12">
-          <label for="aUnitId" class="form-label">{{'labels.aunit' |translate}}
-            *</label>
+          <label for="aUnitId" class="form-label">{{'labels.aunit' | translate}} *</label>
           <select id="aUnitId" formControlName="aUnitId" class="form-select">
             <option [disabled]="aUnits.length === 1" value="null">{{'all' | translate }}</option>
-            <option *ngFor="let aUnit of aUnits" [value]="aUnit.id">{{ aUnit.name
-              }}</option>
+            <option *ngFor="let aUnit of aUnits" [value]="aUnit.id">{{ aUnit.name }}</option>
           </select>
           <div *ngIf="searchForm.controls['aUnitId'].invalid && searchForm.controls['aUnitId'].touched">
-            <p class="text-danger mt-1">{{'errorMessages.please.choose.aUnit' |
-              translate}}</p>
+            <p class="text-danger mt-1">{{'errorMessages.please.choose.aUnit' | translate}}</p>
           </div>
         </div>
       </div>
 
+      <!-- Common Fields -->
       <div *ngIf="searchType !== 'workstation'" formGroupName="filterDto">
         <div class="row mb-3">
           <div class="col-md-3">
@@ -39,51 +39,139 @@
             <label for="model" class="form-label">{{ 'labels.model' | translate }}</label>
             <input id="model" formControlName="model" class="form-control" />
           </div>
-          <div class="col-md-3" *ngIf="searchType === 'computer' || searchType === 'phone' || searchType === 'printer' || searchType === 'network_equipment'">
+          <div class="col-md-3" *ngIf="searchType === 'computer' || searchType === 'phone' || searchType === 'printer' || searchType === 'network_equipment'|| searchType === 'server'">
             <label for="serialNumber" class="form-label">{{ 'labels.serialNumber' | translate }}</label>
             <input id="serialNumber" formControlName="serialNumber" class="form-control" />
           </div>
-          <div class="col-md-3" *ngIf="searchType === 'computer'">
+        </div>
+
+        <!-- Computer Specific Fields -->
+        <div class="row mb-3" *ngIf="searchType === 'computer'">
+          <div class="col-md-3">
             <label for="ram" class="form-label">{{ 'labels.RAM' | translate }}</label>
             <input id="ram" type="number" formControlName="ram" class="form-control" />
           </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-3" *ngIf="searchType === 'computer'">
+          <div class="col-md-3">
             <label for="ip" class="form-label">{{ 'labels.ip' | translate }}</label>
             <input id="ip" formControlName="ip" class="form-control" />
           </div>
-          <div class="col-md-3"  *ngIf="searchType === 'computer'">
-            <label for="operatingSystem" class="form-label">{{ 'labels.operatingSystem' | translate }}</label>
-            <select class="form-control" id="operatingSystem" formControlName="operatingSystem">
-              <option *ngFor="let os of operationSystems" [value]="os">{{ os }}</option>
-            </select>
+          <div class="col-md-3">
+            <label for="macAddress" class="form-label">{{ 'labels.macAddress' | translate }}</label>
+            <input id="macAddress" formControlName="macAddress" class="form-control" />
           </div>
-          <div class="col-md-3" *ngIf="searchType === 'computer'">
+          <div class="col-md-3">
             <label for="ssd" class="form-label">{{ 'labels.ssd' | translate }}</label>
             <input id="ssd" type="checkbox" formControlName="ssd" class="form-check-input" />
           </div>
-          <div class="col-md-3" *ngIf="searchType === 'network_equipment'">
-            <label for="networkEquipmentTypeId" class="form-label">{{ 'labels.netEquipmentType' | translate }}</label>
-            <select id="networkEquipmentTypeId" formControlName="networkEquipmentTypeId" class="form-select">
-              <option [value]="netEquipmentType.ROUTER">{{'Router'}}</option>
-              <option [value]="netEquipmentType.SWITCH">{{'Switch'}}</option>
+          <div class="col-md-3">
+            <label for="operatingSystemId" class="form-label">{{ 'labels.operatingSystem' | translate }}</label>
+            <select id="operatingSystemId" formControlName="operatingSystemId" class="form-control">
+              <option *ngFor="let os of operatingSystems" [value]="os.id">{{ os.name }}</option>
             </select>
           </div>
-          <div class="col-md-3" *ngIf="searchType === 'network_equipment'">
+          <div class="col-md-3">
+            <label for="remoteDesktopAppId" class="form-label">{{ 'labels.remoteDesktopApp' | translate }}</label>
+            <select id="remoteDesktopAppId" formControlName="remoteDesktopAppId" class="form-control">
+              <option *ngFor="let app of remoteDesktopAppTypes" [value]="app.id">{{ app.name }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="refurbished">{{ 'labels.refurbished' | translate }}</label>
+            <input id="refurbished" type="checkbox" formControlName="refurbished" class="form-check-input" />
+          </div>
+        </div>
+
+        <!-- Server Specific Fields -->
+        <div *ngIf="searchType === 'server'" class="row mb-3">
+          <div class="col-md-3">
+            <label for="operatingSystemId" class="form-label">{{ 'labels.operatingSystem' | translate }}</label>
+            <select id="operatingSystemId" formControlName="operatingSystemId" class="form-control">
+              <option *ngFor="let os of operatingSystems" [value]="os.id">{{ os.name }}</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="serverDiskTypeId" class="form-label">{{ 'labels.serverDiskType' | translate }}</label>
+            <select id="serverDiskTypeId" formControlName="serverDiskTypeId" class="form-control">
+              <option *ngFor="let diskType of serverDiskTypes" [value]="diskType.id">{{ diskType.name }}</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="diskRotations" class="form-label">{{ 'labels.diskRotations' | translate }}</label>
+            <input id="diskRotations" type="number" formControlName="diskRotations" class="form-control" />
+          </div>
+          <div class="col-md-3">
+            <label for="networkDisk" class="form-label">{{ 'labels.networkDisk' | translate }}</label>
+            <input id="networkDisk" type="checkbox" formControlName="networkDisk" class="form-check-input" />
+          </div>
+        </div>
+
+        <!-- Network Equipment Specific Fields -->
+        <div class="row mb-3" *ngIf="searchType === 'network_equipment'">
+          <div class="col-md-3">
+            <label for="networkEquipmentTypeId" class="form-label">{{ 'labels.netEquipmentType' | translate }}</label>
+            <select id="networkEquipmentTypeId" formControlName="networkEquipmentTypeId" class="form-control">
+              <option *ngFor="let netEq of netEqs" [value]="netEq.id">{{ netEq.name }}</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label for="ipAddress" class="form-label">{{ 'labels.ip' | translate }}</label>
+            <input id="ipAddress" formControlName="ipAddress" class="form-control" />
+          </div>
+
+          <div class="col-md-3" *ngIf="searchForm.get('filterDto')?.get('networkEquipmentTypeId')?.value === 1">
+            <label for="routerUsername" class="form-label">{{ 'labels.routerUsername' | translate }}</label>
+            <input id="routerUsername" formControlName="routerUsername" class="form-control" />
+          </div>
+          <div class="col-md-3" *ngIf="searchForm.get('filterDto')?.get('networkEquipmentTypeId')?.value === 1">
+            <label for="routerPassword" class="form-label">{{ 'labels.routerPassword' | translate }}</label>
+            <input id="routerPassword" formControlName="routerPassword" class="form-control" />
+          </div>
+
+          <div class="col-md-3" *ngIf="searchForm.get('filterDto')?.get('networkEquipmentTypeId')?.value === 1">
+            <label for="switchAddress" class="form-label">{{ 'labels.switchAddress' | translate }}</label>
+            <input id="switchAddress" formControlName="switchAddress" class="form-control" />
+          </div>
+
+          <div class="col-md-3">
             <label for="floor" class="form-label">{{ 'labels.floor' | translate }}</label>
             <input id="floor" formControlName="floor" class="form-control" />
           </div>
-          <div class="col-md-3" *ngIf="searchType === 'phone'">
+        </div>
+
+        <!-- Phone Specific Fields -->
+        <div *ngIf="searchType === 'phone'" class="row mb-3">
+          <div class="col-md-3">
             <label for="phoneNumber" class="form-label">{{ 'labels.phoneNumber' | translate }}</label>
             <input id="phoneNumber" formControlName="phoneNumber" class="form-control" />
           </div>
-          <div class="col-md-3" *ngIf="searchType === 'printer'">
-            <label for="printerTypeId" class="form-label">{{ 'labels.printerType' | translate }}</label>
-            <select id="printerTypeId" formControlName="printerTypeId" class="form-select">
-              <option [value]="printerType.BASIC">{{'basic.printer' | translate}}</option>
-              <option [value]="printerType.NETWORK">{{'network.printer' | translate}}</option>
+          <div class="col-md-3">
+            <label for="phoneSocket" class="form-label">{{ 'labels.phoneSocket' | translate }}</label>
+            <input id="phoneSocket" formControlName="phoneSocket" class="form-control" />
+          </div>
+          <div class="col-md-3">
+            <label for="phoneTypeId" class="form-label">{{ 'labels.phoneType' | translate }}</label>
+            <select id="phoneTypeId" formControlName="phoneTypeId" class="form-control">
+              <option *ngFor="let phoneType of phoneTypes" [value]="phoneType.id">{{ phoneType.name }}</option>
             </select>
+          </div>
+        </div>
+
+        <!-- Printer Specific Fields -->
+        <div *ngIf="searchType === 'printer'" class="row mb-3">
+          <div class="col-md-3">
+            <label for="printerTypeId" class="form-label">{{ 'labels.printerType' | translate }}</label>
+            <select id="printerTypeId" formControlName="printerTypeId" class="form-control">
+              <option *ngFor="let printerType of printerTypes" [value]="printerType.id">{{ printerType.name }}</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="paperSize" class="form-label">{{ 'labels.paperSize' | translate }}</label>
+            <input id="paperSize" formControlName="paperSize" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="refurbished">{{ 'labels.refurbished' | translate }}</label>
+            <input id="refurbished" type="checkbox" formControlName="refurbished" class="form-check-input" />
           </div>
         </div>
       </div>
@@ -91,18 +179,15 @@
       <div *ngIf="searchType === 'workstation'" formGroupName="workstationFilterDto">
         <div class="row mb-3">
           <div class="col-md-4">
-            <label for="employeeLastName" class="form-label">{{ 'employeeLastName'
-              | translate }}</label>
+            <label for="employeeLastName" class="form-label">{{ 'employeeLastName' | translate }}</label>
             <input id="employeeLastName" formControlName="employeeLastName" class="form-control" />
           </div>
           <div class="col-md-4">
-            <label for="employeeFirstName" class="form-label">{{
-              'employeeFirstName' | translate }}</label>
+            <label for="employeeFirstName" class="form-label">{{ 'employeeFirstName' | translate }}</label>
             <input id="employeeFirstName" formControlName="employeeFirstName" class="form-control" />
           </div>
           <div class="col-md-4">
-            <label for="department" class="form-label">{{ 'department' | translate
-              }}</label>
+            <label for="department" class="form-label">{{ 'department' | translate }}</label>
             <input id="department" formControlName="department" class="form-control" />
           </div>
         </div>
@@ -111,16 +196,14 @@
       <div formGroupName="sorting">
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="sortBy" class="form-label">{{ 'labels.sortBy' | translate
-              }}</label>
+            <label for="sortBy" class="form-label">{{ 'labels.sortBy' | translate }}</label>
             <select id="sortBy" formControlName="sortBy" class="form-select">
               <option [value]="'deviceName'">{{ sorting.DEVICE_NAME }}</option>
               <option [value]="'Date'">{{ sorting.DATE }}</option>
             </select>
           </div>
           <div class="col-md-6">
-            <label for="sortOrder" class="form-label">{{ 'labels.sortOrder' |
-              translate }}</label>
+            <label for="sortOrder" class="form-label">{{ 'labels.sortOrder' | translate }}</label>
             <select id="sortOrder" formControlName="sortOrder" class="form-select">
               <option [value]="'desc'">{{ sorting.DESC }}</option>
               <option [value]="'asc'">{{ sorting.ASC }}</option>
@@ -129,8 +212,7 @@
         </div>
       </div>
 
-      <button type="submit" [disabled]="searchForm.controls['aUnitId'].invalid"
-        class="btn btn-primary btn-search">Αναζήτηση</button>
+      <button type="submit" [disabled]="searchForm.controls['aUnitId'].invalid" class="btn btn-primary btn-search">Αναζήτηση</button>
     </form>
     <button mat-mini-fab color="warn" class="position-absolute top-0 end-0 m-2" (click)="close.emit()">
       <mat-icon>close</mat-icon>

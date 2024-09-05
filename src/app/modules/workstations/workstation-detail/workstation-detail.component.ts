@@ -87,6 +87,9 @@ export class WorkstationDetailComponent implements OnInit {
         case DeviceType.NETWORK_EQUIPMENT:
           this.workstation.data.network_equipment_list = this.workstation.data.network_equipment_list.filter(item => item.id !== itemId);
           break;
+        case DeviceType.SERVER:
+          this.workstation.data.servers_list = this.workstation.data.servers_list.filter(item => item.id !== itemId);
+            break;
       }
     }
   }

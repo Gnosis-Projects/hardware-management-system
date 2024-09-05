@@ -78,7 +78,7 @@ export class Utils {
   }
 
   updateAUnit(unitId: number, unitName: string, aUnits: CommonResponse[], callback: (success: boolean, updatedUnits: CommonResponse[]) => void): void {
-    this.aUnitService.updateAunit(unitId, unitName).subscribe(response => {
+    this.aUnitService.updateAunit(unitId,  unitName ).subscribe(response => {
       if (response.success) {
         this.utilityService.handleResponse(
           response.success,
@@ -123,7 +123,7 @@ export class Utils {
   }
 
   deleteWorkStation(id: number, onSuccess: () => void): void {
-    this.alertService.showDeleteItemAlert('station').then(result => {
+    this.alertService.showDeleteItemAlert('θέσης εργασίας').then(result => {
       if (result.isConfirmed) {
         this.workStationService.deleteWorkStation(id).pipe(take(1)).subscribe(response => {
           if (response.success) {
@@ -144,6 +144,8 @@ export class Utils {
       employeeFirstName: workstation.data.employeeFirstName,
       email: workstation.data.email,
       personalPhone: workstation.data.personalPhone,
+      socketNumber: workstation.data.socketNumber,
+      workstationNumber: workstation.data.workstationNumber,
       department: workstation.data.department,
       city: workstation.data.city
     }).then(result => {
@@ -169,12 +171,14 @@ export class Utils {
       data: { deviceType }
     });
   
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       if (result) {
         const deviceData = result;
-        this.deviceService.addDevice(deviceData, workstationId, deviceType).pipe(take(1)).subscribe(response => {
-          callback(response);
-        });
+        if (deviceData) {
+          this.deviceService.addDevice(deviceData, workstationId, deviceType).pipe(take(1)).subscribe(response => {
+            callback(response);
+          });
+        }
       }
     });
   }

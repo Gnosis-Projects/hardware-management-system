@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { DeviceType } from '../../enums/device-type';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./item-info.component.scss'],
   imports: [CommonModule, MatButtonModule, TranslateModule],
   standalone: true,
+  encapsulation: ViewEncapsulation.None
 })
 export class ItemInfoComponent {
   @Input() device: any;

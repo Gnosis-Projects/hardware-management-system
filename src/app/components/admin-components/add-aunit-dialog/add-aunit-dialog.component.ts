@@ -5,18 +5,15 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { AUnitService } from '../../../services/aunit.service';
 import { CarrierStateService } from '../../../services/state-management/carrier-state.service';
 import { CommonResponse } from '../../../interfaces/responses/common-response';
-import { CarrierTableComponent } from '../../tables/carrier-table/carrier-table.component';
-import { CarrierService } from '../../../services/carrier.service';
-import { take } from 'rxjs';
-import { ApiResponse } from '../../../interfaces/responses/api-response';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { CarrierService } from '../../../services/carrier.service';
 
 @Component({
   selector: 'app-add-aunit-dialog',
@@ -43,37 +40,21 @@ export class AddAunitDialogComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private dialogRef: MatDialogRef<AddAunitDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
     private aUnitService: AUnitService,
     private carrierService: CarrierService,
+    private translate: TranslateService,
     private toastr: ToastrService,
     private carrierStateService: CarrierStateService
   ) {
     this.unitForm = this.fb.group({
       carrier: ['', Validators.required],
-      unitName: [{ value: '', disabled: true }, Validators.required]
+      unitName: ['', Validators.required]
     });
   }
 
   ngOnInit() {
-
-    const isSelectedCarrierRoute = this.router.url === '/selectedCarrier'
-    if (isSelectedCarrierRoute) {
-      this.handleSelectedCarrierRoute();
-    } else {
-      this.loadCarriers();
-      this.setupCarrierValueChanges();
-    }
-  }
-
-  private handleSelectedCarrierRoute(): void {
-    this.hideCarrierSelection = true;
-    const carrierControl = this.unitForm.get('carrier');
-    if (carrierControl) {
-      carrierControl.clearValidators();
-      carrierControl.updateValueAndValidity();
-    }
-    this.unitForm.get('unitName')?.enable();
+    this.loadCarriers();
+    this.setupCarrierValueChanges();
   }
   
   private loadCarriers(): void {
@@ -82,7 +63,6 @@ export class AddAunitDialogComponent implements OnInit {
       this.carriers = carriersFromState;
     } else {
       this.carrierService.getAllCarriers()
-        .pipe(take(1))
         .subscribe(response => {
           if (response.success) {
             this.carrierStateService.setAllCarriers(response.data);
@@ -93,7 +73,7 @@ export class AddAunitDialogComponent implements OnInit {
         });
     }
   }
-  
+
   private setupCarrierValueChanges(): void {
     this.unitForm.get('carrier')?.valueChanges.subscribe(carrier => {
       if (carrier) {
@@ -106,21 +86,17 @@ export class AddAunitDialogComponent implements OnInit {
 
   onSave(): void {
     if (this.unitForm.valid) {
-      let carrierId = this.unitForm.value.carrier;
-      if(!carrierId) {
-        carrierId = this.carrierStateService.getSelectedCarrier()?.id;
-      }
+      const carrierId = this.unitForm.value.carrier;
       const unitName = this.unitForm.value.unitName;
       this.aUnitService.addAUnit(carrierId, unitName).subscribe({
-        next: (response: ApiResponse<CommonResponse>) => {
-          if (response.success) {
-            this.dialogRef.close({ isConfirmed: true, value: response.data });
-            this.toastr.success('successMessages.aunit.added.successfully')
-          } else {
-            this.toastr.error('errorMessages.aunit.not.created')
-          }
+        next: (response) => {
+          this.dialogRef.close({ isConfirmed: true, value: response.data });
+          this.toastr.success(this.translate.instant('successMessages.aunit.created.successfully'));
         },
-      })
+        error: () => {
+          this.toastr.error(this.translate.instant('errorMessages.aunit.not.created'));
+        }
+      });
     }
   }
 

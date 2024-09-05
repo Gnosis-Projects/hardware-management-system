@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FilterType } from '../../../enums/filter-type.enum';
 import { CommonModule, KeyValuePipe } from '@angular/common';
@@ -8,9 +8,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { operationSystems } from '../../../shared/os';
 import { HttpClient } from '@angular/common/http';
-import { AUnitService } from '../../../services/aunit.service'; // Add this import
+import { AUnitService } from '../../../services/aunit.service';
+import { DropdownService } from '../../../services/dropdown.service';
+import { IpType, OperatingSystem, PhoneType, PrinterType, RemoteDesktopApp, ServerDiskType } from '../../../interfaces/requests/device-request';
+import { NetworkEquipmentType } from '../../../interfaces/responses/device-response';
 
 @Component({
   selector: 'app-filter',
@@ -19,25 +21,42 @@ import { AUnitService } from '../../../services/aunit.service'; // Add this impo
   standalone: true,
   imports: [ReactiveFormsModule, MatTooltipModule, MatSidenavModule, MatButtonModule, MatIconModule, CommonModule, TranslateModule, KeyValuePipe]
 })
-export class FilterComponent implements OnChanges {
+export class FilterComponent implements OnInit, OnChanges {
   @Input() filterType: FilterType = FilterType.Computer;
   @Input() carriers: CommonResponse[] = [];
   @Output() filter = new EventEmitter<any>();
+
   showFilter: boolean = false;
   filterForm: FormGroup;
-  osOptions: string[] = [];
+  operatingSystems: OperatingSystem[] = [];
   aUnits: CommonResponse[] = [];
-  FilterType = FilterType;
-  operationSystems = operationSystems;
+  printerTypes: PrinterType[] = [];
+  phoneTypes: PhoneType[] = [];
+  serverDiskTypes: ServerDiskType[] = [];
+  netTypes: NetworkEquipmentType[] = [];
+  ipTypes: IpType[] = [];
+  remoteDesktopAppTypes: RemoteDesktopApp[] = [];
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private aUnitService: AUnitService) {
+  FilterType = FilterType;
+
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private aUnitService: AUnitService,
+    private dropdownService: DropdownService
+  ) {
     this.filterForm = this.fb.group({});
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['filterType'] || changes['carriers']) {
       this.initializeForm();
+
     }
+  }
+
+  ngOnInit(): void {
+    this.loadDropdownData();
   }
 
   toggleFilter(): void {
@@ -46,19 +65,49 @@ export class FilterComponent implements OnChanges {
 
   initializeForm() {
     let controls: any = {
+      deviceName: [''],
+    model: ['' ],
+    serialNumber: ['' ],
       carrierId: [null],
       aUnitId: [{ value: null, disabled: true }]
     };
 
     switch (this.filterType) {
       case FilterType.Phone:
+        controls = {
+          ...controls,
+          deviceName: [''],
+          model: [''],
+          serialNumber: [''],
+          phoneNumber: [''],
+          phoneSocket: [''],
+          phoneTypeId: [0]
+        };
+        break;
       case FilterType.Printer:
+        controls = {
+          ...controls,
+          deviceName: [''],
+          model: [''],
+          serialNumber: [''],
+          printerTypeId: [null],
+          refurbished: [false],
+          paperSize: ['']
+        };
+        break;
       case FilterType.NetEquipment:
         controls = {
           ...controls,
           deviceName: [''],
           model: [''],
-          serialNumber: ['']
+          serialNumber: [''],
+          floor: [''],
+          networkEquipmentTypeId: [null],
+          ipTypeId: [null],
+          ipAddress: [''],
+          routerUsername: [''],
+          routerPassword: [''],
+          switchAddress: ['']
         };
         break;
       case FilterType.Computer:
@@ -70,7 +119,19 @@ export class FilterComponent implements OnChanges {
           ram: [0],
           ip: [''],
           macAddress: [''],
-          operatingSystem: [''],
+          operatingSystemId: [null]
+        };
+        break;
+      case FilterType.Server:
+        controls = {
+          ...controls,
+          deviceName: [''],
+          model: [''],
+          serialNumber: [''],
+          operatingSystemId: [null],
+          serverDiskTypeId: [null],
+          diskRotations: [null],
+          networkDisk: [false]
         };
         break;
       case FilterType.Workstation:
@@ -81,18 +142,42 @@ export class FilterComponent implements OnChanges {
           department: ['']
         };
         break;
-      default:
-        controls = {
-          ...controls,
-          ram: [0]
-        };
-        break;
     }
 
     this.filterForm = this.fb.group(controls);
 
     this.filterForm.get('carrierId')?.valueChanges.subscribe(carrierId => {
       this.onCarrierChange(carrierId);
+    });
+  }
+
+  loadDropdownData(): void {
+    this.dropdownService.getPrinterTypes().subscribe((response) => {
+      this.printerTypes = response.data;
+    });
+
+    this.dropdownService.getPhoneTypes().subscribe((response) => {
+      this.phoneTypes = response.data;
+    });
+
+    this.dropdownService.getServerDiskTypes().subscribe((response) => {
+      this.serverDiskTypes = response.data;
+    });
+
+    this.dropdownService.getOperatingSystems().subscribe((response) => {
+      this.operatingSystems = response.data;
+    });
+
+    this.dropdownService.getNetEquipments().subscribe((response) => {
+      this.netTypes = response.data;
+    });
+
+    this.dropdownService.getIPTypes().subscribe((response) => {
+      this.ipTypes = response.data;
+    });
+
+    this.dropdownService.getRemoteDesktopAppTypes().subscribe((response) => {
+      this.remoteDesktopAppTypes = response.data;
     });
   }
 
@@ -111,13 +196,18 @@ export class FilterComponent implements OnChanges {
   }
 
   onFilter(): void {
-    console.log(this.filterForm.getRawValue())
     if (this.filterForm.valid) {
       const { carrierId, aUnitId, ...filterDto } = this.filterForm.getRawValue();
+  
+      Object.keys(filterDto).forEach(key => {
+        if (key !=='macAddress' && (filterDto[key] === null || filterDto[key] === '')) {
+          delete filterDto[key];
+        }
+      });
+  
       this.filter.emit({ carrierId, aUnitId, filterDto });
     }
   }
-
   onReset(): void {
     this.filterForm.reset({
       carrierId: null,
@@ -128,12 +218,13 @@ export class FilterComponent implements OnChanges {
       ram: 0,
       ip: '',
       macAddress: '',
-      operatingSystem: '',
+      operatingSystemId: null,
       employeeLastName: '',
       employeeFirstName: '',
       department: ''
     });
     this.aUnits = [];
     this.filterForm.get('aUnitId')?.disable();
+    this.onFilter()
   }
 }

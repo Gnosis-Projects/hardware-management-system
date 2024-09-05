@@ -41,6 +41,7 @@ import { AddAunitDialogComponent } from '../../../components/admin-components/ad
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { Utils } from '../../../shared/utils';
 import { AuthStateService } from '../../../services/state-management/auth-state.service';
+import { EditAunitDialogComponent } from '../../../components/admin-components/edit-aunit-dialog/edit-aunit-dialog.component';
 
 @Component({
   selector: 'app-carrier-detail',
@@ -146,8 +147,13 @@ export class CarrierDetailComponent implements OnInit {
     this.router.navigate(['/workstation']);
   }
 
-  onSearch(term: string): void {
-    if (this.searchType === DeviceType.COMPUTER || this.searchType === DeviceType.PHONE || this.searchType === DeviceType.PRINTER) {
+  onSearch(term: string): void { if (
+    this.searchType === DeviceType.COMPUTER ||
+    this.searchType === DeviceType.PHONE ||
+    this.searchType === DeviceType.PRINTER ||
+    this.searchType === DeviceType.NETWORK_EQUIPMENT ||
+    this.searchType === DeviceType.SERVER
+  )  {
       this.filteredResults = term ? Helper.filterDevices(term, this.devices) : this.devices;
     } else if (this.searchType === DeviceType.WORKSTATION) {
       this.filteredResults = term ? Helper.filterWorkStations(term, this.workstations) : this.workstations;
@@ -174,30 +180,27 @@ export class CarrierDetailComponent implements OnInit {
   }
 
 
-  openUnitDialog(unit?: CommonResponse): void {
+  openAddUnitDialog(): void {
     const dialogRef = this.dialog.open(AddAunitDialogComponent, {
       width: '500px',
-      data: { unitName: unit ? unit.name : '' }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result && result.isConfirmed) {
-        const unitName = result.value?.unitName;
-        if (unitName) {
-          if (unit && unit.id) {
-            this.utils.updateAUnit(unit.id, unitName, this.aUnits, (success, updatedUnits) => {
-              if (success) {
-                this.aUnits = updatedUnits;
-              }
-            });
-          } else if (this.carrier?.id) {
-            this.utils.addAUnit(this.carrier.id, unitName, (success) => {
-              if (success) {
-                this.fetchAUnits(this.carrier!.id);
-              }
-            });
-          }
-        }
+        this.fetchAUnits(this.carrier!.id);
+      }
+    });
+  }
+
+  openEditUnitDialog(unit: CommonResponse): void {
+    const dialogRef = this.dialog.open(EditAunitDialogComponent, {
+      width: '500px',
+      data: { unitName: unit.name, unitId: unit.id },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.isConfirmed) {
+        this.fetchAUnits(this.carrier!.id);
       }
     });
   }
@@ -278,6 +281,7 @@ export class CarrierDetailComponent implements OnInit {
       case DeviceType.COMPUTER:
       case DeviceType.PHONE:
       case DeviceType.PRINTER:
+      case DeviceType.SERVER:
         this.searchForDevices(searchParams);
         break;
       case DeviceType.WORKSTATION:

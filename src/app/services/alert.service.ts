@@ -87,12 +87,67 @@ export class AlertService {
 
   showEditWorkStationAlert(workstation: EditWorkStationRequest): Promise<any> {
     const htmlContent = `
-      <input type="text" id="employeeLastName" class="swal2-input" placeholder="${this.translate.instant('employeeLastName')}" value="${workstation.employeeLastName || ''}">
-      <input type="text" id="employeeFirstName" class="swal2-input" placeholder="${this.translate.instant('employeeFirstName')}" value="${workstation.employeeFirstName || ''}">
-      <input type="email" id="email" class="swal2-input" placeholder="${this.translate.instant('email')}" value="${workstation.email || ''}">
-      <input type="text" id="personalPhone" class="swal2-input" placeholder="${this.translate.instant('phone')}" value="${workstation.personalPhone || ''}">
-      <input type="text" id="department" class="swal2-input" placeholder="${this.translate.instant('department')}" value="${workstation.department || ''}">
-      <input type="text" id="city" class="swal2-input" placeholder="${this.translate.instant('city')}" value="${workstation.city || ''}">
+      <style>
+        .minimal-form {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          font-family: Arial, sans-serif;
+          color: #333;
+        }
+        .minimal-form label {
+          font-size: 14px;
+          font-weight: bold;
+          margin-bottom: 5px;
+          color: #555;
+        }
+        .minimal-form input {
+          padding: 8px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          font-size: 14px;
+          width: 100%;
+          box-sizing: border-box;
+        }
+        .minimal-form input:focus {
+          border-color: #007bff;
+          outline: none;
+        }
+      </style>
+      <div class="minimal-form">
+        <div>
+          <label for="employeeLastName">${this.translate.instant('employeeLastName')}</label>
+          <input type="text" id="employeeLastName" placeholder="${this.translate.instant('employeeLastName')}" value="${workstation.employeeLastName || ''}">
+        </div>
+        <div>
+          <label for="employeeFirstName">${this.translate.instant('employeeFirstName')}</label>
+          <input type="text" id="employeeFirstName" placeholder="${this.translate.instant('employeeFirstName')}" value="${workstation.employeeFirstName || ''}">
+        </div>
+        <div>
+          <label for="email">${this.translate.instant('email')}</label>
+          <input type="email" id="email" placeholder="${this.translate.instant('email')}" value="${workstation.email || ''}">
+        </div>
+        <div>
+          <label for="personalPhone">${this.translate.instant('phone')}</label>
+          <input type="text" id="personalPhone" placeholder="${this.translate.instant('phone')}" value="${workstation.personalPhone || ''}">
+        </div>
+        <div>
+          <label for="department">${this.translate.instant('department')}</label>
+          <input type="text" id="department" placeholder="${this.translate.instant('department')}" value="${workstation.department || ''}">
+        </div>
+        <div>
+          <label for="workstationNumber">${this.translate.instant('workstationNumber')}</label>
+          <input type="text" id="workstationNumber" placeholder="${this.translate.instant('workstationNumber')}" value="${workstation.workstationNumber || ''}">
+        </div>
+        <div>
+          <label for="socketNumber">${this.translate.instant('socketNumber')}</label>
+          <input type="text" id="socketNumber" placeholder="${this.translate.instant('socketNumber')}" value="${workstation.socketNumber || ''}">
+        </div>
+        <div>
+          <label for="city">${this.translate.instant('city')}</label>
+          <input type="text" id="city" placeholder="${this.translate.instant('city')}" value="${workstation.city || ''}">
+        </div>
+      </div>
     `;
 
     return Swal.fire({
@@ -108,18 +163,19 @@ export class AlertService {
         const email = (document.getElementById('email') as HTMLInputElement).value;
         const personalPhone = (document.getElementById('personalPhone') as HTMLInputElement).value;
         const department = (document.getElementById('department') as HTMLInputElement).value;
+        const workstationNumber = (document.getElementById('workstationNumber') as HTMLInputElement).value;
+        const socketNumber = (document.getElementById('socketNumber') as HTMLInputElement).value;
         const city = (document.getElementById('city') as HTMLInputElement).value;
 
-        if (!employeeLastName || !employeeFirstName || !email || !personalPhone || !department || !city) {
+        if (!employeeLastName || !employeeFirstName || !email || !personalPhone || !department || !city || !socketNumber || !workstationNumber) {
           Swal.showValidationMessage(this.translate.instant('all.fields.required'));
           return false;
         }
 
-        return { employeeLastName, employeeFirstName, email, personalPhone, department, city };
+        return { employeeLastName, employeeFirstName, email, personalPhone, department, city, socketNumber, workstationNumber };
       }
     });
-  }
-
+}
 
 
 
@@ -206,7 +262,6 @@ export class AlertService {
         const password = (document.getElementById('password') as HTMLInputElement).value;
         const confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement).value;
         const carrierId = (document.getElementById('carrier') as HTMLSelectElement).value;
-        console.log(carrierId)
         if (!username || !password || !confirmPassword || !carrierId) {
           Swal.showValidationMessage(this.translate.instant('all.fields.required'));
           return false;

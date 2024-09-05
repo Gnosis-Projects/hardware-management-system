@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/enrivonment';
 import { Observable } from 'rxjs';
 import { DeviceListResponse, SingleDeviceResponse, DeviceHistoryResponse } from '../interfaces/responses/device-response';
-import { EditDeviceRequest } from '../interfaces/requests/device-request';
-import { AddDeviceRequest } from '../interfaces/requests/device-request';
-import { DeviceType } from '../enums/device-type';
+import { EditDeviceRequest, AddDeviceRequest } from '../interfaces/requests/device-request';
+import { DeviceType, NetEquipmentType } from '../enums/device-type';
 
 @Injectable({
   providedIn: 'root'
@@ -35,9 +34,15 @@ export class DeviceService {
     return this.http.post<SingleDeviceResponse>(`${this.apiUrl}/${endpoint}/${workStationId}`, addRequest);
   }
 
-  editDevice(editRequest: EditDeviceRequest, deviceType: DeviceType): Observable<SingleDeviceResponse> {
+  editDevice(editRequest: EditDeviceRequest, deviceType: DeviceType, newWorkstationId?: number): Observable<SingleDeviceResponse> {
     const endpoint = this.getEndpoint(deviceType, 'Update');
-    return this.http.put<SingleDeviceResponse>(`${this.apiUrl}/${endpoint}`, editRequest);
+    let params = new HttpParams();
+  
+    if (newWorkstationId) {
+      params = params.set('newWorkstationId', newWorkstationId.toString());
+    }
+  
+    return this.http.put<SingleDeviceResponse>(`${this.apiUrl}/${endpoint}`, editRequest, { params });
   }
 
   deleteDevice(deviceId: number, deviceType: DeviceType): Observable<any> {
@@ -55,6 +60,8 @@ export class DeviceService {
         return `Printer/${action}`;
       case DeviceType.NETWORK_EQUIPMENT:
         return `NetworkEquipment/${action}`;
+      case DeviceType.SERVER:
+        return `Server/${action}`;
       default:
         throw new Error('Unsupported device type');
     }

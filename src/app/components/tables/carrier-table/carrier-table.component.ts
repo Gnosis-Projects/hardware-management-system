@@ -93,31 +93,16 @@ export class CarrierTableComponent implements OnInit {
     this.dataSource.data = term ? Helper.filterCarriers(term, this.carriers) : this.carriers;
   }
 
-  editCarrier(carrier?: CommonResponse): void {
+  openAddEditDialog(carrier?: CommonResponse): void {
+    const dialogData = carrier ? { type: 'edit', carrierName: carrier.name, carrierId: carrier.id } : { type: 'create' };
     const dialogRef = this.dialog.open(AddCarrierDialogComponent, {
       width: '400px',
-      data: { carrierName: carrier ? carrier.name : '' }
+      data: dialogData
     });
-
-    dialogRef.afterClosed().subscribe((result) => {
+  
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.isConfirmed) {
-        const carrierName = result.value.carrierName;
-        if (carrierName) {
-          if (carrier) {
-            this.carrierService.updateCarrier(carrier.id, carrierName).subscribe((response) => {
-              this.utilityService.handleResponse(
-                response.success,
-                'successMessages.carrier.updated.successfully',
-                'errorMessages.unexpected.error',
-                'notificationMessages.carrier.updated',
-                { carrierName }
-              );
-              if (response.success) {
-                this.fetchData();
-              }
-            });
-          }
-        }
+        this.fetchData(); // Re-fetch the list of carriers
       }
     });
   }

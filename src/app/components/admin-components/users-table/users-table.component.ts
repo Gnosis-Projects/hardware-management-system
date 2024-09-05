@@ -6,7 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { GetAllUsersResponse, UserData } from '../../../interfaces/responses/auth-response';
 import { ExcelColumnNames } from '../../../enums/excel-column-names';
 import { UserTableHeaders } from '../../../enums/table-headers.enum';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
@@ -40,7 +40,8 @@ export class UsersTableComponent implements OnInit {
     private alertService: AlertService,
     private toastr: ToastrService,
     private authStateService: AuthStateService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -73,7 +74,7 @@ deleteUser(id:number){
     this.authService.deleteUser(id).subscribe({
       next: (response: any) => {
         if (response.success) {
-          this.toastr.success('successMessages.user.disabled.successfully');
+          this.toastr.success(this.translate.instant('successMessages.user.disabled.successfully'));
           this.fetchAllUsers();
         } else {
           this.toastr.error('successMessages.failed.to.disable.user');

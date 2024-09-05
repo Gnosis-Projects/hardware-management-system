@@ -2,7 +2,6 @@
   <h2 class="text-primary mb-4">{{ 'edit.device' | translate }}</h2>
   <form [formGroup]="editForm" (ngSubmit)="submitEdit()">
     <div class="row">
-
       <div class="col-md-4">
         <div class="form-group">
           <label for="model">{{ 'labels.model' | translate }}</label>
@@ -22,6 +21,7 @@
         </div>
       </div>
 
+      <!-- Computer Specific Fields -->
       <ng-container *ngIf="deviceType === DeviceType.COMPUTER">
         <div class="col-md-4">
           <div class="form-group">
@@ -49,9 +49,9 @@
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label for="operatingSystem">{{ 'labels.operatingSystem' | translate }}</label>
-            <select id="operatingSystem" formControlName="operatingSystem" class="form-control form-control-sm">
-              <option *ngFor="let os of operationSystems" [value]="os">{{ os }}</option>
+            <label for="operatingSystemId">{{ 'labels.operatingSystem' | translate }}</label>
+            <select id="operatingSystemId" formControlName="operatingSystemId" class="form-control form-control-sm">
+              <option *ngFor="let os of operatingSystems" [value]="os.id">{{ os.name }}</option>
             </select>
           </div>
         </div>
@@ -73,28 +73,37 @@
             <input id="antivirus" type="text" formControlName="antivirus" class="form-control" />
           </div>
         </div>
+        <div class="col-md-6" formArrayName="disks">
+          <ng-container *ngIf="disks.length > 0">
+            <div [formGroupName]="i" *ngFor="let disk of disks.controls; let i = index">
+              <div class="form-group">
+                <label for="capacity-{{i}}">{{ 'labels.HDD.capacity' | translate }}</label>
+                <input id="capacity-{{i}}" type="number" formControlName="capacity" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="ssd-{{i}}">{{ 'labels.ssd' | translate }}</label>
+                <input id="ssd-{{i}}" type="checkbox" formControlName="ssd" class="form-check-input" />
+              </div>
+            </div>
+          </ng-container>
+        </div>
         <div class="col-md-6">
           <div class="form-group">
             <label for="workGroupDomain">{{ 'labels.workGroupDomain' | translate }}</label>
             <input id="workGroupDomain" type="text" formControlName="workGroupDomain" class="form-control" />
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="purchaseDate">{{ 'labels.purchaseDate' | translate }}</label>
-            <input id="purchaseDate" type="date" formControlName="purchaseDate" class="form-control" />
-          </div>
-        </div>
+       
         <div class="col-md-12">
           <div class="form-group">
             <label for="remoteDesktopApp">{{ 'labels.remote.desktop.app' | translate }}</label>
-            <select id="remoteDesktopApp" formControlName="remoteDesktopApp" class="form-control" (change)="onRemoteDesktopAppChange($event)">
-              <option [value]="RemoteDesktopAppType.TeamViewer">{{ 'TeamViewer' | translate }}</option>
-              <option [value]="RemoteDesktopAppType.AnyDesk">{{ 'AnyDesk' | translate }}</option>
+            <select id="remoteDesktopApp" formControlName="remoteDesktopApp" class="form-control"
+              (change)="onRemoteDesktopAppChange($event)">
+              <option *ngFor="let type of remoteDesktopAppTypes" [value]="type.id">{{ type.name | translate }}</option>
             </select>
           </div>
           <div formArrayName="remoteDesktopApps">
-            <div *ngFor="let app of remoteDesktopApps.controls; let i = index" [formGroupName]="i">
+            <div [formGroupName]="i" *ngFor="let app of remoteDesktopApps.controls; let i = index">
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
@@ -114,41 +123,185 @@
         </div>
       </ng-container>
 
+      <!-- Phone Specific Fields -->
+      <ng-container *ngIf="deviceType === DeviceType.PHONE">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="phoneNumber">{{ 'labels.phoneNumber' | translate }}</label>
+            <input id="phoneNumber" type="text" formControlName="phoneNumber" class="form-control" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="phoneSocket">{{ 'labels.phoneSocket' | translate }}</label>
+            <input id="phoneSocket" type="text" formControlName="phoneSocket" class="form-control" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="phoneTypeId">{{ 'labels.phoneType' | translate }}</label>
+            <select id="phoneTypeId" formControlName="phoneTypeId" class="form-control form-control-sm">
+              <option *ngFor="let type of phoneTypes" [value]="type.id">{{ type.name | translate }}</option>
+            </select>
+          </div>
+        </div>
+      </ng-container>
 
-      <div class="col-md-6" *ngIf="deviceType === DeviceType.PHONE">
+      <ng-container *ngIf="deviceType === DeviceType.NETWORK_EQUIPMENT">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="networkEquipmentFloor">{{ 'labels.networkEquipmentFloor' | translate }}</label>
+            <input id="networkEquipmentFloor" type="text" formControlName="networkEquipmentFloor" class="form-control" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="routerUsername">{{ 'labels.routerUsername' | translate }}</label>
+            <input id="routerUsername" type="text" formControlName="routerUsername" class="form-control" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="switchAddress">{{ 'labels.switchAddress' | translate }}</label>
+            <input id="switchAddress" type="text" formControlName="switchAddress" class="form-control" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="routerPassword">{{ 'labels.routerPassword' | translate }}</label>
+            <input id="routerPassword" type="text" formControlName="routerPassword" class="form-control" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="networkEquipmentTypeId">{{ 'labels.networkType' | translate }}</label>
+            <select id="networkEquipmentTypeId" formControlName="networkEquipmentTypeId" class="form-control form-control-sm">
+              <option *ngFor="let type of netTypes" [value]="type.id">{{ type.name | translate }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+        <div formGroupName="networkEquipmentIp">
+          <div class="form-group">
+            <label for="ipTypeId">{{ 'labels.ipType' | translate }}</label>
+            <select id="ipTypeId" formControlName="ipTypeId" class="form-control form-control-sm">
+              <option *ngFor="let ipType of ipTypes" [value]="ipType.id">{{ ipType.name | translate }}</option>
+            </select>
+          </div>
+        </div>
+        </div>
+        
+      </ng-container>
+
+
+      <!-- Printer Specific Fields -->
+      <ng-container *ngIf="deviceType === DeviceType.PRINTER">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="printerTypeId">{{ 'labels.printerType' | translate }}</label>
+            <select id="printerTypeId" formControlName="printerTypeId" class="form-control form-control-sm">
+              <option *ngFor="let type of printerTypes" [value]="type.id">{{ type.name | translate }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="paperSize">{{ 'labels.paperSize' | translate }}</label>
+            <input id="paperSize" type="text" formControlName="paperSize" class="form-control" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="refurbished">{{ 'labels.refurbished' | translate }}</label>
+            <input id="refurbished" type="checkbox" formControlName="refurbished" class="form-check-input" />
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Server Specific Fields -->
+      <ng-container *ngIf="deviceType === DeviceType.SERVER">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="serverDiskTypeId">{{ 'labels.serverDiskType' | translate }}</label>
+            <select id="serverDiskTypeId" formControlName="serverDiskTypeId" class="form-control form-control-sm">
+              <option *ngFor="let type of diskTypes" [value]="type.id">{{ type.name | translate }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="diskRotations">{{ 'labels.diskRotations' | translate }}</label>
+            <input id="diskRotations" type="number" formControlName="diskRotations" class="form-control" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="networkDisk">{{ 'labels.networkDisk' | translate }}</label>
+            <input id="networkDisk" type="checkbox" formControlName="networkDisk" class="form-check-input" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="operatingSystemId">{{ 'labels.operatingSystem' | translate }}</label>
+            <select id="operatingSystemId" formControlName="operatingSystemId" class="form-control form-control-sm">
+              <option *ngFor="let os of operatingSystems" [value]="os.id">{{ os.name }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-12" formGroupName="networkDiskInfo">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="name">{{ 'labels.networkDiskName' | translate }}</label>
+                <input id="name" type="text" formControlName="name" class="form-control" />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="diskArray">{{ 'labels.networkDiskArray' | translate }}</label>
+                <input id="diskArray" type="number" formControlName="diskArray" class="form-control" />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="diskSize">{{ 'labels.networkDiskSize' | translate }}</label>
+                <input id="diskSize" type="number" formControlName="diskSize" class="form-control" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="ip">{{ 'labels.IPaddress' | translate }}</label>
+                <input id="ip" type="text" formControlName="ip" class="form-control" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="brand">{{ 'labels.networkDiskBrand' | translate }}</label>
+                <input id="brand" type="text" formControlName="brand" class="form-control" />
+              </div>
+            </div>f
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="purchaseDate">{{ 'labels.purchaseDate' | translate }}</label>
+                <input id="purchaseDate" type="date" formControlName="purchaseDate" class="form-control" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="col-md-6" *ngIf="deviceType !== DeviceType.SERVER">
         <div class="form-group">
-          <label for="phoneNumber">{{ 'labels.phoneNumber' | translate }}</label>
-          <input id="phoneNumber" type="text" formControlName="phoneNumber" class="form-control" />
+          <label for="purchaseDate">{{ 'labels.purchaseDate' | translate }}</label>
+          <input id="purchaseDate" type="date" formControlName="purchaseDate" class="form-control" />
         </div>
       </div>
-
-
-      <div class="col-md-6" *ngIf="deviceType === DeviceType.PRINTER">
+      <div class="col-md-6">
         <div class="form-group">
-          <label for="printerTypeId">{{ 'labels.printerType' | translate }}</label>
-          <select id="printerTypeId" formControlName="printerTypeId" class="form-control form-control-sm">
-            <option [value]="printerType.BASIC">{{ 'basic.printer' | translate }}</option>
-            <option [value]="printerType.NETWORK">{{ 'network.printer' | translate }}</option>
-          </select>
+          <label for="supplier">{{ 'labels.supplier' | translate }}</label>
+          <input id="supplier" type="text" formControlName="supplier" class="form-control" />
         </div>
       </div>
-
-      <div class="col-md-6" *ngIf="deviceType === DeviceType.NETWORK_EQUIPMENT">
-        <div class="form-group">
-          <label for="networkEquipmentTypeId">{{ 'labels.netEquipmentType' | translate }}</label>
-          <select id="networkEquipmentTypeId" formControlName="networkEquipmentTypeId" class="form-control form-control-sm">
-            <option [value]="netEquipmentType.ROUTER">{{ 'ROUTER' }}</option>
-            <option [value]="netEquipmentType.SWITCH">{{ 'SWITCH' }}</option>
-          </select>
-        </div>
-      </div>
-      <div class="col-md-6" *ngIf="deviceType === DeviceType.NETWORK_EQUIPMENT">
-        <div class="form-group">
-          <label for="floor">{{ 'labels.floor' | translate }}</label>
-          <input id="floor" type="text" formControlName="floor" class="form-control" />
-        </div>
-      </div>
-
 
       <div class="col-md-12">
         <div class="form-group">

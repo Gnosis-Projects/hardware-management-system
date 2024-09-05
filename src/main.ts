@@ -13,11 +13,17 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { HttpLoadingAndNoResultsInterceptor } from './app/interceptors/loading-and-no-results.interceptor';
-import { MatNativeDateModule, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core'; // Import MatNativeDateModule and MAT_DATE_LOCALE
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { registerLocaleData } from '@angular/common';
+import localeEl from '@angular/common/locales/el'; // Import Greek locale data
+import { LOCALE_ID } from '@angular/core';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
+
+// Register Greek locale data
+registerLocaleData(localeEl, 'el');
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -42,9 +48,10 @@ bootstrapApplication(AppComponent, {
         preventDuplicates: true,
       }),
       BreadcrumbModule,
-      MatNativeDateModule 
+      MatNativeDateModule
     ),
     { provide: MAT_DATE_LOCALE, useValue: 'el-GR' },
+    { provide: LOCALE_ID, useValue: 'el' },
   ]
 })
 .catch(err => console.error(err));

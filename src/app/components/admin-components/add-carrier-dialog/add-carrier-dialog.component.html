@@ -1,9 +1,9 @@
-<h2 mat-dialog-title>{{ data.carrierName ? ( 'edit.carrier' | translate ) : ( 'create.carrier' | translate ) }}</h2>
+<h2 mat-dialog-title>{{ isEdit ? ('edit.carrier' | translate) : ('create.carrier' | translate) }}</h2>
 <mat-dialog-content class="dialog-content">
     <form [formGroup]="carrierForm">
         <mat-form-field class="full-width">
             <mat-label>{{ 'carrier' | translate }}</mat-label>
-            <input matInput formControlName="carrierName" placeholder="Όνομα Φορέα">
+            <input matInput formControlName="carrierName" placeholder="{{ 'carrierName' | translate }}">
         </mat-form-field>
     </form>
 </mat-dialog-content>

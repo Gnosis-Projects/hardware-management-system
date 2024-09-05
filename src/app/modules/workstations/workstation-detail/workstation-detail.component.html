@@ -1,24 +1,45 @@
 <div class="container mt-3" *ngIf="workstation && workstation.data">
   <div class="page-title">{{ 'workstation.text' | translate }}</div>
+  
   <div class="workstation-card card mb-3">
     <div class="card-body">
-      <div class="card-header">
-        <h5 class="card-title">{{ workstation.data.employeeFirstName }} {{ workstation.data.employeeLastName }}</h5>
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title">
+          {{ workstation.data.employeeFirstName }} {{ workstation.data.employeeLastName }}
+        </h5>
         <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button">
           <mat-icon>more_vert</mat-icon>
         </button>
       </div>
-      <p class="card-text"><strong>{{ 'employeeFirstName' | translate }}:</strong> {{ workstation.data.employeeFirstName
-        }}</p>
-      <p class="card-text"><strong>{{ 'employeeLastName' | translate }}:</strong> {{ workstation.data.employeeLastName
-        }}</p>
-      <p class="card-text"><strong>{{ 'labels.department' | translate }}:</strong> {{ workstation.data.department }}</p>
-      <p class="card-text"><strong>{{ 'labels.city' | translate }}:</strong> {{ workstation.data.city }}</p>
-      <p class="card-text"><strong>{{ 'labels.unit' | translate }}:</strong> {{ workstation.data.aUnit.name }}</p>
-      <p class="card-text"><strong>{{ 'labels.carrier' | translate }}:</strong> {{ workstation.data.carrier.name }}</p>
+
+      <p class="card-text">
+        <strong>{{ 'employeeFirstName' | translate }}:</strong> {{ workstation.data.employeeFirstName }}
+      </p>
+      <p class="card-text">
+        <strong>{{ 'employeeLastName' | translate }}:</strong> {{ workstation.data.employeeLastName }}
+      </p>
+      <p class="card-text">
+        <strong>{{ 'labels.department' | translate }}:</strong> {{ workstation.data.department }}
+      </p>
+      <p class="card-text">
+        <strong>{{ 'labels.city' | translate }}:</strong> {{ workstation.data.city }}
+      </p>
+      <p class="card-text">
+        <strong>{{ 'workstationNumber' | translate }}:</strong> {{ workstation.data.workstationNumber }}
+      </p>
+      <p class="card-text">
+        <strong>{{ 'socketNumber' | translate }}:</strong> {{ workstation.data.socketNumber }}
+      </p>
+      <p class="card-text">
+        <strong>{{ 'labels.unit' | translate }}:</strong> {{ workstation.data.aUnit.name }}
+      </p>
+      <p class="card-text">
+        <strong>{{ 'labels.carrier' | translate }}:</strong> {{ workstation.data.carrier.name }}
+      </p>
     </div>
   </div>
 
+  <!-- Context Menu -->
   <mat-menu #menu="matMenu">
     <button mat-menu-item (click)="editWorkStation()">
       <mat-icon>edit</mat-icon>
@@ -30,18 +51,25 @@
     </button>
   </mat-menu>
 
+  <!-- Add Device Button -->
   <div class="section-header">
-    <button mat-mini-fab color="primary" class="add-button" [matMenuTriggerFor]="addDeviceMenu"
-      matTooltip="{{ 'add.device' | translate }}">
+    <button
+      mat-mini-fab
+      color="primary"
+      class="add-button"
+      [matMenuTriggerFor]="addDeviceMenu"
+      matTooltip="{{ 'add.device' | translate }}"
+    >
       <mat-icon>add</mat-icon>
     </button>
+    
     <mat-menu #addDeviceMenu="matMenu">
       <button mat-menu-item (click)="openAddDeviceDialog(deviceType.COMPUTER)">
         <mat-icon>computer</mat-icon>
         <span>{{ 'add.computer' | translate }}</span>
       </button>
       <button mat-menu-item (click)="openAddDeviceDialog(deviceType.PHONE)">
-        <mat-icon>phone_iphone</mat-icon>
+        <mat-icon>phone</mat-icon>
         <span>{{ 'add.phone' | translate }}</span>
       </button>
       <button mat-menu-item (click)="openAddDeviceDialog(deviceType.PRINTER)">
@@ -52,55 +80,120 @@
         <mat-icon>router</mat-icon>
         <span>{{ 'add.net_equipment' | translate }}</span>
       </button>
+      <button mat-menu-item (click)="openAddDeviceDialog(deviceType.SERVER)">
+        <mat-icon>dns</mat-icon>
+        <span>{{ 'add.server' | translate }}</span>
+      </button>
     </mat-menu>
   </div>
 
-  <app-export-data-button [data]="[workstation.data]" fileName="workstation-report"
-    [columnNames]="columnNames">
-  </app-export-data-button>
+  <!-- Export Button -->
+  <app-export-data-button
+    [data]="[workstation.data]"
+    fileName="θέση εργασίας"
+    [columnNames]="columnNames"
+  ></app-export-data-button>
 
+  <!-- Device Buttons -->
   <div class="device-buttons">
-    <button mat-fab *ngIf="workstation.data.computers_list.length > 0" (click)="setView('COMPUTER')">{{
-      'computerDevices' | translate }}</button>
-    <button mat-fab *ngIf="workstation.data.phones_list.length > 0" (click)="setView('PHONE')">{{ 'phoneDevices' |
-      translate }}</button>
-    <button mat-fab *ngIf="workstation.data.printers_list.length > 0" (click)="setView('PRINTER')">{{ 'printerDevices' |
-      translate }}</button>
-    <button mat-fab *ngIf="workstation.data.network_equipment_list.length > 0" (click)="setView('NETWORK_EQUIPMENT')">{{
-      'networkEquipmentDevices' | translate }}</button>
+    <button
+      mat-fab
+      *ngIf="workstation.data.computers_list.length > 0"
+      (click)="setView('COMPUTER')"
+    >
+      {{ 'computerDevices' | translate }}
+    </button>
+    <button
+      mat-fab
+      *ngIf="workstation.data.phones_list.length > 0"
+      (click)="setView('PHONE')"
+    >
+      {{ 'phoneDevices' | translate }}
+    </button>
+    <button
+      mat-fab
+      *ngIf="workstation.data.printers_list.length > 0"
+      (click)="setView('PRINTER')"
+    >
+      {{ 'printerDevices' | translate }}
+    </button>
+    <button
+      mat-fab
+      *ngIf="workstation.data.network_equipment_list.length > 0"
+      (click)="setView('NETWORK_EQUIPMENT')"
+    >
+      {{ 'networkEquipmentDevices' | translate }}
+    </button>
+
+    <button
+    mat-fab
+    *ngIf="workstation.data.servers_list.length > 0"
+    (click)="setView('SERVER')"
+  >
+    {{ 'serverDevices' | translate }}
+  </button>
   </div>
+
+  <!-- Device Tables -->
   <mat-divider></mat-divider>
+  
   <div *ngIf="currentView === 'COMPUTER' && workstation.data.computers_list.length > 0">
     <div class="row mb-4">
       <p class="item-description mt-4">{{ 'computerDevices' | translate }}</p>
-      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name"
-        [items]="workstation.data.computers_list" [deviceType]="deviceType.COMPUTER"></app-item-table>
+      <app-item-table
+        [carrierName]="workstation.data.carrier.name"
+        [unitName]="workstation.data.aUnit.name"
+        [items]="workstation.data.computers_list"
+        [deviceType]="deviceType.COMPUTER"
+      ></app-item-table>
     </div>
   </div>
 
   <div *ngIf="currentView === 'PHONE' && workstation.data.phones_list.length > 0">
     <div class="row mb-4">
       <p class="item-description mt-4">{{ 'phoneDevices' | translate }}</p>
-      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name"
-        [items]="workstation.data.phones_list" [deviceType]="deviceType.PHONE"></app-item-table>
+      <app-item-table
+        [carrierName]="workstation.data.carrier.name"
+        [unitName]="workstation.data.aUnit.name"
+        [items]="workstation.data.phones_list"
+        [deviceType]="deviceType.PHONE"
+      ></app-item-table>
     </div>
   </div>
 
   <div *ngIf="currentView === 'PRINTER' && workstation.data.printers_list.length > 0">
     <div class="row mb-4">
       <p class="item-description mt-4">{{ 'printerDevices' | translate }}</p>
-      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name"
-        [items]="workstation.data.printers_list" [deviceType]="deviceType.PRINTER"></app-item-table>
+      <app-item-table
+        [carrierName]="workstation.data.carrier.name"
+        [unitName]="workstation.data.aUnit.name"
+        [items]="workstation.data.printers_list"
+        [deviceType]="deviceType.PRINTER"
+      ></app-item-table>
     </div>
   </div>
 
   <div *ngIf="currentView === 'NETWORK_EQUIPMENT' && workstation.data.network_equipment_list.length > 0">
     <div class="row mb-4">
       <p class="item-description mt-4">{{ 'networkEquipmentDevices' | translate }}</p>
-      <app-item-table [carrierName]="workstation.data.carrier.name" [unitName]="workstation.data.aUnit.name"
-        [items]="workstation.data.network_equipment_list" [deviceType]="deviceType.NETWORK_EQUIPMENT"></app-item-table>
+      <app-item-table
+        [carrierName]="workstation.data.carrier.name"
+        [unitName]="workstation.data.aUnit.name"
+        [items]="workstation.data.network_equipment_list"
+        [deviceType]="deviceType.NETWORK_EQUIPMENT"
+      ></app-item-table>
     </div>
   </div>
 
-
+  <div *ngIf="currentView === 'SERVER' && workstation.data.servers_list.length > 0">
+    <div class="row mb-4">
+      <p class="item-description mt-4">{{ 'serverDevices' | translate }}</p>
+      <app-item-table
+        [carrierName]="workstation.data.carrier.name"
+        [unitName]="workstation.data.aUnit.name"
+        [items]="workstation.data.servers_list"
+        [deviceType]="deviceType.SERVER"
+      ></app-item-table>
+    </div>
+  </div>
 </div>

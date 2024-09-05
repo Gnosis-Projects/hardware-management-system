@@ -1,6 +1,15 @@
-<h2 mat-dialog-title>{{ 'edit.aUnit' | translate }}</h2>
+<h2 mat-dialog-title>{{ 'add.aUnit' | translate }}</h2>
 <mat-dialog-content class="dialog-content">
   <form [formGroup]="unitForm">
+    <mat-form-field class="full-width" *ngIf="!hideCarrierSelection">
+      <mat-label>{{ 'carrier' | translate }}</mat-label>
+      <mat-select formControlName="carrier" placeholder="{{ 'select.carrier' | translate }}">
+        <mat-option *ngFor="let carrier of carriers" [value]="carrier.id">
+          {{ carrier.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <mat-form-field class="full-width">
       <mat-label>{{ 'unit.name' | translate }}</mat-label>
       <input matInput formControlName="unitName" placeholder="{{ 'enter.unit.name' | translate }}">
@@ -8,6 +17,6 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-actions">
-  <button mat-button color="primary" (click)="onSave()">{{ 'update' | translate }}</button>
+  <button mat-button color="primary" (click)="onSave()">{{ 'save' | translate }}</button>
   <button mat-button color="warn" (click)="onCancel()">{{ 'cancel' | translate }}</button>
 </mat-dialog-actions>

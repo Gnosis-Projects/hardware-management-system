@@ -35,7 +35,7 @@ export class UserDetailsComponent implements OnInit {
     }
 
     if (!this.user) {
-      console.error('User not found');
+      console.error('Δεν βρέθηκε ο χρήστης');
     }
   }
 

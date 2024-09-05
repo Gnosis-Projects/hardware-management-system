@@ -17,6 +17,7 @@ import { ExcelColumnNames } from '../../../enums/excel-column-names';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { ItemInfoComponent } from '../../../components/item-info/item-info.component';
+import { WorkStationStateService } from '../../../services/state-management/workstation-state.service';
 @Component({
   selector: 'app-device-detail',
   encapsulation: ViewEncapsulation.None,
@@ -34,7 +35,8 @@ export class DeviceDetailComponent implements OnInit {
   showEdit: boolean = false;
   showGeneralInfo: boolean = true;
   showTechnicalInfo: boolean = false;
-  showWorkstationInfo: boolean = false;
+  showWorkstationInfo: boolean = false; 
+
 
   constructor(
     private deviceService: DeviceService,
@@ -43,6 +45,7 @@ export class DeviceDetailComponent implements OnInit {
     private toastr: ToastrService,
     private translate: TranslateService,
     private alertService: AlertService,
+    private workstationState: WorkStationStateService,
     private utilityService: UtilityService
   ) {
   }
@@ -99,6 +102,11 @@ export class DeviceDetailComponent implements OnInit {
 
   editDevice() {
     this.router.navigate(['/selectedDevice/edit']);
+  }
+
+  goToWorkstation(){
+    this.workstationState.setWorkstationId(Number(this.device?.data.workStation?.id));
+    this.router.navigate(['/workstation'])
   }
 
   deleteDevice() {

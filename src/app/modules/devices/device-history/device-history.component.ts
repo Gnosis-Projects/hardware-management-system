@@ -68,13 +68,10 @@ export class DeviceHistoryComponent implements OnInit {
         if (response.success) {
           this.deviceHistory = response;
           this.deviceStateService.setDeviceHistory(response);
-        } else {
-          console.error(response.message);
-        }
+        } 
       },
       error: error => {
         this.isLoading = false; 
-        console.error(error);
       }
     });
   }

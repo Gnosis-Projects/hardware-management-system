@@ -66,12 +66,14 @@
           <div class="col-md-3">
             <label for="operatingSystemId" class="form-label">{{ 'labels.operatingSystem' | translate }}</label>
             <select id="operatingSystemId" formControlName="operatingSystemId" class="form-control">
+              <option [value]="0">{{ 'all' | translate }}</option>
               <option *ngFor="let os of operatingSystems" [value]="os.id">{{ os.name }}</option>
             </select>
           </div>
           <div class="col-md-3">
-            <label for="remoteDesktopAppId" class="form-label">{{ 'labels.remoteDesktopApp' | translate }}</label>
+            <label for="remoteDesktopAppId" class="form-label">{{ 'labels.remoteDesktopApps' | translate }}</label>
             <select id="remoteDesktopAppId" formControlName="remoteDesktopAppId" class="form-control">
+              <option [value]="0">{{ 'all' | translate }}</option>
               <option *ngFor="let app of remoteDesktopAppTypes" [value]="app.id">{{ app.name }}</option>
             </select>
           </div>
@@ -86,12 +88,14 @@
           <div class="col-md-3">
             <label for="operatingSystemId" class="form-label">{{ 'labels.operatingSystem' | translate }}</label>
             <select id="operatingSystemId" formControlName="operatingSystemId" class="form-control">
+              <option [value]="0">{{ 'all' | translate }}</option>
               <option *ngFor="let os of operatingSystems" [value]="os.id">{{ os.name }}</option>
             </select>
           </div>
           <div class="col-md-3">
             <label for="serverDiskTypeId" class="form-label">{{ 'labels.serverDiskType' | translate }}</label>
             <select id="serverDiskTypeId" formControlName="serverDiskTypeId" class="form-control">
+              <option [value]="0">{{ 'all' | translate }}</option>
               <option *ngFor="let diskType of serverDiskTypes" [value]="diskType.id">{{ diskType.name }}</option>
             </select>
           </div>
@@ -110,6 +114,7 @@
           <div class="col-md-3">
             <label for="networkEquipmentTypeId" class="form-label">{{ 'labels.netEquipmentType' | translate }}</label>
             <select id="networkEquipmentTypeId" formControlName="networkEquipmentTypeId" class="form-control">
+              <option [value]="0">{{ 'all' | translate }}</option>
               <option *ngFor="let netEq of netEqs" [value]="netEq.id">{{ netEq.name }}</option>
             </select>
           </div>
@@ -152,6 +157,7 @@
           <div class="col-md-3">
             <label for="phoneTypeId" class="form-label">{{ 'labels.phoneType' | translate }}</label>
             <select id="phoneTypeId" formControlName="phoneTypeId" class="form-control">
+              <option [value]="0">{{ 'all' | translate }}</option>
               <option *ngFor="let phoneType of phoneTypes" [value]="phoneType.id">{{ phoneType.name }}</option>
             </select>
           </div>
@@ -162,6 +168,7 @@
           <div class="col-md-3">
             <label for="printerTypeId" class="form-label">{{ 'labels.printerType' | translate }}</label>
             <select id="printerTypeId" formControlName="printerTypeId" class="form-control">
+              <option [value]="0">{{ 'all' | translate }}</option>
               <option *ngFor="let printerType of printerTypes" [value]="printerType.id">{{ printerType.name }}</option>
             </select>
           </div>

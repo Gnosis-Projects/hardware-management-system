@@ -40,9 +40,7 @@ export class AUnitDetailComponent implements OnInit {
       .subscribe(response => {
         if (response.success) {
           this.aUnit = response.data;
-        } else {
-          console.error('Error fetching aUnit:', response.message);
-        }
+        } 
       });
   }
 
@@ -54,9 +52,6 @@ export class AUnitDetailComponent implements OnInit {
           next: response => {
             formGroup.reset();
           },
-          error: err => {
-            console.error('Error adding workstation:', err);
-          }
         });
     }
   }

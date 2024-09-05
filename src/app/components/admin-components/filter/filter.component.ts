@@ -214,6 +214,8 @@ export class FilterComponent implements OnInit, OnChanges {
       aUnitId: null,
       deviceName: '',
       model: '',
+      paperSize: '',
+      networkEquipmentTypeId: null,
       serialNumber: '',
       ram: 0,
       ip: '',

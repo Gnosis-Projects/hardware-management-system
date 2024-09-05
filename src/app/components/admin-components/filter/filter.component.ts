@@ -9,14 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { HttpClient } from '@angular/common/http';
-<<<<<<< HEAD
 import { AUnitService } from '../../../services/aunit.service';
 import { DropdownService } from '../../../services/dropdown.service';
 import { IpType, OperatingSystem, PhoneType, PrinterType, RemoteDesktopApp, ServerDiskType } from '../../../interfaces/requests/device-request';
 import { NetworkEquipmentType } from '../../../interfaces/responses/device-response';
-=======
-import { AUnitService } from '../../../services/aunit.service'; // Add this import
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
 
 @Component({
   selector: 'app-filter',
@@ -32,7 +28,6 @@ export class FilterComponent implements OnInit, OnChanges {
 
   showFilter: boolean = false;
   filterForm: FormGroup;
-<<<<<<< HEAD
   operatingSystems: OperatingSystem[] = [];
   aUnits: CommonResponse[] = [];
   printerTypes: PrinterType[] = [];
@@ -50,14 +45,6 @@ export class FilterComponent implements OnInit, OnChanges {
     private aUnitService: AUnitService,
     private dropdownService: DropdownService
   ) {
-=======
-  osOptions: string[] = [];
-  aUnits: CommonResponse[] = [];
-  FilterType = FilterType;
-  operationSystems = operationSystems;
-
-  constructor(private fb: FormBuilder, private http: HttpClient, private aUnitService: AUnitService) {
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
     this.filterForm = this.fb.group({});
   }
 
@@ -78,6 +65,9 @@ export class FilterComponent implements OnInit, OnChanges {
 
   initializeForm() {
     let controls: any = {
+      deviceName: [''],
+    model: ['' ],
+    serialNumber: ['' ],
       carrierId: [null],
       aUnitId: [{ value: null, disabled: true }]
     };
@@ -161,7 +151,6 @@ export class FilterComponent implements OnInit, OnChanges {
     });
   }
 
-<<<<<<< HEAD
   loadDropdownData(): void {
     this.dropdownService.getPrinterTypes().subscribe((response) => {
       this.printerTypes = response.data;
@@ -203,27 +192,6 @@ export class FilterComponent implements OnInit, OnChanges {
       this.aUnits = [];
       this.filterForm.get('aUnitId')?.disable();
       this.filterForm.patchValue({ aUnitId: null });
-=======
-  onCarrierChange(carrierId: number): void {
-    if (carrierId) {
-      this.aUnitService.getAUnitsByCarrierId(carrierId).subscribe(aUnits => {
-        this.aUnits = aUnits.data;
-        this.filterForm.get('aUnitId')?.enable();
-        this.filterForm.patchValue({ aUnitId: null });
-      });
-    } else {
-      this.aUnits = [];
-      this.filterForm.get('aUnitId')?.disable();
-      this.filterForm.patchValue({ aUnitId: null });
-    }
-  }
-
-  onFilter(): void {
-    console.log(this.filterForm.getRawValue())
-    if (this.filterForm.valid) {
-      const { carrierId, aUnitId, ...filterDto } = this.filterForm.getRawValue();
-      this.filter.emit({ carrierId, aUnitId, filterDto });
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
     }
   }
 
@@ -232,7 +200,7 @@ export class FilterComponent implements OnInit, OnChanges {
       const { carrierId, aUnitId, ...filterDto } = this.filterForm.getRawValue();
   
       Object.keys(filterDto).forEach(key => {
-        if (filterDto[key] === null || filterDto[key] === '') {
+        if (key !=='macAddress' && (filterDto[key] === null || filterDto[key] === '')) {
           delete filterDto[key];
         }
       });
@@ -257,5 +225,6 @@ export class FilterComponent implements OnInit, OnChanges {
     });
     this.aUnits = [];
     this.filterForm.get('aUnitId')?.disable();
+    this.onFilter()
   }
 }

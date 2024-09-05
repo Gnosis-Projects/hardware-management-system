@@ -22,6 +22,13 @@ export interface NetworkEquipmentType {
   name: string;
 }
 
+export interface ComputerPrinter{
+  id: number;
+  typeId: number;
+  ipAddress?: string;
+}
+
+
 export interface RemoteDesktopApp {
   name: string;
   typeId: number;
@@ -57,7 +64,10 @@ export interface Device {
   paperSize?: string;
   macAddress?: string;
   machineType?: string;
+  routerPassword?: string;
+  routerUsername?: string;
   operatingSystem?: OperatingSystem
+  computerPrinters?: ComputerPrinter[]
   netWorkDisk?:boolean;
   monitorType?: string;
   outlet?: string;
@@ -68,12 +78,8 @@ export interface Device {
   aUnit: CommonResponse;
   carrier: CommonResponse;
   workStation?: WorkStation;
-<<<<<<< HEAD
   networkDiskInfo?: NetworkDiskInfo;
   comments?: string;
-=======
-  comments?: string;  
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
 }
 
 export interface SingleDeviceResponse {

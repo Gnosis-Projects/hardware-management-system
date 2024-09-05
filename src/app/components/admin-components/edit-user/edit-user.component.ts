@@ -64,12 +64,12 @@ export class EditUserComponent {
         roles: [roles],
         carrierIds: [carrier],
       };
-
+  
       if (this.user) {
         this.authService.editUser(this.user.userId!, updateRequest).subscribe({
           next: (response) => {
             if (response.success) {
-              this.dialogRef.close({ success: true });
+              this.dialogRef.close({ success: true, updatedUser: response.data });
               this.toastr.success(this.translate.instant('successMessages.user.updated.successfully'));
             } else {
               this.toastr.error(response.message);

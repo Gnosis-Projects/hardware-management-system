@@ -2,10 +2,6 @@
   <h2 class="text-primary mb-4">{{ 'edit.device' | translate }}</h2>
   <form [formGroup]="editForm" (ngSubmit)="submitEdit()">
     <div class="row">
-<<<<<<< HEAD
-=======
-
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
       <div class="col-md-4">
         <div class="form-group">
           <label for="model">{{ 'labels.model' | translate }}</label>
@@ -127,7 +123,6 @@
         </div>
       </ng-container>
 
-<<<<<<< HEAD
       <!-- Phone Specific Fields -->
       <ng-container *ngIf="deviceType === DeviceType.PHONE">
         <div class="col-md-6">
@@ -135,13 +130,6 @@
             <label for="phoneNumber">{{ 'labels.phoneNumber' | translate }}</label>
             <input id="phoneNumber" type="text" formControlName="phoneNumber" class="form-control" />
           </div>
-=======
-
-      <div class="col-md-6" *ngIf="deviceType === DeviceType.PHONE">
-        <div class="form-group">
-          <label for="phoneNumber">{{ 'labels.phoneNumber' | translate }}</label>
-          <input id="phoneNumber" type="text" formControlName="phoneNumber" class="form-control" />
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
         </div>
         <div class="col-md-6">
           <div class="form-group">
@@ -159,30 +147,11 @@
         </div>
       </ng-container>
 
-<<<<<<< HEAD
       <ng-container *ngIf="deviceType === DeviceType.NETWORK_EQUIPMENT">
         <div class="col-md-6">
           <div class="form-group">
             <label for="networkEquipmentFloor">{{ 'labels.networkEquipmentFloor' | translate }}</label>
             <input id="networkEquipmentFloor" type="text" formControlName="networkEquipmentFloor" class="form-control" />
-          </div>
-=======
-
-      <div class="col-md-6" *ngIf="deviceType === DeviceType.PRINTER">
-        <div class="form-group">
-          <label for="printerTypeId">{{ 'labels.printerType' | translate }}</label>
-          <select id="printerTypeId" formControlName="printerTypeId" class="form-control form-control-sm">
-            <option [value]="printerType.BASIC">{{ 'basic.printer' | translate }}</option>
-            <option [value]="printerType.NETWORK">{{ 'network.printer' | translate }}</option>
-          </select>
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="networkEquipmentIP">{{ 'labels.networkType' | translate }}</label>
-            <select id="networkEquipmentIP" formControlName="networkEquipmentIP" class="form-control form-control-sm">
-              <option *ngFor="let type of ipTypes" [value]="type.id">{{ type.name | translate }}</option>
-            </select>
           </div>
         </div>
         <div class="col-md-6">
@@ -211,26 +180,19 @@
             </select>
           </div>
         </div>
+        <div class="col-md-6">
+        <div formGroupName="networkEquipmentIp">
+          <div class="form-group">
+            <label for="ipTypeId">{{ 'labels.ipType' | translate }}</label>
+            <select id="ipTypeId" formControlName="ipTypeId" class="form-control form-control-sm">
+              <option *ngFor="let ipType of ipTypes" [value]="ipType.id">{{ ipType.name | translate }}</option>
+            </select>
+          </div>
+        </div>
+        </div>
+        
       </ng-container>
 
-<<<<<<< HEAD
-=======
-      <div class="col-md-6" *ngIf="deviceType === DeviceType.NETWORK_EQUIPMENT">
-        <div class="form-group">
-          <label for="networkEquipmentTypeId">{{ 'labels.netEquipmentType' | translate }}</label>
-          <select id="networkEquipmentTypeId" formControlName="networkEquipmentTypeId" class="form-control form-control-sm">
-            <option [value]="netEquipmentType.ROUTER">{{ 'ROUTER' }}</option>
-            <option [value]="netEquipmentType.SWITCH">{{ 'SWITCH' }}</option>
-          </select>
-        </div>
-      </div>
-      <div class="col-md-6" *ngIf="deviceType === DeviceType.NETWORK_EQUIPMENT">
-        <div class="form-group">
-          <label for="floor">{{ 'labels.floor' | translate }}</label>
-          <input id="floor" type="text" formControlName="floor" class="form-control" />
-        </div>
-      </div>
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
 
       <!-- Printer Specific Fields -->
       <ng-container *ngIf="deviceType === DeviceType.PRINTER">
@@ -317,7 +279,7 @@
                 <label for="brand">{{ 'labels.networkDiskBrand' | translate }}</label>
                 <input id="brand" type="text" formControlName="brand" class="form-control" />
               </div>
-            </div>
+            </div>f
             <div class="col-md-6">
               <div class="form-group">
                 <label for="purchaseDate">{{ 'labels.purchaseDate' | translate }}</label>

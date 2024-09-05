@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/enrivonment';
 import { Observable } from 'rxjs';
 import { DeviceListResponse, SingleDeviceResponse, DeviceHistoryResponse } from '../interfaces/responses/device-response';
@@ -34,9 +34,15 @@ export class DeviceService {
     return this.http.post<SingleDeviceResponse>(`${this.apiUrl}/${endpoint}/${workStationId}`, addRequest);
   }
 
-  editDevice(editRequest: EditDeviceRequest, deviceType: DeviceType): Observable<SingleDeviceResponse> {
+  editDevice(editRequest: EditDeviceRequest, deviceType: DeviceType, newWorkstationId?: number): Observable<SingleDeviceResponse> {
     const endpoint = this.getEndpoint(deviceType, 'Update');
-    return this.http.put<SingleDeviceResponse>(`${this.apiUrl}/${endpoint}`, editRequest);
+    let params = new HttpParams();
+  
+    if (newWorkstationId) {
+      params = params.set('newWorkstationId', newWorkstationId.toString());
+    }
+  
+    return this.http.put<SingleDeviceResponse>(`${this.apiUrl}/${endpoint}`, editRequest, { params });
   }
 
   deleteDevice(deviceId: number, deviceType: DeviceType): Observable<any> {

@@ -47,12 +47,9 @@ export enum ExcelColumnNames {
   'workStation.personalPhone' = 'Τηλέφωνο',
   'workStation.department' = 'Τμήμα',
   'workStation.city' = 'Πόλη',
-<<<<<<< HEAD
   'workStation.workstationNumber' = 'Αριθμός θέσης εργασίας',
   'workStation.socketNumber' = 'Αριθμός πρίζας θέσης εργασίας',
   supplier = 'Προμηθευτής',
-=======
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
   'computer.ram' = 'Μνήμη RAM',
   'computer.ip' = 'IP Διεύθυνση',
   'computer.disks' = 'Δίσκοι',
@@ -80,6 +77,10 @@ export enum ExcelColumnNames {
   'phone.checkDateTime' = 'Ημερομηνία Ελέγχου Τηλεφώνου',
   'phone.purchaseDate' = 'Ημερομηνία Αγοράς Τηλεφώνου',
   'phone.comments' = 'Σχόλια Τηλεφώνου',
+  phoneNumber = 'Αριθμός τηλεφώνου',
+  phoneSocket = 'Πρίζα τηλεφώνου',
+  'phoneType.id' = 'ΙD τύπου τηλεφώνου',
+  'phoneType.name' = 'Τύπος τηλεφώνου',
   'phone.username' = 'Όνομα Χρήστη Τηλεφώνου',
   'network_equipment.floor' = 'Όροφος Δικτυακού Εξοπλισμού',
   'network_equipment.networkEquipmentType.id' = 'ID Τύπου Δικτυακού Εξοπλισμού',
@@ -91,14 +92,13 @@ export enum ExcelColumnNames {
   'network_equipment.checkDateTime' = 'Ημερομηνία Ελέγχου Δικτυακού Εξοπλισμού',
   'network_equipment.purchaseDate' = 'Ημερομηνία Αγοράς Δικτυακού Εξοπλισμού',
   'network_equipment.comments' = 'Σχόλια Δικτυακού Εξοπλισμού',
-<<<<<<< HEAD
   'network_equipment.username' = 'Όνομα Χρήστη Δικτυακού Εξοπλισμού',
   'networkEquipmentFloor' = 'Όροφος Δικτυακού Εξοπλισμού',
   'routerUsername' = 'Όνομα Χρήστη Ρουτερ',
   'routerPassword' = 'Κωδικός Ρουτερ',
   'switchAddress' = 'Διεύθυνση Switch',
   'actionType.name' = 'Ενέργεια',
-  
+
   // New Printer Columns
   'printer.printerType.id' = 'ID Τύπου Εκτυπωτή',
   'printer.printerType.name' = 'Όνομα Τύπου Εκτυπωτή',
@@ -110,7 +110,11 @@ export enum ExcelColumnNames {
   'printer.purchaseDate' = 'Ημερομηνία Αγοράς Εκτυπωτή',
   'printer.comments' = 'Σχόλια Εκτυπωτή',
   'printer.username' = 'Όνομα Χρήστη Εκτυπωτή',
-  
+  'printerType.id' = 'ID Τύπου Εκτυπωτή',
+  'printerType.name' = 'Όνομα Τύπου Εκτυπωτή',
+  refurbished = 'Ανακατασκευασμένο',
+  paperSize = 'Μέγεθος Χάρτου',
+
   // Additional Fields
   'operatingSystem.id' = 'ID Λειτουργικού Συστήματος',
   'operatingSystem.name' = 'Όνομα Λειτουργικού Συστήματος',
@@ -118,9 +122,16 @@ export enum ExcelColumnNames {
   'serverDiskType.name' = 'Όνομα Τύπου Δίσκου Διακομιστή',
   diskRotations = 'Στροφές Δίσκου',
   networkDisk = 'Δίσκος Δικτύου',
-  networkDiskInfo = 'Πληροφορίες Δίσκου Δικτύου',
+  'networkDiskInfo.id' = 'ID Δίσκου Δικτύου',
+  'networkDiskInfo.name' = 'Όνομα Δίσκου Δικτύου',
+  'networkDiskInfo.diskArray' = 'Πίνακας Δίσκων Δικτύου',
+  'networkDiskInfo.diskSize' = 'Μέγεθος Δίσκου Δικτύου',
+  'networkDiskInfo.ip' = 'IP Διεύθυνση Δίσκου Δικτύου',
+  'networkDiskInfo.brand' = 'Μάρκα Δίσκου Δικτύου',
+  'networkDiskInfo.supplier' = 'Προμηθευτής Δίσκου Δικτύου',
+  'networkDiskInfo.purchaseDate' = 'Ημερομηνία Αγοράς Δίσκου Δικτύου',
+  'ID Φορέα' = 'ID Φορέα',
+  'networkEquipmentIP.id' = 'ID Εξοπλισμού Δικτύου',
+  'networkEquipmentIP.name' = 'Όνομα Εξοπλισμού Δικτύου',
+  'networkEquipmentIP.ip' = 'Διεύθυνση IP Εξοπλισμού Δικτύου',
 }
-=======
-  'network_equipment.username' = 'Όνομα Χρήστη Δικτυακού Εξοπλισμού'
-}
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1

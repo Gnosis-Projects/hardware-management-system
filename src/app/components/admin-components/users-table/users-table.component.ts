@@ -74,11 +74,7 @@ deleteUser(id:number){
     this.authService.deleteUser(id).subscribe({
       next: (response: any) => {
         if (response.success) {
-<<<<<<< HEAD
           this.toastr.success(this.translate.instant('successMessages.user.disabled.successfully'));
-=======
-          this.toastr.success('successMessages.user.disabled.successfully');
->>>>>>> 39ba3696e5be5a68965b90ff459682334efc0bf1
           this.fetchAllUsers();
         } else {
           this.toastr.error('successMessages.failed.to.disable.user');

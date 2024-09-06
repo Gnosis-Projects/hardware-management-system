@@ -89,7 +89,6 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
 
   
   onSearch(term: string): void {
-    // Check the device type and use appropriate filtering logic based on the type of items
     if (this.deviceType === DeviceType.WORKSTATION) {
       this.dataSource.data = term ? Helper.filterWorkStations(term, this.items as WorkStation[]) : this.items as WorkStation[];
     } else {

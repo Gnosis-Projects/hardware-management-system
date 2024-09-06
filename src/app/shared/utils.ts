@@ -97,21 +97,23 @@ export class Utils {
   }
 
   addWorkStation(aUnitId: number, request: WorkstationRequest, callback: (success: boolean, id?: number) => void): void {
-    this.workStationService.addWorkStation(aUnitId, request).subscribe(response => {
-      if (response.success) {
-        this.utilityService.handleResponse(
-          response.success,
-          'successMessages.workstation.added.successfully',
-          'errorMessages.unexpected.error',
-          'notificationMessages.workstation.added',
-          {}
-        );
-        callback(true, response.data[response.data.length-1].id);
-      } else {
-        this.toastr.error(this.translate.instant('errorMessages.unexpected.error'));
-        callback(false);
-      }
-    });
+    if (this.router.url !== '/selectedCarrier') {
+      this.workStationService.addWorkStation(aUnitId, request).subscribe(response => {
+        if (response.success) {
+          this.utilityService.handleResponse(
+            response.success,
+            'successMessages.workstation.added.successfully',
+            'errorMessages.unexpected.error',
+            'notificationMessages.workstation.added',
+            {}
+          );
+          callback(true, response.data[response.data.length-1].id);
+        } else {
+          this.toastr.error(this.translate.instant('errorMessages.unexpected.error'));
+          callback(false);
+        }
+      });
+    } 
   }
   
   fetchWorkstation(id: number, callback: (response: any) => void): void {

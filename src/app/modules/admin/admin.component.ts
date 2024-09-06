@@ -73,13 +73,14 @@ export class AdminComponent implements OnInit {
   filterType: FilterType = FilterType.Computer;
   columnNames = ExcelColumnNames;
   isSuperAdmin: boolean = true;
+  filteredWorkstations: WorkStation[] = [];
   DeviceType = DeviceType;
   showOptions: boolean = false;
   isDrawerOpen: boolean = false;
   showCarriers: boolean = false;
   showUsersTable: boolean = false;
   showFilter: boolean = false;
-
+  hide: boolean = false;
   constructor(
     private adminService: AdminService,
     private alertService: AlertService,
@@ -129,6 +130,17 @@ export class AdminComponent implements OnInit {
     this.showCarriers = false;
     this.showFilter = false;
     this.resetProperties();
+  }
+
+  onFilterWarehouses(hideWarehouses: boolean): void {
+    if (hideWarehouses) {
+      this.hide = true;
+      this.filteredWorkstations = this.workstations.filter(ws => ws.employeeLastName !== 'Warehouse');
+    } else {
+      this.hide = false;
+      this.filteredWorkstations = [...this.workstations]; 
+    }
+
   }
 
 
@@ -223,6 +235,13 @@ export class AdminComponent implements OnInit {
       if (response.success) {
         if (isWorkstation) {
           this.workstations = response.data || [];
+          if (this.hide) {
+            this.filteredWorkstations = this.workstations.filter(ws => ws.employeeLastName !== 'Warehouse');
+          }
+          else {
+            this.filteredWorkstations = [...this.workstations];
+          }
+         
           this.devices = [];
         } else {
           this.devices = response.data || [];

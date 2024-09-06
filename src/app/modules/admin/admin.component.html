@@ -87,10 +87,10 @@
           <mat-icon *ngIf="searchType === DeviceType.NETWORK_EQUIPMENT">router</mat-icon>
         </div>
         <div class="all-devices-text" *ngIf="workstations.length > 0">{{ 'all.workstations' | translate }}</div>
-        <app-filter [filterType]="filterType" [carriers]="carriers" *ngIf="this.showFilter" (filter)="applyFilter($event)"></app-filter>
+        <app-filter [filterType]="filterType" [carriers]="carriers" *ngIf="this.showFilter" (filterWarehouses)="onFilterWarehouses($event)" (filter)="applyFilter($event)"></app-filter>
         <div class="row">
           <app-item-table *ngIf="devices.length > 0" [items]="devices" [deviceType]="searchType"></app-item-table>
-          <app-item-table *ngIf="workstations.length > 0" [items]="workstations" [deviceType]="searchType"></app-item-table>
+          <app-item-table *ngIf="filteredWorkstations.length > 0" [items]="filteredWorkstations" [deviceType]="searchType"></app-item-table>
         </div>
       </div>
     </div>

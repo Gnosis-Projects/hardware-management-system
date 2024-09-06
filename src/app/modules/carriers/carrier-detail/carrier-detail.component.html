@@ -17,6 +17,9 @@
           <button mat-menu-item (click)="openAddUnitDialog()" *ngIf="isSuperAdmin">
             <mat-icon>add_circle</mat-icon> {{ 'add.Unit' | translate }}
           </button>
+          <button mat-menu-item (click)="addWorkStation()">
+            <mat-icon>computer</mat-icon> {{ 'addWorkStation' | translate }}
+          </button>
         </mat-menu>
       </div>
 

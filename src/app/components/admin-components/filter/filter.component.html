@@ -80,6 +80,11 @@
         </div>
       </ng-container>
 
+      <div class="form-group" *ngIf="filterType === FilterType.Workstation">
+        <input id="hideWarehouses" type="checkbox" formControlName="hideWarehouses" />
+        <label for="hideWarehouses" class="m-2">{{ 'hide.warehouses' | translate }}</label>
+      </div>
+
       <!-- Network Equipment Filters -->
       <ng-container *ngIf="filterType === FilterType.NetEquipment">
         <div class="form-group">

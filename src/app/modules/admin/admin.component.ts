@@ -34,6 +34,8 @@ import { Helper } from '../../shared/helpers';
 import { AddCarrierDialogComponent } from '../../components/admin-components/add-carrier-dialog/add-carrier-dialog.component';
 import { AddAunitDialogComponent } from '../../components/admin-components/add-aunit-dialog/add-aunit-dialog.component';
 import { DropdownOptionDialogComponent } from '../../components/dropdowns/dropdown-option-dialog/dropdown-option-dialog.component';
+import Swal from 'sweetalert2';
+import { DropdownService } from '../../services/dropdown.service';
 
 @Component({
   standalone: true,
@@ -84,6 +86,7 @@ export class AdminComponent implements OnInit {
   constructor(
     private adminService: AdminService,
     private alertService: AlertService,
+    private dropdownService: DropdownService,
     private translate: TranslateService,
     private toastr: ToastrService,
     private carrierService: CarrierService,
@@ -320,11 +323,36 @@ export class AdminComponent implements OnInit {
     this.fetchAllDevices(this.searchType, searchParams);
   }
 
+  showOperatingSystems(): void {
+    // Assuming you have a service that fetches the operating systems
+    this.dropdownService.getOperatingSystems().subscribe(
+      (response) => {
+        if (response.success) {
+          const operatingSystems = response.data;
+  
+          const operatingSystemsList = operatingSystems
+            .map((os: { name: any; }) => `<li>${os.name}</li>`)
+            .join('');
+          Swal.fire({
+            title: 'Λειτουργικά Συστήματα',
+            html: `<ul>${operatingSystemsList}</ul>`,
+            confirmButtonText: 'OK'
+          });
+        } else {
+          this.toastr.error('Failed to fetch operating systems.');
+        }
+      },
+      (error) => {
+        this.toastr.error('An error occurred while fetching operating systems.');
+      }
+    );
+  }
   persistData(): void {
     localStorage.setItem('searchDevices', Helper.encode(JSON.stringify(this.devices)));
     localStorage.setItem('searchWorkstations', Helper.encode(JSON.stringify(this.workstations)));
     localStorage.setItem('searchType', this.searchType);
   }
+
 
   loadPersistedData(): void {
     const storedDevices = localStorage.getItem('searchDevices');

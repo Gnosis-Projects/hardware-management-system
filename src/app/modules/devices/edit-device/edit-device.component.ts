@@ -85,7 +85,7 @@ export class EditDeviceComponent implements OnInit {
         ip: [''],
         brand: [''],
         supplier: [''],
-        purchaseDate: [''],
+        purchaseDate: ['',Validators.required],
       }),
       networkEquipmentIp: this.fb.group({
         ipTypeId: [null],
@@ -207,7 +207,7 @@ export class EditDeviceComponent implements OnInit {
                 ip: response.data.networkDiskInfo.ip,
                 brand: response.data.networkDiskInfo.brand,
                 supplier: response.data.networkDiskInfo.supplier,
-                purchaseDate: response.data.networkDiskInfo.purchaseDate
+                purchaseDate: new Date(response.data.networkDiskInfo.purchaseDate).toISOString().substring(0, 10)
               });
             }
           }

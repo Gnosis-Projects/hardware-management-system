@@ -418,6 +418,9 @@
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="deviceForm.get('purchaseDate')?.hasError('required')">
+            {{ 'This field is required' | translate }}
+          </mat-error>
         </mat-form-field>
       </div>
     </div>

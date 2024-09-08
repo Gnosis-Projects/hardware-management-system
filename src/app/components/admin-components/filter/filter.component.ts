@@ -13,6 +13,7 @@ import { AUnitService } from '../../../services/aunit.service';
 import { DropdownService } from '../../../services/dropdown.service';
 import { IpType, OperatingSystem, PhoneType, PrinterType, RemoteDesktopApp, ServerDiskType } from '../../../interfaces/requests/device-request';
 import { NetworkEquipmentType } from '../../../interfaces/responses/device-response';
+import { DeviceType } from '../../../enums/device-type';
 
 @Component({
   selector: 'app-filter',
@@ -25,6 +26,7 @@ export class FilterComponent implements OnInit, OnChanges {
   @Input() filterType: FilterType = FilterType.Computer;
   @Input() carriers: CommonResponse[] = [];
   @Output() filter = new EventEmitter<any>();
+  @Output() filterWarehouses = new EventEmitter<boolean>();
 
   showFilter: boolean = false;
   filterForm: FormGroup;
@@ -139,7 +141,8 @@ export class FilterComponent implements OnInit, OnChanges {
           ...controls,
           employeeLastName: [''],
           employeeFirstName: [''],
-          department: ['']
+          department: [''],
+          hideWarehouses: [false] 
         };
         break;
     }
@@ -181,6 +184,7 @@ export class FilterComponent implements OnInit, OnChanges {
     });
   }
 
+
   onCarrierChange(carrierId: number): void {
     if (carrierId) {
       this.aUnitService.getAUnitsByCarrierId(carrierId).subscribe(aUnits => {
@@ -197,17 +201,23 @@ export class FilterComponent implements OnInit, OnChanges {
 
   onFilter(): void {
     if (this.filterForm.valid) {
-      const { carrierId, aUnitId, ...filterDto } = this.filterForm.getRawValue();
+      const { carrierId, aUnitId, hideWarehouses, ...filterDto } = this.filterForm.getRawValue();
   
-      Object.keys(filterDto).forEach(key => {
-        if (key !=='macAddress' && (filterDto[key] === null || filterDto[key] === '')) {
+      Object.keys(filterDto).forEach((key) => {
+        if (key !== 'macAddress' && (filterDto[key] === null || filterDto[key] === '')) {
           delete filterDto[key];
         }
       });
   
+      // Emit the hideWarehouses event for workstations
+      if (this.filterType === FilterType.Workstation) {
+        this.filterWarehouses.emit(hideWarehouses);
+      }
+  
       this.filter.emit({ carrierId, aUnitId, filterDto });
     }
   }
+  
   onReset(): void {
     this.filterForm.reset({
       carrierId: null,
@@ -220,6 +230,7 @@ export class FilterComponent implements OnInit, OnChanges {
       ram: 0,
       ip: '',
       macAddress: '',
+      hideWarehouses: false,
       operatingSystemId: null,
       employeeLastName: '',
       employeeFirstName: '',

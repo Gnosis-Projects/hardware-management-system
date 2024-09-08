@@ -167,7 +167,7 @@ export class AlertService {
         const socketNumber = (document.getElementById('socketNumber') as HTMLInputElement).value;
         const city = (document.getElementById('city') as HTMLInputElement).value;
 
-        if (!employeeLastName || !employeeFirstName || !email || !personalPhone || !department || !city || !socketNumber || !workstationNumber) {
+        if (!employeeLastName || !employeeFirstName || !email || !personalPhone || !department || !city ) {
           Swal.showValidationMessage(this.translate.instant('all.fields.required'));
           return false;
         }

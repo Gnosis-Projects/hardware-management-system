@@ -12,6 +12,16 @@
           </select>
           </div>
           </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="deviceName">{{ 'labels.deviceName' | translate }}</label>
+              <input id="deviceName" type="text" formControlName="deviceName" class="form-control" />
+              <div *ngIf="editForm.get('deviceName')?.invalid && editForm.get('deviceName')?.touched" class="text-danger">
+                {{ 'This field is required' | translate }}
+              </div>
+            </div>
+          </div>
+    
       <div class="col-md-4">
         <div class="form-group">
           <label for="model">{{ 'labels.model' | translate }}</label>
@@ -30,16 +40,6 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          <label for="deviceName">{{ 'labels.deviceName' | translate }}</label>
-          <input id="deviceName" type="text" formControlName="deviceName" class="form-control" />
-          <div *ngIf="editForm.get('deviceName')?.invalid && editForm.get('deviceName')?.touched" class="text-danger">
-            {{ 'This field is required' | translate }}
-          </div>
-        </div>
-      </div>
-
       <!-- Computer Specific Fields -->
       <ng-container *ngIf="deviceType === DeviceType.COMPUTER">
         <div class="col-md-4">
@@ -315,6 +315,9 @@
               <div class="form-group">
                 <label for="purchaseDate">{{ 'labels.purchaseDate' | translate }}</label>
                 <input id="purchaseDate" type="date" formControlName="purchaseDate" class="form-control" />
+                <div *ngIf="editForm.get('purchaseDate')?.invalid && editForm.get('purchaseDate')?.touched" class="text-danger">
+                  {{ 'This field is required' | translate }}
+                </div>
               </div>
             </div>
           </div>
@@ -325,6 +328,9 @@
         <div class="form-group">
           <label for="purchaseDate">{{ 'labels.purchaseDate' | translate }}</label>
           <input id="purchaseDate" type="date" formControlName="purchaseDate" class="form-control" />
+          <div *ngIf="editForm.get('purchaseDate')?.invalid && editForm.get('purchaseDate')?.touched" class="text-danger">
+            {{ 'This field is required' | translate }}
+          </div>
         </div>
       </div>
       <div class="col-md-6">

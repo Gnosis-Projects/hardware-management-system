@@ -67,7 +67,7 @@ export class AddDeviceDialogComponent implements OnInit {
       model: ['', Validators.required],
       serialNumber: ['', Validators.required],
       comments: [''],
-      purchaseDate: [''],
+      purchaseDate: ['', Validators.required],
       supplier: [''],
       phoneNumber: [''],
       phoneSocket: [''],

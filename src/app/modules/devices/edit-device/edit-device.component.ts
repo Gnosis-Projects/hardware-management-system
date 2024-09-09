@@ -70,7 +70,7 @@ export class EditDeviceComponent implements OnInit {
       model: ['', Validators.required],
       serialNumber: ['', Validators.required],
       deviceName: ['', Validators.required],
-      ram: [null],
+      ram: [''],
       ip: [''],
       macAddress: [''],
       machineType: [''],
@@ -136,9 +136,17 @@ export class EditDeviceComponent implements OnInit {
       this.toggleNetworkDiskInfo(value);
     });
 
+    
+    if(this.deviceType !== DeviceType.SERVER){
+      this.editForm.get('networkDiskInfo.purchaseDate')?.clearValidators();
+    this.editForm.get('networkDiskInfo.purchaseDate')?.updateValueAndValidity();
+    }
+
+
     this.editForm.get('networkEquipmentTypeId')?.valueChanges.subscribe((value) => {
       this.onNetworkEquipmentTypeChange(value);
     });
+
   }
   
   toggleNetworkDiskInfo(show: boolean): void {
@@ -307,7 +315,7 @@ export class EditDeviceComponent implements OnInit {
       if (newWorkstationId && newWorkstationId !== 0) {
         editRequest.newWorkstationId = newWorkstationId;
       }
-  
+
       switch (this.deviceType) {
         case DeviceType.COMPUTER:
           this.removeNonComputerFields(editRequest);
@@ -348,8 +356,6 @@ export class EditDeviceComponent implements OnInit {
     } else {
       this.editForm.markAllAsTouched();
       const invalidControls = this.findInvalidControls();
-      
-      
       this.toastr.error(this.translate.instant('form.errors'));
     }
   }
@@ -413,6 +419,7 @@ export class EditDeviceComponent implements OnInit {
     delete editRequest.outlet;
     delete editRequest.antivirus;
     delete editRequest.workGroupDomain;
+    delete editRequest.networkDiskInfo;
     delete editRequest.operatingSystemId;
     delete editRequest.disks;
     delete editRequest.computerPrinters;
@@ -437,6 +444,7 @@ export class EditDeviceComponent implements OnInit {
     delete editRequest.macAddress;
     delete editRequest.machineType;
     delete editRequest.monitorType;
+    delete editRequest.networkDiskInfo;
     delete editRequest.outlet;
     delete editRequest.antivirus;
     delete editRequest.networkEquipmentIp;

@@ -111,7 +111,7 @@ export class CarrierDetailComponent implements OnInit {
     private utils: Utils
   ) {
     this.searchForm = this.fb.group({
-      ram: [0]
+      ram: ['']
     });
     this.isSuperAdmin = this.authStateService.isSuperAdmin();
     if (!this.isSuperAdmin && !this.hasMultipleCarriers) {

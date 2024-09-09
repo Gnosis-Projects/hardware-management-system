@@ -72,7 +72,7 @@ export class AddDeviceDialogComponent implements OnInit {
       phoneNumber: [''],
       phoneSocket: [''],
       phoneTypeId: [null],
-      ram: [null, Validators.required],
+      ram: ['', Validators.required],
       ip: ['', Validators.required],
       disks: this.fb.array([]),
       workGroupDomain: [''],

@@ -70,7 +70,7 @@ export interface AddDeviceRequest {
   model: string;
   serialNumber: string;
   deviceName: string;
-  ram?: number;
+  ram?: string;
   supplier?: string;
   printerTypeId?: number;
   networkEquipmentTypeId?: number;
@@ -113,7 +113,7 @@ export interface EditDeviceRequest {
   floor?: string;
   networkEquipmentFloor?: string;
   phoneNumber?: string;
-  ram?: number;
+  ram?: string;
   ip?: string;
   ssd?: boolean;
   disks?: Disk[];

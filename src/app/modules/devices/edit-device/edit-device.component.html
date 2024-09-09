@@ -45,7 +45,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label for="ram">{{ 'labels.RAM' | translate }}</label>
-            <input id="ram" type="number" formControlName="ram" class="form-control" />
+            <input id="ram" type="text" formControlName="ram" class="form-control" />
             <div *ngIf="editForm.get('ram')?.invalid && editForm.get('ram')?.touched" class="text-danger">
               {{ 'This field is required' | translate }}
             </div>

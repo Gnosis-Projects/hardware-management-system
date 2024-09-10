@@ -184,7 +184,7 @@
         <div class="col-md-6">
           <mat-form-field class="full-width">
             <mat-label>{{ 'labels.ram' | translate }}</mat-label>
-            <input matInput type="number" formControlName="ram">
+            <input matInput type="text" formControlName="ram">
             <mat-error *ngIf="deviceForm.get('ram')?.hasError('required')">
               {{ 'This field is required' | translate }}
             </mat-error>

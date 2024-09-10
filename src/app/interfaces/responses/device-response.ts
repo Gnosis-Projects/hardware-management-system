@@ -48,7 +48,7 @@ export interface Device {
   model: string;
   serialNumber: string;
   deviceName: string;
-  ram?: number;
+  ram?: string;
   ip?: string;
   phoneNumber?: string;
   disks?: Disk[];
@@ -89,7 +89,7 @@ export interface SingleDeviceResponse {
 }
 
 export interface DeviceHistory {
-  ram?: number;
+  ram?: string;
   id: number;
   username: string;
   employeeLastName: string;

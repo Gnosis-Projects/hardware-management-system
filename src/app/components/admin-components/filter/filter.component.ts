@@ -118,7 +118,7 @@ export class FilterComponent implements OnInit, OnChanges {
           deviceName: [''],
           model: [''],
           serialNumber: [''],
-          ram: [0],
+          ram: [''],
           ip: [''],
           macAddress: [''],
           operatingSystemId: [null]
@@ -227,7 +227,7 @@ export class FilterComponent implements OnInit, OnChanges {
       paperSize: '',
       networkEquipmentTypeId: null,
       serialNumber: '',
-      ram: 0,
+      ram: '',
       ip: '',
       macAddress: '',
       hideWarehouses: false,

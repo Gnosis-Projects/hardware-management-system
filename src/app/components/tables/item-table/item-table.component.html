@@ -52,7 +52,7 @@
       <!-- RAM Column -->
       <ng-container [matColumnDef]="ItemColumnNames.ram">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="ram"> {{ ItemColumnNames.ram }} </th>
-        <td mat-cell *matCellDef="let item"> {{ item?.ram ? item.ram + ' GB' : 'N/A' }} </td>
+        <td mat-cell *matCellDef="let item"> {{ item?.ram ? item.ram : 'N/A' }} </td>
       </ng-container>
 
       <!-- Employee Last Name Column -->

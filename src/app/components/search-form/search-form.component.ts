@@ -44,7 +44,7 @@ export class SearchFormComponent implements OnInit, OnChanges {
         deviceName: [''],
         model: [''],
         serialNumber: [''],
-        ram: [0],
+        ram: [''],
         ip: [''],
         macAddress: [''],
         ssd: [false],

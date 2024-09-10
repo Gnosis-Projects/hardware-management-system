@@ -158,12 +158,13 @@ export class EditDeviceComponent implements OnInit {
     }
   }
 
-  get computerPrinters(): FormArray {
-    return this.editForm.get('computerPrinters') as FormArray;
-  }
-
   get remoteDesktopApps(): FormArray {
     return this.editForm.get('remoteDesktopApps') as FormArray;
+  }
+
+  
+  get computerPrinters(): FormArray {
+    return this.editForm.get('computerPrinters') as FormArray;
   }
 
   get disks(): FormArray {

@@ -17,7 +17,6 @@ export class ExportDataService {
   public serversLength = 0;
 
   private extractWorkstationData(data: any): any {
-    // Only include specific fields, excluding lists
     return {
       aUnit: data.aUnit ? data.aUnit.name : '',
       address: data.address || '',

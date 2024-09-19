@@ -40,7 +40,7 @@ export class ItemHistoryComponent implements OnInit {
   addDeviceSpecificColumns(): void {
     switch (this.deviceType) {
       case DeviceType.COMPUTER:
-        this.displayedColumns.push('ram', 'ip', 'macAddress', 'operatingSystem', 'outlet', 'antivirus', 'remoteDesktopApps'  );
+        this.displayedColumns.push('ram', 'ip', 'macAddress', 'operatingSystem', 'outlet', 'antivirus', 'monitorType','ssd','remoteDesktopApps'  );
         break;
       case DeviceType.PHONE:
         this.displayedColumns.push('phoneNumber', 'phoneSocket', 'phoneType');

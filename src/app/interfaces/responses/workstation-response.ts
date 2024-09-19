@@ -8,12 +8,13 @@
     id: number;
     employeeLastName: string;
     employeeFirstName: string;
-    email: string;
-    personalPhone: string;
+    email?: string;
+    personalPhone?: string;
     socketNumber?: string;
+    address?: string;
     workstationNumber?: string;
     department: string;
-    city: string;
+    city?: string;
     computers_list: Device[];
     printers_list: Device[];
     phones_list: Device[];

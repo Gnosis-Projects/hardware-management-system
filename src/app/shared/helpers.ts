@@ -50,7 +50,7 @@ export abstract class Helper {
     return workStations.filter((workStation: WorkStation) => 
       workStation.aUnit.name.toLowerCase().includes(lowerTerm) || 
       workStation.id.toString().includes(lowerTerm) ||
-      workStation.city.toLowerCase().includes(lowerTerm) ||
+      workStation.city?.toLowerCase().includes(lowerTerm) ||
       workStation.employeeFirstName.toLowerCase().includes(lowerTerm) ||
       workStation.employeeLastName.toLowerCase().includes(lowerTerm)
     );

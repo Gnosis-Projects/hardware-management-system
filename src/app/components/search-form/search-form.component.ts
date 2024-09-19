@@ -63,6 +63,7 @@ export class SearchFormComponent implements OnInit, OnChanges {
         ipTypeId: [0],
         routerUsername: [''],
         routerPassword: [''],
+        address: [''],
         switchAddress: [''],
         ipAddress: [''],
         paperSize: ['']  
@@ -135,7 +136,7 @@ export class SearchFormComponent implements OnInit, OnChanges {
 
       if (filterDtoValue) {
         Object.keys(filterDtoValue).forEach(key => {
-          if (key !== 'macAddress' && (filterDtoValue[key] === null || filterDtoValue[key] === '' || filterDtoValue[key] === 0 || filterDtoValue[key] === false)) {
+          if (key !== 'macAddress' && key !=='ram' && (filterDtoValue[key] === null || filterDtoValue[key] === '' || filterDtoValue[key] === 0 || filterDtoValue[key] === false)) {
             delete filterDtoValue[key];
           }
         });

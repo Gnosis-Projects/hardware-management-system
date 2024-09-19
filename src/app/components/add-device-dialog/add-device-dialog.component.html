@@ -1,8 +1,6 @@
 <h2 mat-dialog-title>{{ 'add.device' | translate }} ({{deviceType!.toString() | translate}}) </h2>
 <div mat-dialog-content>
   <form [formGroup]="deviceForm" class="device-form">
-    
-    <!-- Network Equipment Selection -->
     <div class="row" *ngIf="deviceType === 'network_equipment'">
       <div class="col-md-6">
         <mat-form-field class="full-width">
@@ -14,7 +12,6 @@
       </div>
     </div>
     
-    <!-- General Information -->
     <div class="row">
       <div class="col-md-6">
         <mat-form-field class="full-width">
@@ -29,14 +26,10 @@
         <mat-form-field class="full-width">
           <mat-label>{{ 'labels.model' | translate }}</mat-label>
           <input matInput formControlName="model">
-          <mat-error *ngIf="deviceForm.get('model')?.hasError('required')">
-            {{ 'This field is required' | translate }}
-          </mat-error>
         </mat-form-field>
       </div>
     </div>
 
-    <!-- Serial Number -->
     <div class="row">
       <div class="col-md-6">
         <mat-form-field class="full-width">
@@ -49,7 +42,6 @@
       </div>
     </div>
 
-    <!-- Phone Specific Fields -->
     <div class="row" *ngIf="deviceType === 'phone'">
       <div class="col-md-6">
         <mat-form-field class="full-width">
@@ -84,7 +76,6 @@
       </div>
     </div>
 
-    <!-- Printer Specific Fields -->
     <div class="row" *ngIf="deviceType === 'printer'">
       <div class="col-md-6">
         <mat-form-field class="full-width">
@@ -106,13 +97,12 @@
       </div>
     </div>
 
-    <!-- Network Equipment Specific Fields -->
     <ng-container *ngIf="deviceType === 'network_equipment'">
-      <div class="row">
+      <div class="row" formGroupName="networkEquipmentIp">
         <div class="col-md-6">
           <mat-form-field class="full-width">
             <mat-label>{{ 'labels.ipType' | translate }}</mat-label>
-            <mat-select formControlName="networkEquipmentIp.ipTypeId">
+            <mat-select formControlName="ipTypeId">
               <mat-option *ngFor="let type of ipTypes" [value]="type.id">{{ type.name | translate }}</mat-option>
             </mat-select>
             <mat-error *ngIf="deviceForm.get('networkEquipmentIp.ipTypeId')?.hasError('required')">
@@ -123,7 +113,7 @@
         <div class="col-md-6">
           <mat-form-field class="full-width">
             <mat-label>{{ 'labels.ip' | translate }}</mat-label>
-            <input matInput formControlName="networkEquipmentIp.ip">
+            <input matInput formControlName="ip">
             <mat-error *ngIf="deviceForm.get('networkEquipmentIp.ip')?.hasError('required')">
               {{ 'This field is required' | translate }}
             </mat-error>
@@ -173,12 +163,10 @@
       </div>
     </ng-container>
 
-    <!-- Refurbished Checkbox for Printers and Computers -->
     <div class="col-md-6" *ngIf="deviceType === 'printer' || deviceType === 'computer'">
       <mat-checkbox formControlName="refurbished">{{ 'labels.refurbished' | translate }}</mat-checkbox>
     </div>
 
-    <!-- Computer Specific Fields -->
     <ng-container *ngIf="deviceType === 'computer'">
       <div class="row">
         <div class="col-md-6">
@@ -329,32 +317,19 @@
       </div>
     </ng-container>
 
-    <!-- Server Specific Fields -->
     <ng-container *ngIf="deviceType === 'server'">
+      <!-- Server basic fields -->
       <div class="row">
         <div class="col-md-6">
           <mat-form-field class="full-width">
-            <mat-label>{{ 'labels.serverDiskType' | translate }}</mat-label>
-            <mat-select formControlName="serverDiskTypeId">
-              <mat-option *ngFor="let type of diskTypes" [value]="type.id">{{ type.name | translate }}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="deviceForm.get('serverDiskTypeId')?.hasError('required')">
+            <mat-label>{{ 'labels.ram' | translate }}</mat-label>
+            <input matInput type="text" formControlName="ram">
+            <mat-error *ngIf="deviceForm.get('ram')?.hasError('required')">
               {{ 'This field is required' | translate }}
             </mat-error>
           </mat-form-field>
         </div>
         <div class="col-md-6">
-          <mat-form-field class="full-width">
-            <mat-label>{{ 'labels.diskRotations' | translate }}</mat-label>
-            <input matInput type="number" formControlName="diskRotations">
-          </mat-form-field>
-        </div>
-        <div class="col-md-6">
-          <mat-checkbox formControlName="networkDisk">{{ 'labels.networkDisk' | translate }}</mat-checkbox>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
           <mat-form-field class="full-width">
             <mat-label>{{ 'labels.operatingSystem' | translate }}</mat-label>
             <mat-select formControlName="operatingSystemId">
@@ -363,47 +338,105 @@
           </mat-form-field>
         </div>
       </div>
-      <ng-container *ngIf="deviceForm.get('networkDisk')?.value">
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field class="full-width">
-              <mat-label>{{ 'labels.networkDiskName' | translate }}</mat-label>
-              <input matInput formControlName="networkDiskInfo.name">
-            </mat-form-field>
+    
+      <!-- Button to add a new server disk -->
+      <div class="row">
+        <div class="col-md-12">
+          <button mat-button color="primary" (click)="addServerDisk()">+ Προσθήκη δίσκου server</button>
+        </div>
+      </div>
+    
+      <!-- Server Disks Form Array -->
+      <div formArrayName="serverDisks">
+        <div *ngFor="let serverDisk of serverDisks.controls; let i = index" [formGroupName]="i" class="server-disk-form">
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field class="full-width">
+                <mat-label>{{ 'labels.capacity' | translate }}</mat-label>
+                <input matInput formControlName="capacity">
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field class="full-width">
+                <mat-label>{{ 'labels.diskRotations' | translate }}</mat-label>
+                <input matInput type="TEXT" formControlName="diskRotations">
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field class="full-width">
+                <mat-label>{{ 'labels.serverDiskType' | translate }}</mat-label>
+                <mat-select formControlName="serverDiskTypeId">
+                  <mat-option *ngFor="let type of diskTypes" [value]="type.id">{{ type.name | translate }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="serverDisk.get('serverDiskTypeId')?.hasError('required')">
+                  {{ 'This field is required' | translate }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-checkbox formControlName="networkDisk">{{ 'labels.networkDisk' | translate }}</mat-checkbox>
+            </div>
           </div>
-          <div class="col-md-6">
-            <mat-form-field class="full-width">
-              <mat-label>{{ 'labels.networkDiskArray' | translate }}</mat-label>
-              <input matInput formControlName="networkDiskInfo.diskArray">
-            </mat-form-field>
+    
+          <!-- Network Disk Info -->
+          <div *ngIf="serverDisk.get('networkDisk')?.value" formGroupName="networkDiskInfo">
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="full-width">
+                  <mat-label>{{ 'labels.networkDiskName' | translate }}</mat-label>
+                  <input matInput formControlName="name">
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field class="full-width">
+                  <mat-label>{{ 'labels.diskArray' | translate }}</mat-label>
+                  <input matInput formControlName="diskArray">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="full-width">
+                  <mat-label>{{ 'labels.IPaddress' | translate }}</mat-label>
+                  <input matInput formControlName="ip">
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field class="full-width">
+                  <mat-label>{{ 'labels.networkDiskBrand' | translate }}</mat-label>
+                  <input matInput formControlName="brand">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="full-width">
+                  <mat-label>{{ 'labels.supplier' | translate }}</mat-label>
+                  <input matInput formControlName="supplier">
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field class="full-width">
+                  <mat-label>{{ 'labels.purchaseDate' | translate }}</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="purchaseDate">
+                  <mat-hint>MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Remove Disk Button -->
+          <div class="row">
+            <div class="col-md-12">
+              <button mat-button color="warn" (click)="removeServerDisk(i)">Αφαίρεση</button>
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field class="full-width">
-              <mat-label>{{ 'labels.networkDiskSize' | translate }}</mat-label>
-              <input matInput type="number" formControlName="networkDiskInfo.diskSize">
-            </mat-form-field>
-          </div>
-          <div class="col-md-6">
-            <mat-form-field class="full-width">
-              <mat-label>{{ 'labels.IPaddress' | translate }}</mat-label>
-              <input matInput formControlName="networkDiskInfo.ip">
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field class="full-width">
-              <mat-label>{{ 'labels.networkDiskBrand' | translate }}</mat-label>
-              <input matInput formControlName="networkDiskInfo.brand">
-            </mat-form-field>
-          </div>
-        </div>
-      </ng-container>
+      </div>
     </ng-container>
 
-    <!-- Supplier and Purchase Date -->
     <div class="row">
       <div class="col-md-6">
         <mat-form-field class="full-width">
@@ -425,7 +458,6 @@
       </div>
     </div>
 
-    <!-- Comments -->
     <div class="row">
       <div class="col-md-12">
         <mat-form-field class="full-width">
@@ -438,7 +470,6 @@
   </form>
 </div>
 
-<!-- Action Buttons -->
 <div mat-dialog-actions class="dialog-actions">
   <button mat-button color="primary" (click)="onSave()">{{ 'save' | translate }}</button>
   <button mat-button color="warn" (click)="onCancel()">{{ 'cancel' | translate }}</button>

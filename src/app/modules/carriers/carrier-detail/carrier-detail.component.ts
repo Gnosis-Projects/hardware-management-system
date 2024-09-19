@@ -42,6 +42,7 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { Utils } from '../../../shared/utils';
 import { AuthStateService } from '../../../services/state-management/auth-state.service';
 import { EditAunitDialogComponent } from '../../../components/admin-components/edit-aunit-dialog/edit-aunit-dialog.component';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-carrier-detail',
@@ -91,6 +92,12 @@ export class CarrierDetailComponent implements OnInit {
   hasMultipleCarriers = this.authStateService.hasMultipleCarriers();
   dataSource = new MatTableDataSource<Device>(this.filteredResults);
   workstationDataSource = new MatTableDataSource<WorkStation>(this.workstations);
+  menuItems: MenuItem[] = [];
+  currentFilterParams: any = {};
+
+  currentPage: number = 1;
+  pageSize: number = 30;
+  totalPages: number = 1;
 
   constructor(
     private router: Router,
@@ -121,6 +128,7 @@ export class CarrierDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
     const carrier = this.carrierStateService.selectedCarrier();
     if (carrier) {
       this.carrier = carrier;
@@ -156,18 +164,10 @@ export class CarrierDetailComponent implements OnInit {
     this.router.navigate(['/workstation']);
   }
 
-  onSearch(term: string): void { 
-    if (
-    this.searchType === DeviceType.COMPUTER ||
-    this.searchType === DeviceType.PHONE ||
-    this.searchType === DeviceType.PRINTER ||
-    this.searchType === DeviceType.NETWORK_EQUIPMENT ||
-    this.searchType === DeviceType.SERVER
-  )  {
-      this.filteredResults = term ? Helper.filterDevices(term, this.devices) : this.devices;
-    } else if (this.searchType === DeviceType.WORKSTATION) {
-      this.filteredResults = term ? Helper.filterWorkStations(term, this.workstations) : this.workstations;
-    }
+  onSearch(term: string): void {
+    this.filteredResults = this.searchType !== DeviceType.WORKSTATION 
+      ? (term ? Helper.filterDevices(term, this.devices) : this.devices)
+      : (term ? Helper.filterWorkStations(term, this.workstations) : this.workstations);
   }
 
   onDeleteUnit(unit: CommonResponse): void {
@@ -287,6 +287,8 @@ export class CarrierDetailComponent implements OnInit {
       return;
     }
 
+    this.currentFilterParams = searchParams;
+
     switch (this.searchType) {
       case DeviceType.COMPUTER:
       case DeviceType.PHONE:
@@ -303,20 +305,60 @@ export class CarrierDetailComponent implements OnInit {
     }
   }
 
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.searchDevices(this.currentFilterParams);
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.searchDevices(this.currentFilterParams);
+    }
+  }
+
+  firstPage(): void {
+    if (this.currentPage !== 1) {
+      this.currentPage = 1;
+      this.searchDevices(this.currentFilterParams);
+    }
+  }
+
+  lastPage(): void {
+    if (this.currentPage !== this.totalPages) {
+      this.currentPage = this.totalPages;
+      this.searchDevices(this.currentFilterParams);
+    }
+  }
+
   private searchForDevices(searchParams: any): void {
-    this.deviceService.getDevicesByCarrierId(this.carrierStateService.selectedCarrier()!.id, this.searchType, searchParams).subscribe(response => {
+    this.deviceService.getDevicesByCarrierId(
+      this.carrierStateService.selectedCarrier()!.id,
+      this.currentPage,
+      this.pageSize,
+      this.searchType,
+      searchParams
+    ).subscribe(response => {
       if (response.success) {
         this.devices = response.data || [];
         this.filteredResults = this.devices;
+        this.totalPages = response.totalPages;
       }
     });
   }
-
   private searchForWorkstations(searchParams: any): void {
-    this.workStationService.getWorkStationsByCarrierId(this.carrierStateService.selectedCarrier()!.id, searchParams).subscribe((response: WorkStationResponse) => {
+    this.workStationService.getWorkStationsByCarrierId(
+      this.carrierStateService.selectedCarrier()!.id,
+      this.currentPage,
+      this.pageSize,
+      searchParams
+    ).subscribe((response: WorkStationResponse) => {
       if (response.success) {
         this.workstations = response.data || [];
         this.filteredResults = this.workstations;
+        this.totalPages = response.totalPages;
       }
     });
   }

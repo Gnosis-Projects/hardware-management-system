@@ -3,7 +3,7 @@
     <div class="card-body">
       <div class="card-title text-primary mb-4 carrier-name">{{ carrier.name }}</div>
       <div class="btn-group mb-3">
-        <button mat-button [matMenuTriggerFor]="menu">
+        <button mat-raised-button [matMenuTriggerFor]="menu">
           <mat-icon>more_vert</mat-icon> {{ 'options' | translate }}
         </button>
         <mat-menu #menu="matMenu">
@@ -70,14 +70,22 @@
         <div *ngIf="(searchType !== DeviceType.WORKSTATION) && filteredResults.length > 0" class="col-12">
           <app-export-data-button [data]="filteredResults" fileName="{{searchType.toString() | translate }}"
             [columnNames]="columnNames"></app-export-data-button>
-          <app-item-table [items]="filteredResults" [deviceType]="searchType"></app-item-table>
+          <app-item-table [items]="filteredResults" [deviceType]="searchType" [currentPage]="currentPage"
+            [totalPages]="totalPages" (nextPage)="nextPage()" (previousPage)="previousPage()" (firstPage)="firstPage()"
+            (lastPage)="lastPage()">
+          </app-item-table>
         </div>
         <div *ngIf="searchType === DeviceType.WORKSTATION && filteredResults.length > 0" class="col-12">
           <app-export-data-button [data]="filteredResults" fileName="Θεσεις εργασίας"
             [columnNames]="columnNames"></app-export-data-button>
-          <app-item-table [items]="filteredResults" [deviceType]="searchType"></app-item-table>
+          <app-item-table [items]="filteredResults" [deviceType]="searchType" [currentPage]="currentPage"
+            [totalPages]="totalPages" (nextPage)="nextPage()" (previousPage)="previousPage()" (firstPage)="firstPage()"
+            (lastPage)="lastPage()">
+          </app-item-table>
+
         </div>
       </ng-container>
+
 
       <ng-container *ngIf="isMobileScreen">
         <div *ngIf="(searchType !== DeviceType.WORKSTATION) && filteredResults.length > 0" class="col-12">

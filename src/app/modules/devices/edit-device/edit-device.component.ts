@@ -10,13 +10,11 @@ import { ToastrService } from 'ngx-toastr';
 import { DeviceType } from '../../../enums/device-type';
 import { DropdownService } from '../../../services/dropdown.service';
 import { PrinterType, RemoteDesktopAppType } from '../../../interfaces/requests/device-request';
-import { NetworkEquipmentIpResponse, NetworkEquipmentType } from '../../../interfaces/responses/device-response';
+import { NetworkEquipmentType } from '../../../interfaces/responses/device-response';
 import { WorkStationStateService } from '../../../services/state-management/workstation-state.service';
 import { WorkStationService } from '../../../services/workstation.service';
 import { CarrierStateService } from '../../../services/state-management/carrier-state.service';
 import { WorkStation } from '../../../interfaces/responses/workstation-response';
-
-// Angular Material Modules
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -67,7 +65,7 @@ export class EditDeviceComponent implements OnInit {
   ) {
     this.editForm = this.fb.group({
       id: [null],
-      model: ['', Validators.required],
+      model: [''],
       serialNumber: ['', Validators.required],
       deviceName: ['', Validators.required],
       ram: [''],
@@ -81,11 +79,10 @@ export class EditDeviceComponent implements OnInit {
       networkDiskInfo: this.fb.group({
         name: [''],
         diskArray: [''],
-        diskSize: [0],
         ip: [''],
         brand: [''],
         supplier: [''],
-        purchaseDate: ['',Validators.required],
+        purchaseDate: [''],
       }),
       networkEquipmentIp: this.fb.group({
         ipTypeId: [null],
@@ -101,7 +98,7 @@ export class EditDeviceComponent implements OnInit {
       computerPrinters: this.fb.array([]),
       printerTypeId: [null],
       paperSize: [''],
-      serverDiskTypeId: [null],
+      serverDisks:this.fb.array([]),
       diskRotations: [null],
       networkDisk: [false],
       networkEquipmentTypeId: [null],
@@ -117,12 +114,26 @@ export class EditDeviceComponent implements OnInit {
     });
   }
 
+    get serverDisks(): FormArray {
+    return this.editForm.get('serverDisks') as FormArray;
+  }
   ngOnInit(): void {
+
+    if (this.deviceType === DeviceType.SERVER) {
+      this.serverDisks.clear();
+    }
 
     this.dropdownService.getPrinterTypes().subscribe(types => this.printerTypes = types.data);
     this.dropdownService.getRemoteDesktopAppTypes().subscribe(types => this.remoteDesktopAppTypes = types.data);
     this.dropdownService.getOperatingSystems().subscribe(types => this.operatingSystems = types.data);
-    this.dropdownService.getNetEquipments().subscribe(types => this.netTypes = types.data);
+    this.netTypes = [ {
+      "id": 1,
+      "name": "Router"
+    },
+    {
+      "id": 2,
+      "name": "Switch"
+    }]
     this.dropdownService.getPhoneTypes().subscribe(types => this.phoneTypes = types.data);
     this.dropdownService.getServerDiskTypes().subscribe(types => this.diskTypes = types.data);
     this.dropdownService.getIPTypes().subscribe(types => this.ipTypes = types.data);
@@ -135,13 +146,6 @@ export class EditDeviceComponent implements OnInit {
     this.editForm.get('networkDisk')?.valueChanges.subscribe(value => {
       this.toggleNetworkDiskInfo(value);
     });
-
-    
-    if(this.deviceType !== DeviceType.SERVER){
-      this.editForm.get('networkDiskInfo.purchaseDate')?.clearValidators();
-    this.editForm.get('networkDiskInfo.purchaseDate')?.updateValueAndValidity();
-    }
-
 
     this.editForm.get('networkEquipmentTypeId')?.valueChanges.subscribe((value) => {
       this.onNetworkEquipmentTypeChange(value);
@@ -181,7 +185,7 @@ export class EditDeviceComponent implements OnInit {
           this.carrier = response.data.workStation?.carrier?.name ?? '';
 
           if (this.carrierId) {
-            this.workstationService.getWorkStationsByCarrierId(this.carrierId, {}).subscribe({
+            this.workstationService.getWorkstationList(this.carrierId, {}).subscribe({
               next: (workstationResponse) => {
                 this.availableWorkstations = workstationResponse.data
                   .filter(ws => ws.id !== this.newId)
@@ -212,7 +216,6 @@ export class EditDeviceComponent implements OnInit {
               this.editForm.get('networkDiskInfo')?.patchValue({
                 name: response.data.networkDiskInfo.name,
                 diskArray: response.data.networkDiskInfo.diskArray,
-                diskSize: response.data.networkDiskInfo.diskSize,
                 ip: response.data.networkDiskInfo.ip,
                 brand: response.data.networkDiskInfo.brand,
                 supplier: response.data.networkDiskInfo.supplier,
@@ -316,6 +319,10 @@ export class EditDeviceComponent implements OnInit {
       if (newWorkstationId && newWorkstationId !== 0) {
         editRequest.newWorkstationId = newWorkstationId;
       }
+      const purchaseDate = this.editForm.get('purchaseDate')?.value;
+      if (!purchaseDate || purchaseDate === '0000-12-31') {
+          delete editRequest.purchaseDate; 
+      }
 
       switch (this.deviceType) {
         case DeviceType.COMPUTER:
@@ -400,7 +407,7 @@ export class EditDeviceComponent implements OnInit {
     delete editRequest.printerTypeId;
     delete editRequest.computerPrinters;
     delete editRequest.paperSize;
-    delete editRequest.serverDiskTypeId;
+    delete editRequest.serverDisks;
     delete editRequest.diskRotations;
     delete editRequest.networkDisk;
     delete editRequest.networkEquipmentTypeId;
@@ -428,7 +435,7 @@ export class EditDeviceComponent implements OnInit {
     delete editRequest.remoteDesktopApp;
     delete editRequest.printerTypeId;
     delete editRequest.paperSize;
-    delete editRequest.serverDiskTypeId;
+    delete editRequest.serverDisks;
     delete editRequest.diskRotations;
     delete editRequest.networkDisk;
     delete editRequest.networkEquipmentTypeId;
@@ -458,7 +465,7 @@ export class EditDeviceComponent implements OnInit {
     delete editRequest.phoneNumber;
     delete editRequest.phoneSocket;
     delete editRequest.phoneTypeId;
-    delete editRequest.serverDiskTypeId;
+    delete editRequest.serverDisks;
     delete editRequest.diskRotations;
     delete editRequest.networkDisk;
     delete editRequest.networkEquipmentTypeId;
@@ -483,6 +490,7 @@ export class EditDeviceComponent implements OnInit {
     delete editRequest.remoteDesktopApp;
     delete editRequest.phoneNumber;
     delete editRequest.phoneSocket;
+    delete editRequest.serverDisks;
     delete editRequest.phoneTypeId;
     delete editRequest.printerTypeId;
     delete editRequest.paperSize;
@@ -513,7 +521,7 @@ export class EditDeviceComponent implements OnInit {
     delete editRequest.phoneTypeId;
     delete editRequest.printerTypeId;
     delete editRequest.paperSize;
-    delete editRequest.serverDiskTypeId;
+    delete editRequest.serverDisks;
     delete editRequest.diskRotations;
     delete editRequest.networkDisk;
     delete editRequest.refurbished;

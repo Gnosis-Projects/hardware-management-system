@@ -6,7 +6,6 @@ export interface Disk {
 export interface NetworkDiskInfo {
   name: string;
   diskArray: string;
-  diskSize: number;
   ip: string;
   brand: string;
   supplier: string;
@@ -66,6 +65,23 @@ export interface ComputerPrinter{
   ipAddress?: string;
 }
 
+export interface ServerDisk {
+  capacity: string;
+  diskRotations: string;
+  serverDiskTypeId: number;
+  networkDisk: boolean;
+  networkDiskInfo?: NetworkDiskInfo;
+}
+
+export interface NetworkDiskInfo {
+  name: string;
+  diskArray: string;
+  ip: string;
+  brand: string;
+  supplier: string;
+  purchaseDate: string;
+}
+
 export interface AddDeviceRequest {
   model: string;
   serialNumber: string;
@@ -97,7 +113,7 @@ export interface AddDeviceRequest {
   purchaseDate?: string;
   networkEquipmentIp?: NetworkEquipmentIp;
   networkDiskInfo?: NetworkDiskInfo;
-  serverDiskTypeId?: number;
+ serverDisks?: ServerDisk[];
   diskRotations?: number;
   networkDisk?: boolean;
   switchAddress?: string;
@@ -138,7 +154,7 @@ export interface EditDeviceRequest {
   comments?: string;
   phoneSocket?: string;
   phoneTypeId?: number;
-  serverDiskTypeId?: number;
+  serverDisks?: ServerDisk[];
   diskRotations?: number;
   networkDisk?: boolean;
   networkEquipmentIp?: NetworkEquipmentIp;

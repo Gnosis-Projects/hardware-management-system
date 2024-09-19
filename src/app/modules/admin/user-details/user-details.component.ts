@@ -8,11 +8,11 @@ import { TranslateModule } from '@ngx-translate/core';3
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { EditUserComponent } from '../../../components/admin-components/edit-user/edit-user.component';
-
+import { MatChipsModule } from '@angular/material/chips';
 @Component({
   selector: 'app-user-details',
   standalone: true,
-  imports: [CommonModule, MatButtonModule,TranslateModule,MatCardModule,RouterModule],
+  imports: [CommonModule, MatButtonModule,MatChipsModule,TranslateModule,MatCardModule,RouterModule],
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.scss']
 })
@@ -47,7 +47,6 @@ export class UserDetailsComponent implements OnInit {
   
       dialogRef.afterClosed().subscribe(result => {
         if (result && result.success && result.updatedUser) {
-          // Update the local user data with the updated user data returned from the dialog
           this.user = result.updatedUser;
         }
       });

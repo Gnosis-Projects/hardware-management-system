@@ -24,14 +24,14 @@
           <mat-icon class="info-icon">business</mat-icon>
           <strong>{{ 'carriers' | translate }}</strong>
           <ul class="carriers-list">
-            <mat-chip-set aria-label="Carriers" *ngFor="let carrier of user?.carriers">
+            <mat-chip-set aria-label="Carriers" *ngFor="let carrier of user?.carriers" (click)="goToCarrier(carrier)">
               <mat-chip>{{ carrier.name }}</mat-chip>
             </mat-chip-set>
           </ul>
       </div>
     </mat-card-content>
     <mat-card-actions class="actions">
-      <button mat-button (click)="changePassword()">{{ 'change.password' | translate }}</button>
+      <button mat-raised-button (click)="changePassword()">{{ 'change.password' | translate }}</button>
     </mat-card-actions>
   </mat-card>
 </div>

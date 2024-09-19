@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { AdminService } from '../../services/admin.service';
-import { Device } from '../../interfaces/responses/device-response';
-import { WorkStation } from '../../interfaces/responses/workstation-response';
+import { Device, DeviceListResponse } from '../../interfaces/responses/device-response';
+import { WorkStation, WorkStationResponse } from '../../interfaces/responses/workstation-response';
 import { ToastrService } from 'ngx-toastr';
 import { ItemDetailsComponent } from '../../components/mobile-screen/item-details/item-details.component';
 import { WorkStationItemDetailsComponent } from '../../components/mobile-screen/workstation-item-details/workstation-item-details.component';
@@ -36,6 +36,7 @@ import { AddAunitDialogComponent } from '../../components/admin-components/add-a
 import { DropdownOptionDialogComponent } from '../../components/dropdowns/dropdown-option-dialog/dropdown-option-dialog.component';
 import Swal from 'sweetalert2';
 import { DropdownService } from '../../services/dropdown.service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   standalone: true,
@@ -67,6 +68,11 @@ import { DropdownService } from '../../services/dropdown.service';
 export class AdminComponent implements OnInit {
   @ViewChild('drawer') drawer!: MatSidenav;
 
+  currentPage: number = 1;
+  pageSize: number = 50;
+  totalPages: number = 1;
+  currentFilterParams: any = {};
+
   devices: Device[] = [];
   carriers: CommonResponse[] = [];
   aUnits: CommonResponse[] = [];
@@ -83,6 +89,7 @@ export class AdminComponent implements OnInit {
   showUsersTable: boolean = false;
   showFilter: boolean = false;
   hide: boolean = false;
+
   constructor(
     private adminService: AdminService,
     private alertService: AlertService,
@@ -95,16 +102,15 @@ export class AdminComponent implements OnInit {
     private dialog: MatDialog
   ) {
     this.fetchAllDevices(localStorage.getItem('searchType') as DeviceType);
-
   }
 
   ngOnInit(): void {
     this.showFilter = false;
     this.isSuperAdmin = this.authStateService.isSuperAdmin();
+    this.searchType = DeviceType.COMPUTER;
     this.fetchCarriersAndUnits();
     this.loadPersistedData();
   }
-
 
   toggleOptions() {
     this.showOptions = !this.showOptions;
@@ -118,6 +124,7 @@ export class AdminComponent implements OnInit {
   resetProperties() {
     this.devices = [];
     this.workstations = [];
+    this.filteredWorkstations = []
     this.showOptions = false;
   }
 
@@ -134,19 +141,7 @@ export class AdminComponent implements OnInit {
     this.showFilter = false;
     this.resetProperties();
   }
-
-  onFilterWarehouses(hideWarehouses: boolean): void {
-    if (hideWarehouses) {
-      this.hide = true;
-      this.filteredWorkstations = this.workstations.filter(ws => ws.employeeLastName !== 'Warehouse');
-    } else {
-      this.hide = false;
-      this.filteredWorkstations = [...this.workstations]; 
-    }
-
-  }
-
-
+  
   addCarrier(): void {
     const dialogRef = this.dialog.open(AddCarrierDialogComponent, {
       width: '500px',
@@ -171,6 +166,30 @@ export class AdminComponent implements OnInit {
         this.toastr.success(this.translate.instant('successMessages.option.added.successfully'));
       }
     });
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.fetchAllDevices(this.searchType, this.currentFilterParams);
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.fetchAllDevices(this.searchType, this.currentFilterParams);
+    }
+  }
+
+  firstPage(): void{
+    if(this.currentPage > 1) this.currentPage = 1
+    this.fetchAllDevices(this.searchType, this.currentFilterParams);
+  }
+
+  lastPage(): void{
+    if(this.currentPage < this.totalPages) this.currentPage = this.totalPages
+    this.fetchAllDevices(this.searchType, this.currentFilterParams);
   }
 
   addWorkstation(): void {
@@ -215,41 +234,38 @@ export class AdminComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-
+        // Handle response
       }
     });
   }
 
   fetchAllDevices(type: DeviceType, filterParams: any = {}): void {
-    this.showCarriers = false;
-    this.showUsersTable = false;
+
     this.searchType = type;
     this.showFilter = true;
     this.filterType = this.getFilterType(type);
+    this.showCarriers = false;
+    this.showUsersTable = false;
     const searchParams = {
       ...filterParams,
       sorting: {
-        sortBy: 'name',
+        sortBy: 'deviceName',
         sortOrder: 'asc',
       },
     };
+    
+    this.adminService.setPaginationParams(this.currentPage, this.pageSize);
 
     const handleResponse = (response: any, isWorkstation: boolean = false) => {
       if (response.success) {
         if (isWorkstation) {
-          this.workstations = response.data || [];
-          if (this.hide) {
-            this.filteredWorkstations = this.workstations.filter(ws => ws.employeeLastName !== 'Warehouse');
-          }
-          else {
-            this.filteredWorkstations = [...this.workstations];
-          }
-         
+          this.filteredWorkstations = response.data || [];
           this.devices = [];
         } else {
           this.devices = response.data || [];
-          this.workstations = [];
+          this.filteredWorkstations = [];
         }
+        this.totalPages = response.totalPages;
         this.persistData();
       } else {
         this.toastr.error(response.message);
@@ -258,34 +274,22 @@ export class AdminComponent implements OnInit {
 
     switch (type) {
       case DeviceType.COMPUTER:
-        this.adminService
-          .getAllComputers(searchParams)
-          .subscribe((response) => handleResponse(response));
+        this.adminService.getAllComputers(searchParams).subscribe((response) => handleResponse(response));
         break;
       case DeviceType.PHONE:
-        this.adminService
-          .getAllPhones(searchParams)
-          .subscribe((response) => handleResponse(response));
+        this.adminService.getAllPhones(searchParams).subscribe((response) => handleResponse(response));
         break;
       case DeviceType.PRINTER:
-        this.adminService
-          .getAllPrinters(searchParams)
-          .subscribe((response) => handleResponse(response));
+        this.adminService.getAllPrinters(searchParams).subscribe((response) => handleResponse(response));
         break;
       case DeviceType.NETWORK_EQUIPMENT:
-        this.adminService
-          .getAllNetworkEquipments(searchParams)
-          .subscribe((response) => handleResponse(response));
+        this.adminService.getAllNetworkEquipments(searchParams).subscribe((response) => handleResponse(response));
         break;
       case DeviceType.SERVER:
-        this.adminService
-          .getAllServers(searchParams)
-          .subscribe((response) => handleResponse(response));
+        this.adminService.getAllServers(searchParams).subscribe((response) => handleResponse(response));
         break;
       case DeviceType.WORKSTATION:
-        this.adminService
-          .getAllWorkStations(searchParams)
-          .subscribe((response) => handleResponse(response, true));
+        this.adminService.getAllWorkStations(searchParams).subscribe((response) => handleResponse(response, true));
         break;
     }
   }
@@ -310,26 +314,29 @@ export class AdminComponent implements OnInit {
   }
 
   applyFilter(filterParams: any): void {
-    const { carrierId, aUnitId, filterDto } = filterParams;
+    this.currentFilterParams = filterParams; 
+    const { carrierId, aUnitId, ...specificFilterDto } = filterParams;
+    const filterKey = Object.keys(specificFilterDto)[0];
     const searchParams = {
       carrierId: parseInt(carrierId),
       aUnitId: parseInt(aUnitId),
-      [this.filterType]: filterDto,
+      [filterKey]: specificFilterDto[filterKey],
       sorting: {
         sortBy: 'name',
         sortOrder: 'asc',
       },
     };
+    this.currentPage = 1;
     this.fetchAllDevices(this.searchType, searchParams);
   }
 
+  
+
   showOperatingSystems(): void {
-    // Assuming you have a service that fetches the operating systems
     this.dropdownService.getOperatingSystems().subscribe(
       (response) => {
         if (response.success) {
           const operatingSystems = response.data;
-  
           const operatingSystemsList = operatingSystems
             .map((os: { name: any; }) => `<li>${os.name}</li>`)
             .join('');
@@ -347,12 +354,12 @@ export class AdminComponent implements OnInit {
       }
     );
   }
+
   persistData(): void {
     localStorage.setItem('searchDevices', Helper.encode(JSON.stringify(this.devices)));
     localStorage.setItem('searchWorkstations', Helper.encode(JSON.stringify(this.workstations)));
     localStorage.setItem('searchType', this.searchType);
   }
-
 
   loadPersistedData(): void {
     const storedDevices = localStorage.getItem('searchDevices');
@@ -361,11 +368,14 @@ export class AdminComponent implements OnInit {
 
     if (storedDevices) {
       this.devices = JSON.parse(Helper.decode(storedDevices));
+
     }
 
     if (storedWorkstations) {
       this.workstations = JSON.parse(Helper.decode(storedWorkstations));
     }
+
+    this.showCarriers = false;
 
     if (storedSearchType) {
       this.searchType = storedSearchType as DeviceType;

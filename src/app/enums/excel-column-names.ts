@@ -81,6 +81,7 @@ export enum ExcelColumnNames {
   phoneSocket = 'Πρίζα τηλεφώνου',
   'phoneType.id' = 'ΙD τύπου τηλεφώνου',
   'phoneType.name' = 'Τύπος τηλεφώνου',
+  workstationNumber = 'Αριθμός θέσης εργασίας',
   'phone.username' = 'Όνομα Χρήστη Τηλεφώνου',
   'network_equipment.floor' = 'Όροφος Δικτυακού Εξοπλισμού',
   'network_equipment.networkEquipmentType.id' = 'ID Τύπου Δικτυακού Εξοπλισμού',
@@ -134,4 +135,49 @@ export enum ExcelColumnNames {
   'networkEquipmentIP.id' = 'ID Εξοπλισμού Δικτύου',
   'networkEquipmentIP.name' = 'Όνομα Εξοπλισμού Δικτύου',
   'networkEquipmentIP.ip' = 'Διεύθυνση IP Εξοπλισμού Δικτύου',
+
+
+'server.id' = 'ID Διακομιστή',
+  'server.ram' = 'Μνήμη RAM Διακομιστή',
+  'server.ip' = 'IP Διεύθυνση Διακομιστή',
+  'server.operatingSystem.id' = 'ID Λειτουργικού Συστήματος Διακομιστή',
+  'server.operatingSystem.name' = 'Όνομα Λειτουργικού Συστήματος Διακομιστή',
+  'server.serverDisks' = 'Δίσκοι Διακομιστή',
+  'server.model' = 'Μοντέλο Διακομιστή',
+  'server.serialNumber' = 'Σειριακός Αριθμός Διακομιστή',
+  'server.deviceName' = 'Όνομα Συσκευής Διακομιστή',
+  'server.checkDateTime' = 'Ημερομηνία Ελέγχου Διακομιστή',
+  'server.purchaseDate' = 'Ημερομηνία Αγοράς Διακομιστή',
+  'server.comments' = 'Σχόλια Διακομιστή',
+  'server.username' = 'Όνομα Χρήστη Διακομιστή',
+  'server.supplier' = 'Προμηθευτής Διακομιστή',
+
+  socketNumber = 'Αριθμός πρίζας',
+  'computer.computerPrinters' = 'Απομακρυσμένη σύνδεση',
+  'computer.operatingSystem.id' = 'ID Λειτουργικού Συστήματος Υπολογιστή',
+  'computer.operatingSystem.name' = 'Όνομα Λειτουργικού Συστήματος Υπολογιστή',
+  'computer.refurbished' = 'Ανακατασκευασμένος',
+  'computer.supplier' = 'Προμηθευτής Υπολογιστή',
+
+  // New Printer Columns
+  'printer.type.id' = 'ID Τύπου Εκτυπωτή',
+  'printer.type.name' = 'Όνομα Τύπου Εκτυπωτή',
+  'printer.refurbished' = 'Ανακατασκευασμένος',
+  'printer.paperSize' = 'Μέγεθος Χάρτου',
+  'printer.supplier' = 'Προμηθευτής Εκτυπωτή',
+
+  'computer.disks.1.id' = 'ID Δίσκου Υπολογιστή',
+  'computer.disks.1.capacity' = 'Χωρητικότητα Δίσκου Υπολογιστή',
+  'computer.disks.1.ssd' = 'SSD Δίσκος Υπολογιστή',
+
+  'phone.phoneSocket' = 'Πρίζα Τηλεφώνου',
+  'phone.phoneType.id' = 'ID Τύπου Τηλεφώνου',
+  'phone.phoneType.name' = 'Όνομα Τύπου Τηλεφώνου',
+  'phone.supplier' = 'Προμηθευτής Τηλεφώνου',
+
+  'network_equipment.networkEquipmentFloor' = 'Όροφος Δικτυακού Εξοπλισμού',
+  'network_equipment.routerUsername' = 'Όνομα Χρήστη Ρούτερ',
+  'network_equipment.routerPassword' = 'Κωδικός Ρούτερ',
+  'network_equipment.switchAddress' = 'Διεύθυνση Switch',
+  'network_equipment.supplier' = 'Προμηθευτής Δικτυακού Εξοπλισμού',
 }

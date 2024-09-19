@@ -26,7 +26,6 @@ export class FilterComponent implements OnInit, OnChanges {
   @Input() filterType: FilterType = FilterType.Computer;
   @Input() carriers: CommonResponse[] = [];
   @Output() filter = new EventEmitter<any>();
-  @Output() filterWarehouses = new EventEmitter<boolean>();
 
   showFilter: boolean = false;
   filterForm: FormGroup;
@@ -53,7 +52,6 @@ export class FilterComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['filterType'] || changes['carriers']) {
       this.initializeForm();
-
     }
   }
 
@@ -68,8 +66,8 @@ export class FilterComponent implements OnInit, OnChanges {
   initializeForm() {
     let controls: any = {
       deviceName: [''],
-    model: ['' ],
-    serialNumber: ['' ],
+      model: ['' ],
+      serialNumber: ['' ],
       carrierId: [null],
       aUnitId: [{ value: null, disabled: true }]
     };
@@ -78,9 +76,6 @@ export class FilterComponent implements OnInit, OnChanges {
       case FilterType.Phone:
         controls = {
           ...controls,
-          deviceName: [''],
-          model: [''],
-          serialNumber: [''],
           phoneNumber: [''],
           phoneSocket: [''],
           phoneTypeId: [0]
@@ -89,9 +84,6 @@ export class FilterComponent implements OnInit, OnChanges {
       case FilterType.Printer:
         controls = {
           ...controls,
-          deviceName: [''],
-          model: [''],
-          serialNumber: [''],
           printerTypeId: [null],
           refurbished: [false],
           paperSize: ['']
@@ -100,9 +92,6 @@ export class FilterComponent implements OnInit, OnChanges {
       case FilterType.NetEquipment:
         controls = {
           ...controls,
-          deviceName: [''],
-          model: [''],
-          serialNumber: [''],
           floor: [''],
           networkEquipmentTypeId: [null],
           ipTypeId: [null],
@@ -115,9 +104,6 @@ export class FilterComponent implements OnInit, OnChanges {
       case FilterType.Computer:
         controls = {
           ...controls,
-          deviceName: [''],
-          model: [''],
-          serialNumber: [''],
           ram: [''],
           ip: [''],
           macAddress: [''],
@@ -127,9 +113,6 @@ export class FilterComponent implements OnInit, OnChanges {
       case FilterType.Server:
         controls = {
           ...controls,
-          deviceName: [''],
-          model: [''],
-          serialNumber: [''],
           operatingSystemId: [null],
           serverDiskTypeId: [null],
           diskRotations: [null],
@@ -141,6 +124,7 @@ export class FilterComponent implements OnInit, OnChanges {
           ...controls,
           employeeLastName: [''],
           employeeFirstName: [''],
+          address: [''],
           department: [''],
           hideWarehouses: [false] 
         };
@@ -184,7 +168,6 @@ export class FilterComponent implements OnInit, OnChanges {
     });
   }
 
-
   onCarrierChange(carrierId: number): void {
     if (carrierId) {
       this.aUnitService.getAUnitsByCarrierId(carrierId).subscribe(aUnits => {
@@ -202,22 +185,38 @@ export class FilterComponent implements OnInit, OnChanges {
   onFilter(): void {
     if (this.filterForm.valid) {
       const { carrierId, aUnitId, hideWarehouses, ...filterDto } = this.filterForm.getRawValue();
-  
+
       Object.keys(filterDto).forEach((key) => {
-        if (key !== 'macAddress' && (filterDto[key] === null || filterDto[key] === '')) {
+        if (key !== 'macAddress' && key !== 'ram' && (filterDto[key] === null || filterDto[key] === '')) {
           delete filterDto[key];
         }
       });
-  
-      // Emit the hideWarehouses event for workstations
-      if (this.filterType === FilterType.Workstation) {
-        this.filterWarehouses.emit(hideWarehouses);
-      }
-  
-      this.filter.emit({ carrierId, aUnitId, filterDto });
+
+      const filterKey = this.getSpecificFilterKey(this.filterType);
+
+      this.filter.emit({ carrierId, aUnitId, [filterKey]: filterDto });
     }
   }
-  
+
+  getSpecificFilterKey(filterType: FilterType): string {
+    switch (filterType) {
+      case FilterType.Phone:
+        return 'phoneFilterDto';
+      case FilterType.Printer:
+        return 'printerFilterDto';
+      case FilterType.NetEquipment:
+        return 'netEquipmentFilterDto';
+      case FilterType.Computer:
+        return 'computerFilterDto';
+      case FilterType.Server:
+        return 'serverFilterDto';
+      case FilterType.Workstation:
+        return 'workstationFilterDto';
+      default:
+        return 'filterDto'; // Default to a generic filter if none matches
+    }
+  }
+
   onReset(): void {
     this.filterForm.reset({
       carrierId: null,
@@ -229,6 +228,7 @@ export class FilterComponent implements OnInit, OnChanges {
       serialNumber: '',
       ram: '',
       ip: '',
+      address: '',
       macAddress: '',
       hideWarehouses: false,
       operatingSystemId: null,
@@ -238,6 +238,6 @@ export class FilterComponent implements OnInit, OnChanges {
     });
     this.aUnits = [];
     this.filterForm.get('aUnitId')?.disable();
-    this.onFilter()
+    this.onFilter();
   }
 }

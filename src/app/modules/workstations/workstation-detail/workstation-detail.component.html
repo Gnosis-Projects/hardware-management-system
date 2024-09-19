@@ -12,30 +12,34 @@
         </button>
       </div>
 
-      <p class="card-text">
+      <p class="card-text" *ngIf="workstation.data.employeeFirstName">
         <strong>{{ 'employeeFirstName' | translate }}:</strong> {{ workstation.data.employeeFirstName }}
       </p>
-      <p class="card-text">
+      <p class="card-text" *ngIf="workstation.data.employeeLastName">
         <strong>{{ 'employeeLastName' | translate }}:</strong> {{ workstation.data.employeeLastName }}
       </p>
-      <p class="card-text">
+      <p class="card-text" *ngIf="workstation.data.department">
         <strong>{{ 'labels.department' | translate }}:</strong> {{ workstation.data.department }}
       </p>
-      <p class="card-text">
+      <p class="card-text" *ngIf="workstation.data.city">
         <strong>{{ 'labels.city' | translate }}:</strong> {{ workstation.data.city }}
       </p>
-      <p class="card-text">
+      <p class="card-text" *ngIf="workstation.data.address">
+        <strong>{{ 'labels.address' | translate }}:</strong> {{ workstation.data.address }}
+      </p>
+      <p class="card-text" *ngIf="workstation.data.workstationNumber">
         <strong>{{ 'workstationNumber' | translate }}:</strong> {{ workstation.data.workstationNumber }}
       </p>
-      <p class="card-text">
+      <p class="card-text" *ngIf="workstation.data.socketNumber">
         <strong>{{ 'socketNumber' | translate }}:</strong> {{ workstation.data.socketNumber }}
       </p>
-      <p class="card-text">
+      <p class="card-text" *ngIf="workstation.data.aUnit?.name">
         <strong>{{ 'labels.unit' | translate }}:</strong> {{ workstation.data.aUnit.name }}
       </p>
-      <p class="card-text">
+      <p class="card-text" *ngIf="workstation.data.carrier?.name">
         <strong>{{ 'labels.carrier' | translate }}:</strong> {{ workstation.data.carrier.name }}
       </p>
+      
     </div>
   </div>
 

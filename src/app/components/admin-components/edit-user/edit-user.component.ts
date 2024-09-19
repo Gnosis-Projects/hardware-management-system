@@ -1,4 +1,4 @@
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommonResponse } from '../../../interfaces/responses/common-response';
@@ -15,6 +15,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { EditUserRequest } from '../../../interfaces/requests/auth/auth-request';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { CarrierStateService } from '../../../services/state-management/carrier-state.service';
+import { CarrierService } from '../../../services/carrier.service';
 @Component({
   standalone: true,
   encapsulation: ViewEncapsulation.None,
@@ -23,9 +25,10 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./edit-user.component.scss'],
   imports: [CommonModule, MatFormFieldModule, MatCardModule,MatButtonModule, MatSelectModule, MatInputModule, ReactiveFormsModule, TranslateModule]
 })
-export class EditUserComponent {
+export class EditUserComponent implements OnInit {
   editUserForm: FormGroup;
-  carriers: CommonResponse[];
+  carriers: CommonResponse[] | null;
+  userCarriers: CommonResponse[];
   roles: string[] = ['SuperAdmin', 'Admin'];
   user: UserData;
 
@@ -34,35 +37,58 @@ export class EditUserComponent {
     public dialogRef: MatDialogRef<EditUserComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { user: UserData },
     private translate: TranslateService,
+    private carrierStateService: CarrierStateService,
+    private carrierService: CarrierService,
     private authService: AuthService,
     private toastr: ToastrService
   ) {
     this.user = data.user;
-    this.carriers = this.user.carriers;
+    this.userCarriers = this.user.carriers;
+    this.carriers = this.carrierStateService.getAllCarriers();
 
     this.editUserForm = this.fb.group({
       username: [this.user.username, Validators.required],
       email: [this.user.email, [Validators.required, Validators.email]],
       active: [this.user.active , Validators.required],
       roles: [this.user.roles[0], Validators.required],
-      carrier: [this.user.carriers[0].id, Validators.required]
+      carriers: [this.userCarriers.map(carrier => carrier.id), Validators.required] 
     });
+  }
+
+  ngOnInit(): void {
+      this.getAllCarriers();
   }
 
   onCancel(): void {
     this.dialogRef.close();
   }
 
+  private getAllCarriers(): void {
+    this.carrierService.getAllCarriers().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.carriers = response.data;
+        } else {
+          this.toastr.error(this.translate.instant('errorMessages.unexpected.error'));
+        }
+      },
+      error: () => {
+        this.toastr.error(this.translate.instant('errorMessages.unexpected.error'));
+      }
+    });
+  }
+
+
   onSubmit(): void {
     if (this.editUserForm.valid) {
-      const { username, email, active, roles, carrier } = this.editUserForm.value;
+      const { username, email, active, roles, carriers } = this.editUserForm.value;
       const updateRequest: EditUserRequest = {
         userId: this.user.userId!,
         username,
         active,
         email,
         roles: [roles],
-        carrierIds: [carrier],
+        carrierIds: carriers,
       };
   
       if (this.user) {

@@ -11,6 +11,8 @@ import { ChangePasswordComponent } from '../../../components/admin-components/ch
 import { MatButtonModule } from '@angular/material/button';
 import {MatChipsModule} from '@angular/material/chips';
 import { AuthService } from '../../../services/auth.service';
+import { CarrierStateService } from '../../../services/state-management/carrier-state.service';
+import { CommonResponse } from '../../../interfaces/responses/common-response';
 
 @Component({
   selector: 'app-my-profile',
@@ -23,16 +25,18 @@ import { AuthService } from '../../../services/auth.service';
 export class MyProfileComponent implements OnInit {
   user: UserData | null = null;
 
-  constructor(private authStateService: AuthStateService, private authService:AuthService, private router: Router,  private dialog: MatDialog) {}
+  constructor(private authStateService: AuthStateService,private carrierStateService: CarrierStateService, private authService:AuthService, private router: Router,  private dialog: MatDialog) {}
 
   ngOnInit(): void {
-
     this.user = this.authStateService.user();
-
-
     if (!this.user) {
       this.router.navigate(['/login']);
     }
+  }
+
+  goToCarrier(carrier:CommonResponse): void{
+    this.carrierStateService.setSelectedCarrier(carrier)
+    this.router.navigate(['/selectedCarrier'])
   }
 
   changePassword(): void {

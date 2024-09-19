@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "../../environments/enrivonment";
 import { SingleWorkStationResponse, WorkStationResponse } from "../interfaces/responses/workstation-response";
@@ -15,8 +15,21 @@ export class WorkStationService {
 
     constructor(private http: HttpClient) { }
 
-    getWorkStationsByCarrierId(carrierId: number, searchParams: any): Observable<WorkStationResponse> {
+    getWorkstationList(carrierId: number, searchParams: any): Observable<WorkStationResponse> {
         return this.http.post<WorkStationResponse>(`${this.apiUrl}/GetAllByCarrierId/${carrierId}`, searchParams);
+    }
+
+    getWorkStationsByCarrierId(
+        carrierId: number, 
+        page: number, 
+        pageSize: number, 
+        searchParams: any
+    ): Observable<WorkStationResponse> {
+        const params = new HttpParams()
+          .set('PageNumber', page.toString())
+          .set('PageSize', pageSize.toString());
+    
+        return this.http.post<WorkStationResponse>(`${this.apiUrl}/GetAllByCarrierId/${carrierId}`, searchParams, { params });
     }
 
     getByIdWithEquipment(id: number): Observable<SingleWorkStationResponse> {

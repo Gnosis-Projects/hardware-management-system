@@ -26,9 +26,6 @@
         <div class="form-group">
           <label for="model">{{ 'labels.model' | translate }}</label>
           <input id="model" type="text" formControlName="model" class="form-control" />
-          <div *ngIf="editForm.get('model')?.invalid && editForm.get('model')?.touched" class="text-danger">
-            {{ 'This field is required' | translate }}
-          </div>
         </div>
       </div>
       <div class="col-md-4">
@@ -248,29 +245,7 @@
 
       <!-- Server Specific Fields -->
       <ng-container *ngIf="deviceType === DeviceType.SERVER">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="serverDiskTypeId">{{ 'labels.serverDiskType' | translate }}</label>
-            <select id="serverDiskTypeId" formControlName="serverDiskTypeId" class="form-control form-control-sm">
-              <option *ngFor="let type of diskTypes" [value]="type.id">{{ type.name | translate }}</option>
-            </select>
-            <div *ngIf="editForm.get('serverDiskTypeId')?.invalid && editForm.get('serverDiskTypeId')?.touched" class="text-danger">
-              {{ 'This field is required' | translate }}
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="diskRotations">{{ 'labels.diskRotations' | translate }}</label>
-            <input id="diskRotations" type="number" formControlName="diskRotations" class="form-control" />
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="networkDisk">{{ 'labels.networkDisk' | translate }}</label>
-            <input id="networkDisk" type="checkbox" formControlName="networkDisk" class="form-check-input" />
-          </div>
-        </div>
+
         <div class="col-md-6">
           <div class="form-group">
             <label for="operatingSystemId">{{ 'labels.operatingSystem' | translate }}</label>
@@ -279,7 +254,53 @@
             </select>
           </div>
         </div>
-        <div class="col-md-12" formGroupName="networkDiskInfo">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="ram">{{ 'labels.RAM' | translate }}</label>
+            <input id="ram" type="text" formControlName="ram" class="form-control" />
+          </div>
+        </div>
+
+        <div class="col-md-8">
+          <div class="form-group">
+            <label for="ip">{{ 'labels.ipAddress' | translate }}</label>
+            <input id="ip" type="text" formControlName="ip" class="form-control" />
+          </div>
+        </div>
+        <!-- Server Disk Fields -->
+        <div class="col-md-12" formArrayName="serverDisks">
+          <div *ngFor="let serverDisk of serverDisks.controls; let i = index" [formGroupName]="i" class="row mb-3">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="name-{{ i }}">{{ 'labels.name' | translate }}</label>
+                <input id="name-{{ i }}" type="text" formControlName="name" class="form-control" />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="capacity-{{ i }}">{{ 'labels.capacity' | translate }}</label>
+                <input id="capacity-{{ i }}" type="text" formControlName="capacity" class="form-control" />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="diskRotations-{{ i }}">{{ 'labels.diskRotations' | translate }}</label>
+                <input id="diskRotations-{{ i }}" type="text" formControlName="diskRotations" class="form-control" />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="serverDiskTypeId-{{ i }}">{{ 'labels.serverDiskType' | translate }}</label>
+                <select id="serverDiskTypeId-{{ i }}" formControlName="serverDiskTypeId" class="form-control form-control-sm">
+                  <option *ngFor="let type of diskTypes" [value]="type.id">{{ type.name | translate }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Network Disk Info -->
+        <div class="col-md-12" *ngIf="editForm.get('networkDisk')?.value" formGroupName="networkDiskInfo">
           <div class="row">
             <div class="col-md-4">
               <div class="form-group">
@@ -289,40 +310,38 @@
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <label for="diskArray">{{ 'labels.networkDiskArray' | translate }}</label>
-                <input id="diskArray" type="number" formControlName="diskArray" class="form-control" />
+                <label for="diskArray">{{ 'labels.diskArray' | translate }}</label>
+                <input id="diskArray" type="text" formControlName="diskArray" class="form-control" />
               </div>
             </div>
             <div class="col-md-4">
-              <div class="form-group">
-                <label for="diskSize">{{ 'labels.networkDiskSize' | translate }}</label>
-                <input id="diskSize" type="number" formControlName="diskSize" class="form-control" />
-              </div>
-            </div>
-            <div class="col-md-6">
               <div class="form-group">
                 <label for="ip">{{ 'labels.IPaddress' | translate }}</label>
                 <input id="ip" type="text" formControlName="ip" class="form-control" />
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group">
                 <label for="brand">{{ 'labels.networkDiskBrand' | translate }}</label>
                 <input id="brand" type="text" formControlName="brand" class="form-control" />
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="supplier">{{ 'labels.supplier' | translate }}</label>
+                <input id="supplier" type="text" formControlName="supplier" class="form-control" />
+              </div>
+            </div>
+            <div class="col-md-4">
               <div class="form-group">
                 <label for="purchaseDate">{{ 'labels.purchaseDate' | translate }}</label>
                 <input id="purchaseDate" type="date" formControlName="purchaseDate" class="form-control" />
-                <div *ngIf="editForm.get('purchaseDate')?.invalid && editForm.get('purchaseDate')?.touched" class="text-danger">
-                  {{ 'This field is required' | translate }}
-                </div>
               </div>
             </div>
           </div>
         </div>
       </ng-container>
+      
 
       <div class="col-md-6" *ngIf="deviceType !== DeviceType.SERVER">
         <div class="form-group">

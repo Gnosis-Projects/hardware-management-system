@@ -18,7 +18,7 @@ export class CarrierStateService {
   getAllCarriers(): CommonResponse[] | null {
     return this.allCarriers();
   }
-
+  
   setSelectedCarrier(carrier: CommonResponse): void {
     this.selectedCarrier.set(carrier);
     const encodedCarrier = Helper.encode(JSON.stringify(carrier));

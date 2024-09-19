@@ -147,6 +147,10 @@ export class AlertService {
           <label for="city">${this.translate.instant('city')}</label>
           <input type="text" id="city" placeholder="${this.translate.instant('city')}" value="${workstation.city || ''}">
         </div>
+        <div>
+          <label for="city">${this.translate.instant('labels.address')}</label>
+          <input type="text" id="city" placeholder="${this.translate.instant('labels.address')}" value="${workstation.address || ''}">
+        </div>
       </div>
     `;
 
@@ -166,13 +170,14 @@ export class AlertService {
         const workstationNumber = (document.getElementById('workstationNumber') as HTMLInputElement).value;
         const socketNumber = (document.getElementById('socketNumber') as HTMLInputElement).value;
         const city = (document.getElementById('city') as HTMLInputElement).value;
+        const address = (document.getElementById('address') as HTMLInputElement).value;
 
-        if (!employeeLastName || !employeeFirstName || !email || !personalPhone || !department || !city ) {
+        if (!employeeLastName || !employeeFirstName || !department || !city ) {
           Swal.showValidationMessage(this.translate.instant('all.fields.required'));
           return false;
         }
 
-        return { employeeLastName, employeeFirstName, email, personalPhone, department, city, socketNumber, workstationNumber };
+        return { employeeLastName, employeeFirstName, email, personalPhone, department, city, address, socketNumber, workstationNumber };
       }
     });
 }

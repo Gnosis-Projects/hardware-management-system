@@ -13,12 +13,12 @@
       <p><strong>{{ 'carrier' | translate }}:</strong></p>
       <ul>
         <li *ngFor="let carrier of user?.carriers">
-          {{ carrier.name }}
+          <mat-chip>{{ carrier.name }}</mat-chip>
         </li>
       </ul>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button [disabled]="user?.roles![0] === 'SuperAdmin'" (click)="openEditUserDialog()">{{ 'edit' | translate }}</button>
+      <button mat-raised-button [disabled]="user?.roles![0] === 'SuperAdmin'" (click)="openEditUserDialog()">{{ 'edit' | translate }}</button>
     </mat-card-actions>
   </mat-card>
 </div>

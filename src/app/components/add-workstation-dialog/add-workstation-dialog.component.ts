@@ -14,7 +14,7 @@ import { WorkStationService } from '../../services/workstation.service';
 import { WorkstationRequest } from '../../interfaces/requests/workstation/add-workstation-request';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-
+ 
 @Component({
   selector: 'app-add-workstation-dialog',
   standalone: true,
@@ -61,10 +61,11 @@ export class AddWorkStationDialogComponent implements OnInit {
       employeeLastName: ['', Validators.required],
       workstationNumber: [''],
       socketNumber: [''],
-      email: ['', [ Validators.email]],
+      email: [''],
       personalPhone: [''],
-      department: ['', Validators.required],
-      city: ['']
+      address: [''],
+      department: ['',  Validators.required],
+      city: ['',  Validators.required]
     });
 
     this.carriers = this.data.carriers;
@@ -110,6 +111,7 @@ export class AddWorkStationDialogComponent implements OnInit {
         personalPhone: formData.personalPhone,
         department: formData.department,
         city: formData.city,
+        address: formData.address
       };
 
       this.workStationService.addWorkStation(Number(formData.aUnitId), workstationRequest)
@@ -125,7 +127,7 @@ export class AddWorkStationDialogComponent implements OnInit {
           this.isSubmitting = false;
           this.toastr.error(this.translate.instant('errorMessages.unexpected.error'));
         });
-    } 
+    }  
   }
 
   onCancel(): void {

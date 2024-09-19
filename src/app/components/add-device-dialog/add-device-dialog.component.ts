@@ -64,32 +64,33 @@ export class AddDeviceDialogComponent implements OnInit {
 
     this.deviceForm = this.fb.group({
       deviceName: ['', Validators.required],
-      model: ['', Validators.required],
+      model: [''],
       serialNumber: ['', Validators.required],
       comments: [''],
-      purchaseDate: ['', Validators.required],
+      purchaseDate: [''],
       supplier: [''],
       phoneNumber: [''],
       phoneSocket: [''],
       phoneTypeId: [null],
-      ram: ['', Validators.required],
-      ip: ['', Validators.required],
+      ram: [''],
+      ip: [''],
       disks: this.fb.array([]),
       workGroupDomain: [''],
       paperSize: [''],
       printerTypeId: [null],
-      netWorkDisk: [false],
+      networkDisk: [false],
       macAddress: [''],
       machineType: [''],
       monitorType: [''],
-      serverDiskTypeId: [null],
+      serverDisks: this.fb.array([]),
+      diskRotations: [''],
       outlet: [''],
       antivirus: [''],
       operatingSystemId: [null],
       computerPrinters: this.fb.array([]),
       networkEquipmentIp: this.fb.group({
         ipTypeId: [1, Validators.required],
-        ip: ['', Validators.required]
+        ip: ['']
       }),
       remoteDesktopApps: this.fb.array([]),
       refurbished: [false],
@@ -105,10 +106,8 @@ export class AddDeviceDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.data) {
-      this.deviceForm.patchValue(this.data);
-    }
 
+    
     this.dropdownService.getPrinterTypes().subscribe(types => {
       this.printerTypes = types.data;
     });
@@ -121,9 +120,14 @@ export class AddDeviceDialogComponent implements OnInit {
       this.operatingSystems = types.data;
     });
 
-    this.dropdownService.getNetEquipments().subscribe(types => {
-      this.netTypes = types.data;
-    });
+    this.netTypes = [{
+      "id": 1,
+      "name": "Router"
+    },
+    {
+      "id": 2,
+      "name": "Switch"
+    }]
 
     this.dropdownService.getPhoneTypes().subscribe(types => {
       this.phoneTypes = types.data;
@@ -141,9 +145,53 @@ export class AddDeviceDialogComponent implements OnInit {
       this.setValidatorsBasedOnNetworkType(type);
     });
 
+    if (this.data) {
+      this.deviceForm.patchValue(this.data);
+    }
+
     const networkType = this.deviceForm.get('networkEquipmentTypeId')?.value;
     this.setValidatorsBasedOnNetworkType(networkType);
   }
+
+  get serverDisks(): FormArray {
+    return this.deviceForm.get('serverDisks') as FormArray;
+  }
+
+
+  addServerDisk() {
+    const serverDiskGroup = this.fb.group({
+      capacity: [''],
+      diskRotations: [''],
+      serverDiskTypeId: [null],
+      networkDisk: [false],
+      networkDiskInfo: this.fb.group({
+        name: [''],
+        diskArray: [''],
+        ip: [''],
+        brand: [''],
+        supplier: [''],
+        purchaseDate: [null]
+      })
+    });
+
+    serverDiskGroup.get('networkDiskInfo')?.disable();
+
+    serverDiskGroup.get('networkDisk')?.valueChanges.subscribe((checked) => {
+      const networkDiskInfoGroup = serverDiskGroup.get('networkDiskInfo') as FormGroup;
+      if (checked) {
+        networkDiskInfoGroup.enable();
+      } else {
+        networkDiskInfoGroup.disable();
+      }
+    });
+
+    this.serverDisks.push(serverDiskGroup);
+  }
+
+  removeServerDisk(index: number) {
+    this.serverDisks.removeAt(index);
+  }
+
 
   setValidatorsBasedOnDeviceType() {
     const clearValidators = (fields: string[]) => {
@@ -161,25 +209,19 @@ export class AddDeviceDialogComponent implements OnInit {
 
     switch (this.deviceType) {
       case DeviceType.COMPUTER:
-        setValidators('ram', [Validators.required]);
-        setValidators('ip', [Validators.required]);
         this.addDisk();
         break;
       case DeviceType.PRINTER:
         setValidators('printerTypeId', [Validators.required]);
         break;
       case DeviceType.PHONE:
-        setValidators('phoneNumber', [Validators.required]);
-        setValidators('phoneSocket', [Validators.required]);
         setValidators('phoneTypeId', [Validators.required]);
         break;
       case DeviceType.NETWORK_EQUIPMENT:
         setValidators('networkEquipmentTypeId', [Validators.required]);
-        setValidators('floor', [Validators.required]);
         break;
       case DeviceType.SERVER:
-        setValidators('diskRotations', [Validators.required]);
-        setValidators('networkDisk', [Validators.required]);
+        setValidators('serverDiskTypeId', [Validators.required]);
         break;
     }
 
@@ -258,65 +300,77 @@ export class AddDeviceDialogComponent implements OnInit {
 
   onSave() {
     if (this.deviceForm.valid) {
-        let deviceData = { ...this.deviceForm.value };
-        const workStationId = Number(this.workstationState.getWorkstationId());
+      let deviceData = { ...this.deviceForm.value };
+      const workStationId = Number(this.workstationState.getWorkstationId());
 
-        if (this.deviceType === DeviceType.NETWORK_EQUIPMENT) {
-            const networkEquipmentIp = this.deviceForm.get('networkEquipmentIp')?.value;
-            const floorValue = this.deviceForm.get('floor')?.value;
-            
-            deviceData = {
-                ...deviceData,
-                networkEquipmentIp: {
-                    ipTypeId: networkEquipmentIp.ipTypeId,
-                    ip: networkEquipmentIp.ip,
-                },
-                networkEquipmentFloor: floorValue,
-            };
-        }
+      if (this.deviceType === DeviceType.NETWORK_EQUIPMENT) {
+        const networkEquipmentIp = this.deviceForm.get('networkEquipmentIp')?.value;
+        const floorValue = this.deviceForm.get('floor')?.value;
 
-        if (this.deviceType !== DeviceType.COMPUTER) {
-            const computerFields = [
-                'ram', 'ssd', 'ip', 'disks', 'antivirus',
-                'macAddress', 'outlet', 'remoteDesktopApps', 'machineType',
-                'workGroupDomain', 'monitorType', 'computerPrinters',
-            ];
-            computerFields.forEach(field => delete deviceData[field]);
-        }
-        if (this.deviceType !== DeviceType.COMPUTER && this.deviceType !== DeviceType.SERVER) {
-            delete deviceData.operatingSystemId;
-        }
-        if (this.deviceType !== DeviceType.COMPUTER && this.deviceType !== DeviceType.PRINTER) {
-            delete deviceData.refurbished;
-        }
-        if (this.deviceType !== DeviceType.PRINTER) {
-            delete deviceData.printerTypeId;
-            delete deviceData.paperSize;
-        }
-        if (this.deviceType !== DeviceType.PHONE) {
-            delete deviceData.phoneNumber;
-            delete deviceData.phoneSocket;
-            delete deviceData.phoneTypeId;
-        }
-        if (this.deviceType !== DeviceType.NETWORK_EQUIPMENT) {
-            delete deviceData.networkEquipmentTypeId;
-            delete deviceData.floor;
-            delete deviceData.routerUsername;
-            delete deviceData.routerPassword;
-            delete deviceData.switchAddress;
-            delete deviceData.networkEquipmentIp;
-        }
-        if (this.deviceType !== DeviceType.SERVER) {
-            delete deviceData.diskRotations;
-            delete deviceData.netWorkDisk;
-            delete deviceData.serverDiskTypeId;
-        }
+        deviceData = {
+          ...deviceData,
+          networkEquipmentIp: {
+            ipTypeId: networkEquipmentIp.ipTypeId,
+            ip: networkEquipmentIp.ip,
+          },
+          networkEquipmentFloor: floorValue,
+        };
+      }
 
-        this.dialogRef.close(deviceData);
+
+      if (this.deviceType !== DeviceType.COMPUTER) {
+        const computerFields = [
+          'ram', 'ssd', 'ip', 'disks', 'antivirus',
+          'macAddress', 'outlet', 'remoteDesktopApps', 'machineType',
+          'workGroupDomain', 'monitorType', 'computerPrinters',
+        ];
+        computerFields.forEach(field => delete deviceData[field]);
+      }
+      if (this.deviceType !== DeviceType.COMPUTER && this.deviceType !== DeviceType.SERVER) {
+        delete deviceData.operatingSystemId;
+      }
+      if (this.deviceType !== DeviceType.COMPUTER && this.deviceType !== DeviceType.PRINTER) {
+        delete deviceData.refurbished;
+      }
+      if (this.deviceType !== DeviceType.PRINTER) {
+        delete deviceData.printerTypeId;
+        delete deviceData.paperSize;
+      }
+      if (this.deviceType !== DeviceType.PHONE) {
+        delete deviceData.phoneNumber;
+        delete deviceData.phoneSocket;
+        delete deviceData.phoneTypeId;
+      }
+      if (this.deviceType !== DeviceType.NETWORK_EQUIPMENT) {
+        delete deviceData.networkEquipmentTypeId;
+        delete deviceData.floor;
+        delete deviceData.routerUsername;
+        delete deviceData.routerPassword;
+        delete deviceData.switchAddress;
+        delete deviceData.networkEquipmentIp;
+      }
+      if (this.deviceType !== DeviceType.SERVER) {
+        delete deviceData.diskRotations;
+        delete deviceData.netWorkDisk;
+        delete deviceData.serverDiskTypeId;
+        delete deviceData.networkDiskInfo;
+        delete deviceData.serverDisks;
+      }
+
+      this.dialogRef.close(deviceData);
     } else {
-        this.deviceForm.markAllAsTouched();
+      console.log("Form is invalid");
+
+      // Log the specific invalid fields
+      Object.keys(this.deviceForm.controls).forEach(field => {
+        const control = this.deviceForm.get(field);
+        if (control && control.invalid) {
+          console.log(`Field '${field}' is invalid`, control.errors);
+        }
+      });
+      this.deviceForm.markAllAsTouched();
     }
-}
+  }
 
   onCancel() {
     this.dialogRef.close();

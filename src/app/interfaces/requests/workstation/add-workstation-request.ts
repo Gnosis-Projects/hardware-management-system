@@ -7,4 +7,5 @@ export interface WorkstationRequest {
     personalPhone: string;
     department: string;
     city: string;
+    address?: string;
 }

@@ -19,9 +19,28 @@ export class DeviceService {
     return this.http.get<SingleDeviceResponse>(`${this.apiUrl}/${endpoint}/${deviceId}`);
   }
 
-  getDevicesByCarrierId(carrierId: number, deviceType: DeviceType, searchParams: any): Observable<DeviceListResponse> {
+  getDevicesByCarrierId(
+    carrierId: number, 
+    page: number, 
+    pageSize: number, 
+    deviceType: DeviceType, 
+    searchParams: any
+  ): Observable<DeviceListResponse> {
     const endpoint = this.getEndpoint(deviceType, 'GetAllByCarrierId');
-    return this.http.post<DeviceListResponse>(`${this.apiUrl}/${endpoint}/${carrierId}`, searchParams);
+    const params = new HttpParams()
+      .set('PageNumber', page.toString())
+      .set('PageSize', pageSize.toString());
+  
+    return this.http.post<DeviceListResponse>(`${this.apiUrl}/${endpoint}/${carrierId}`, searchParams, { params });
+  }
+
+  getDevices(deviceType: DeviceType, page: number, pageSize: number): Observable<DeviceListResponse> {
+    const endpoint = this.getEndpoint(deviceType, 'GetAll');
+    const params = new HttpParams()
+      .set('PageNumber', page.toString())
+      .set('PageSize', pageSize.toString());
+
+    return this.http.post<DeviceListResponse>(`${this.apiUrl}/${endpoint}`, {}, { params });
   }
 
   getDeviceHistory(deviceId: number, deviceType: DeviceType): Observable<DeviceHistoryResponse> {

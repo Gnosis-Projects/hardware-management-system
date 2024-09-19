@@ -35,8 +35,6 @@
       <td mat-cell *matCellDef="let entry"> {{ entry.employeeFirstName }} {{ entry.employeeLastName }} </td>
     </ng-container>
 
-
-    <!-- Additional fields for specific device types -->
     <ng-container matColumnDef="ip" *ngIf="displayedColumns.includes('ip')">
       <th mat-header-cell *matHeaderCellDef> {{ 'labels.ip' | translate }} </th>
       <td mat-cell *matCellDef="let entry"> {{ entry.ip }} </td>
@@ -45,6 +43,17 @@
     <ng-container matColumnDef="macAddress" *ngIf="displayedColumns.includes('macAddress')">
       <th mat-header-cell *matHeaderCellDef> {{ 'labels.macAddress' | translate }} </th>
       <td mat-cell *matCellDef="let entry"> {{ entry.macAddress }} </td>
+    </ng-container>
+
+    
+    <ng-container matColumnDef="monitorType" *ngIf="displayedColumns.includes('monitorType')">
+      <th mat-header-cell *matHeaderCellDef> {{ 'labels.monitorType' | translate }} </th>
+      <td mat-cell *matCellDef="let entry"> {{ entry.monitorType }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ssd" *ngIf="displayedColumns.includes('ssd')">
+      <th mat-header-cell *matHeaderCellDef> {{ 'labels.ssd' | translate }} </th>
+      <td mat-cell *matCellDef="let entry"> {{ entry.disks[0].ssd ? 'Ναι' : 'Οχι' }} </td>
     </ng-container>
 
     <ng-container matColumnDef="operatingSystem" *ngIf="displayedColumns.includes('operatingSystem')">

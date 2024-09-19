@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild, AfterViewInit, EventEmitter, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -23,6 +23,8 @@ import { PaginatorEnum } from '../../../enums/paginatorEnum';
 import { Helper } from '../../../shared/helpers';
 import Swal from 'sweetalert2';
 import { QuickSearchComponent } from '../../quick-search/quick-search.component';
+import { AdminService } from '../../../services/admin.service';
+import { CarrierStateService } from '../../../services/state-management/carrier-state.service';
 
 @Component({
   selector: 'app-item-table',
@@ -51,8 +53,15 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() carrierName?: string | null = null;
   @Input() items: (Device| WorkStation | SingleWorkStationResponse)[] = [];
   @Input() deviceType: DeviceType = DeviceType.COMPUTER;
-
-
+  @Input() isSuperAdmin: boolean = false;
+  @Input() currentPage: number = 1
+  @Input() totalPages: number = 1
+  
+  @Output() nextPage = new EventEmitter<void>();
+  @Output() previousPage = new EventEmitter<void>();
+  @Output() firstPage = new EventEmitter<void>();
+  @Output() lastPage = new EventEmitter<void>();
+  
   Helper = Helper;
   displayedColumns: string[] = [];
   dataSource = new MatTableDataSource<Device | WorkStation | SingleWorkStationResponse>(this.items);
@@ -61,6 +70,8 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
   constructor(
     private deviceStateService: DeviceStateService,
     private deviceService: DeviceService,
+    private adminService: AdminService,
+    private carrierState: CarrierStateService,
     private router: Router,
     private workstationStateService: WorkStationStateService,
     private toastr: ToastrService,
@@ -70,7 +81,6 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnInit(): void {
     this.setDisplayedColumns();
-    this.dataSource.data = this.items;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -80,6 +90,22 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
     if (changes['deviceType']) {
       this.setDisplayedColumns();
     }
+  }
+
+  onNextPage(): void {
+    this.nextPage.emit();
+  }
+
+  onPreviousPage(): void {
+    this.previousPage.emit();
+  }
+
+  onFirstPage(): void {
+    this.firstPage.emit();
+  }
+
+  onLastPage(): void {
+    this.lastPage.emit();
   }
 
   ngAfterViewInit() {
@@ -108,6 +134,7 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
           ItemColumnNames.serialNumber,
           ItemColumnNames.ram,
           ItemColumnNames.ssd,
+          ItemColumnNames.operatingSystem,
           ItemColumnNames.actions
         ];
         break;
@@ -133,6 +160,7 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
           ItemColumnNames.personalPhone,
           ItemColumnNames.department,
           ItemColumnNames.city,
+          ItemColumnNames.address,
           ItemColumnNames.actions
         ];
         break;

@@ -14,6 +14,24 @@ export class ExportDataService {
   public computersLength = 0;
   public phonesLength = 0;
   public netLength = 0;
+  public serversLength = 0;
+
+  private extractWorkstationData(data: any): any {
+    // Only include specific fields, excluding lists
+    return {
+      aUnit: data.aUnit ? data.aUnit.name : '',
+      address: data.address || '',
+      carrier: data.carrier ? data.carrier.name : '',
+      city: data.city || '',
+      department: data.department || '',
+      email: data.email || '',
+      employeeFirstName: data.employeeFirstName || '',
+      employeeLastName: data.employeeLastName || '',
+      id: data.id || '',
+      workstationNumber: data.workstationNumber || '',
+      socketNumber: data.socketNumber || ''
+    };
+  }
 
   exportDataToExcel(json: any, excelFileName: string, columnNames: any): void {
     const flattenedData = this.flattenData(json);
@@ -21,6 +39,45 @@ export class ExportDataService {
     
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mappedData);
     const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    this.saveAsExcelFile(excelBuffer, excelFileName);
+  }
+
+  exportDataToExcelWithSheets(json: any, excelFileName: string, columnNames: any): void {
+
+    const workstationsList = [this.extractWorkstationData(json[0])];
+    const computersList = this.flattenData(json[0].computers_list || []);
+    const printersList = this.flattenData(json[0].printers_list || []);
+    const phonesList = this.flattenData(json[0].phones_list || []);
+    const networkEquipmentList = this.flattenData(json[0].network_equipment_list || []);
+    const serversList = this.flattenData(json[0].servers_list || []);
+
+    const mappedWorkstationsList = this.renameColumns(workstationsList, columnNames);
+    const mappedComputersList = this.renameColumns(computersList, columnNames);
+    const mappedPrintersList = this.renameColumns(printersList, columnNames);
+    const mappedPhonesList = this.renameColumns(phonesList, columnNames);
+    const mappedNetworkEquipmentList = this.renameColumns(networkEquipmentList, columnNames);
+    const mappedServersList = this.renameColumns(serversList, columnNames);
+
+    const workstationsSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mappedWorkstationsList);
+    const computersSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mappedComputersList);
+    const printersSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mappedPrintersList);
+    const phonesSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mappedPhonesList);
+    const networkEquipmentSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mappedNetworkEquipmentList);
+    const serversSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mappedServersList);
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: {
+        'Θέση Εργασίας': workstationsSheet,
+        'Υπολογιστές': computersSheet,
+        'Εκτυπωτές': printersSheet,
+        'Τηλέφωνα': phonesSheet,
+        'Δικτυακός Εξοπλισμός': networkEquipmentSheet,
+        'Servers': serversSheet
+      },
+      SheetNames: ['Θέση Εργασίας','Υπολογιστές', 'Εκτυπωτές', 'Τηλέφωνα', 'Δικτυακός Εξοπλισμός', 'Servers']
+    };
+
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     this.saveAsExcelFile(excelBuffer, excelFileName);
   }
@@ -67,12 +124,14 @@ export class ExportDataService {
     const phonesList = item.phones_list || [];
     const printersList = item.printers_list || [];
     const networkEquipmentList = item.network_equipment_list || [];
+    const serversList = item.servers_list || []
 
     const mainItem = this.flattenItem(item);
     delete mainItem.computers_list;
     delete mainItem.phones_list;
     delete mainItem.printers_list;
     delete mainItem.network_equipment_list;
+    delete mainItem.servers_list;
 
     computersList.forEach((computer: any) => {
       const flattenedComputer = this.flattenItem(computer, 'computer');
@@ -94,7 +153,13 @@ export class ExportDataService {
       result.push({ ...mainItem, ...flattenedNetworkEquipment });
     });
 
-    if (computersList.length === 0 && phonesList.length === 0 && printersList.length === 0 && networkEquipmentList.length === 0) {
+    serversList.forEach((server: any) => {
+      const flattenedServers = this.flattenItem(server, 'server');
+      result.push({ ...mainItem, ...flattenedServers });
+    });
+
+
+    if (computersList.length === 0 && phonesList.length === 0 && printersList.length === 0 && networkEquipmentList.length === 0 && serversList.length === 0) {
       result.push(mainItem);
     }
 
@@ -102,42 +167,48 @@ export class ExportDataService {
     this.computersLength = computersList.length;
     this.phonesLength = phonesList.length;
     this.netLength = networkEquipmentList.length;
+    this.serversLength = serversList.length;
 
     return result;
   }
 
-  private flattenItem(item: any, prefix: string = '', parentKey: string = '', result: any = {}): any {
-    for (const key in item) {
-      if (item.hasOwnProperty(key)) {
-        const newKey = parentKey ? `${parentKey}.${key}` : key;
-        const prefixedKey = prefix ? `${prefix}.${newKey}` : newKey;
+ private flattenItem(item: any, prefix: string = '', parentKey: string = '', result: any = {}): any {
+  for (const key in item) {
+    if (item.hasOwnProperty(key)) {
+      const newKey = parentKey ? `${parentKey}.${key}` : key;
+      const prefixedKey = prefix ? `${prefix}.${newKey}` : newKey;
 
-        if (key === 'disks' || key === 'Απομακρυσμένη σύνδεση') {
-          // Handle 'disks' and 'Απομακρυσμένη σύνδεση' specifically to split them into multiple columns
-          if (Array.isArray(item[key])) {
-            item[key].forEach((subItem: any, index: number) => {
-              if (typeof subItem === 'object') {
-                for (const subKey in subItem) {
-                  result[`${prefixedKey}.${index + 1}.${subKey}`] = subItem[subKey];
-                }
-              } else {
-                result[`${prefixedKey}.${index + 1}`] = subItem;
+      if (key === 'disks' || key === 'Απομακρυσμένη σύνδεση') {
+        if (Array.isArray(item[key])) {
+          item[key].forEach((subItem: any, index: number) => {
+            if (typeof subItem === 'object') {
+              for (const subKey in subItem) {
+                result[`${prefixedKey}.${index + 1}.${subKey}`] = subItem[subKey];
               }
-            });
-          } else if (typeof item[key] === 'object' && item[key] !== null) {
-            for (const subKey in item[key]) {
-              result[`${prefixedKey}.${subKey}`] = item[key][subKey];
+            } else {
+              result[`${prefixedKey}.${index + 1}`] = subItem;
             }
-          }
-        } else if (Array.isArray(item[key])) {
-          result[prefixedKey] = item[key].map((subItem: any) => (typeof subItem === 'object' ? JSON.stringify(subItem) : subItem)).join(', ');
+          });
         } else if (typeof item[key] === 'object' && item[key] !== null) {
-          this.flattenItem(item[key], prefix, newKey, result);
-        } else {
-          result[prefixedKey] = item[key];
+          for (const subKey in item[key]) {
+            result[`${prefixedKey}.${subKey}`] = item[key][subKey];
+          }
         }
+      } else if (typeof item[key] === 'object' && item[key] !== null) {
+        if (Array.isArray(item[key])) {
+          result[prefixedKey] = item[key].map((subItem: any) => 
+            (typeof subItem === 'object' ? JSON.stringify(subItem) : subItem)
+          ).join(', ');
+        } else {
+          for (const subKey in item[key]) {
+            result[`${prefixedKey}.${subKey}`] = item[key][subKey];
+          }
+        }
+      } else {
+        result[prefixedKey] = item[key];
       }
     }
-    return result;
   }
+  return result;
+}
 }

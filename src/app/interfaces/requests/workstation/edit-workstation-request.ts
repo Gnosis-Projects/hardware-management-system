@@ -8,4 +8,5 @@ export interface EditWorkStationRequest {
     workstationNumber: string;
     department: string;
     city: string;
+    address?: string;
 }

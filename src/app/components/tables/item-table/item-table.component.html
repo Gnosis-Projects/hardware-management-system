@@ -5,21 +5,23 @@
 <div class="mat-elevation-z8 mt-4">
 
   <div class="table-responsive">
+    <div class="table-pagination-buttons">
+      <button mat-button (click)="onFirstPage()" [disabled]="currentPage === 1">Πρώτη σελίδα</button>
+      <button mat-button (click)="onPreviousPage()" [disabled]="currentPage === 1">Προηγούμενη σελίδα</button>
+      <button mat-button (click)="onNextPage()" [disabled]="currentPage === totalPages">Επόμενη σελίδα</button>
+      <button mat-button (click)="onLastPage()" [disabled]="currentPage === totalPages">Τελευταία σελίδα</button>
+    </div>
     <table mat-table matSort [dataSource]="dataSource" class="full-width-table">
 
-      <!-- Carrier Name Column -->
       <ng-container [matColumnDef]="ItemColumnNames.carrierName">
         <th mat-header-cell *matHeaderCellDef> {{ ItemColumnNames.carrierName }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.carrier?.name || carrierName }} </td>
       </ng-container>
       
-      <!-- Unit Name Column -->
       <ng-container [matColumnDef]="ItemColumnNames.aUnitName">
         <th mat-header-cell *matHeaderCellDef> {{ ItemColumnNames.aUnitName }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.aUnit?.name || unitName }} </td>
       </ng-container>
-
-      <!-- Network Equipment Type Column (Conditional) -->
       <ng-container *ngIf="deviceType === 'network_equipment'" [matColumnDef]="ItemColumnNames.networkEquipmentType">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="networkEquipmentType"> {{ ItemColumnNames.networkEquipmentType }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.networkEquipmentType?.name }} </td>
@@ -72,19 +74,16 @@
         </td>
       </ng-container>
 
-      <!-- Employee First Name Column -->
       <ng-container [matColumnDef]="ItemColumnNames.employeeFirstName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="employeeFirstName"> {{ ItemColumnNames.employeeFirstName }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.employeeFirstName }} </td>
       </ng-container>
 
-      <!-- Email Column -->
       <ng-container [matColumnDef]="ItemColumnNames.email">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="email"> {{ ItemColumnNames.email }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.email }} </td>
       </ng-container>
-
-      <!-- Personal Phone Column -->
+      
       <ng-container [matColumnDef]="ItemColumnNames.personalPhone">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="personalPhone"> {{ ItemColumnNames.personalPhone }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.personalPhone }} </td>
@@ -92,32 +91,29 @@
 
       <ng-container [matColumnDef]="ItemColumnNames.diskRotations">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="diskRotations"> {{ ItemColumnNames.diskRotations }} </th>
-        <td mat-cell *matCellDef="let item"> {{ item?.diskRotations }} </td>
+        <td mat-cell *matCellDef="let item"> {{ item?.serverDisks[0]?.diskRotations }} </td>
       </ng-container>
 
-      <!-- Printer Type Column -->
       <ng-container [matColumnDef]="ItemColumnNames.printerType">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="printerType"> {{ ItemColumnNames.printerType }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.printerType?.name }} </td>
       </ng-container>
 
-
-      <!-- Server Disk Type Column -->
       <ng-container [matColumnDef]="ItemColumnNames.serverDiskType">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="serverDiskType"> {{ ItemColumnNames.serverDiskType }} </th>
-        <td mat-cell *matCellDef="let item"> {{ item?.serverDiskType?.name }} </td>
+        <td mat-cell *matCellDef="let item"> {{ item?.serverDisks[0]?.serverDiskType.name }} </td>
       </ng-container>
 
-      <!-- Phone Type Column -->
       <ng-container [matColumnDef]="ItemColumnNames.phoneType">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="phoneType"> {{ ItemColumnNames.phoneType }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.phoneType?.name }} </td>
       </ng-container>
 
+
       <ng-container [matColumnDef]="ItemColumnNames.ssd">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="ssd"> {{ ItemColumnNames.ssd }} </th>
         <td mat-cell *matCellDef="let item">
-          <ng-container *ngIf="item?.ssd; else noSsd">
+          <ng-container *ngIf="item?.disks[0]?.ssd; else noSsd">
             <mat-icon color="primary" matTooltip="Network Disk">check_circle</mat-icon>
           </ng-container>
           <ng-template #noSsd>
@@ -138,25 +134,31 @@
         </td>
       </ng-container>
 
-      <!-- Department Column -->
       <ng-container [matColumnDef]="ItemColumnNames.department">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="department"> {{ ItemColumnNames.department }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.department }} </td>
       </ng-container>
 
-      <!-- City Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.operatingSystem">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="operatingSystem"> {{ ItemColumnNames.operatingSystem }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.operatingSystem.name}} </td>
+      </ng-container>
+
       <ng-container [matColumnDef]="ItemColumnNames.city">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="city"> {{ ItemColumnNames.city }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.city }} </td>
       </ng-container>
 
-      <!-- Check Date Time Column -->
+      <ng-container [matColumnDef]="ItemColumnNames.address">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="address"> {{ ItemColumnNames.address }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.address }} </td>
+      </ng-container>
+
       <ng-container [matColumnDef]="ItemColumnNames.checkDateTime">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="checkDateTime"> {{ ItemColumnNames.checkDateTime }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.data?.checkDateTime }} </td>
       </ng-container>
 
-      <!-- Actions Column -->
       <ng-container [matColumnDef]="ItemColumnNames.actions">
         <th mat-header-cell *matHeaderCellDef> {{ ItemColumnNames.actions }} </th>
         <td mat-cell *matCellDef="let item">
@@ -181,11 +183,14 @@
         </td>
       </ng-container>
 
-      <!-- Header Row -->
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <!-- Data Row -->
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="Helper.getPageSizeOptions(dataSource)" showFirstLastButtons></mat-paginator>
+    <div class="table-pagination-buttons">
+      <button mat-button (click)="onFirstPage()" [disabled]="currentPage === 1">Πρώτη σελίδα</button>
+      <button mat-button (click)="onPreviousPage()" [disabled]="currentPage === 1">Προηγούμενη σελίδα</button>
+      <button mat-button (click)="onNextPage()" [disabled]="currentPage === totalPages">Επόμενη σελίδα</button>
+      <button mat-button (click)="onLastPage()" [disabled]="currentPage === totalPages">Τελευταία σελίδα</button>
+    </div>
   </div>
 </div>

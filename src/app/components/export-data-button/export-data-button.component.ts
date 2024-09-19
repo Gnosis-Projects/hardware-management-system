@@ -9,6 +9,7 @@ import { NotificationsService } from '../../services/notifications.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-export-data-button',
@@ -22,14 +23,18 @@ export class ExportDataButtonComponent {
   @Input() fileName: string = 'export';
   @Input() columnNames: any = ExcelColumnNames;
 
-  constructor(private exportDataService: ExportDataService, private toastr: ToastrService, private alertService: AlertService, private notificationsService: NotificationsService) {}
+  constructor(private exportDataService: ExportDataService, private router: Router, private toastr: ToastrService, private alertService: AlertService, private notificationsService: NotificationsService) {}
 
   exportToExcel(): void {
     if (this.data && this.data.length) {
       this.alertService.showExportAlert().then(result => {
         if(result.isConfirmed){
           this.notificationsService.addNotification('Έγινε εξαγωγή δεδομένων');
-          this.exportDataService.exportDataToExcel(this.data, this.fileName, this.columnNames);
+          if (this.router.url === '/workstation') {
+            this.exportDataService.exportDataToExcelWithSheets(this.data, this.fileName, this.columnNames);
+          } else {
+            this.exportDataService.exportDataToExcel(this.data, this.fileName, this.columnNames);
+          }
         }
       });
     } else {

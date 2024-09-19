@@ -1,4 +1,4 @@
-import { NetworkDiskInfo, OperatingSystem, PhoneType, ServerDiskType } from "../requests/device-request";
+import {  OperatingSystem, PhoneType, ServerDiskType } from "../requests/device-request";
 import { CommonResponse } from "./common-response";
 import { WorkStation } from "./workstation-response";
 
@@ -15,6 +15,23 @@ export interface Disk {
 export interface PrinterType {
   id: number;
   name: string;
+}
+
+export interface ServerDiskResponse {
+  id: number;
+  capacity: string;
+  diskRotations: string;
+  serverDiskType: ServerDiskType;
+  networkDiskInfo?: NetworkDiskInfo | null;
+}
+
+export interface NetworkDiskInfo {
+  name: string;
+  diskArray: string;
+  ip: string;
+  brand: string;
+  supplier: string;
+  purchaseDate: string;
 }
 
 export interface NetworkEquipmentType {
@@ -80,6 +97,7 @@ export interface Device {
   workStation?: WorkStation;
   networkDiskInfo?: NetworkDiskInfo;
   comments?: string;
+  serverDisks?: ServerDiskResponse[];
 }
 
 export interface SingleDeviceResponse {
@@ -87,6 +105,7 @@ export interface SingleDeviceResponse {
   success: boolean;
   message: string;
 }
+
 
 export interface DeviceHistory {
   ram?: string;

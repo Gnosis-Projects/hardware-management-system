@@ -39,7 +39,7 @@ export class SearchFormComponent implements OnInit, OnChanges {
 
   constructor(private fb: FormBuilder, private http: HttpClient, private dropdownService: DropdownService) {
     this.searchForm = this.fb.group({
-      aUnitId: [0, Validators.required],
+      aUnitId: [null, Validators.required],
       filterDto: this.fb.group({
         deviceName: [''],
         model: [''],
@@ -131,6 +131,11 @@ export class SearchFormComponent implements OnInit, OnChanges {
         aUnitId: this.searchForm.value.aUnitId !== null ? Number(this.searchForm.value.aUnitId) : null,
         sorting: this.searchForm.value.sorting
       };
+
+      if(searchParams.aUnitId == 0){
+        searchParams.aUnitId = null;
+        this.searchForm.get('aUnitId')?.setValue('null')
+      }
 
       const filterDtoValue = this.searchForm.value.filterDto ? { ...this.searchForm.value.filterDto } : null;
 

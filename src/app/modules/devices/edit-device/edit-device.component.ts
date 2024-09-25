@@ -219,7 +219,7 @@ export class EditDeviceComponent implements OnInit {
                 ip: response.data.networkDiskInfo.ip,
                 brand: response.data.networkDiskInfo.brand,
                 supplier: response.data.networkDiskInfo.supplier,
-                purchaseDate: new Date(response.data.networkDiskInfo.purchaseDate).toISOString().substring(0, 10)
+               
               });
             }
           }
@@ -287,7 +287,9 @@ export class EditDeviceComponent implements OnInit {
           }
           
           if (response.data.purchaseDate) {
-            const formattedDate = new Date(response.data.purchaseDate).toISOString().substring(0, 10);
+            const formattedDate = response.data.purchaseDate === '1900-01-01T00:00:00'
+              ? ''
+              : new Date(response.data.purchaseDate).toISOString().substring(0, 10);
             this.editForm.get('purchaseDate')?.setValue(formattedDate);
           }
 

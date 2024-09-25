@@ -19,7 +19,7 @@
             <strong>{{ 'labels.serialNumber' | translate }}:</strong> {{ device?.data?.serialNumber }}
           </p>
         </div>
-        <div class="info-box mb-3" *ngIf="device?.data?.purchaseDate">
+        <div class="info-box mb-3" *ngIf="device?.data?.purchaseDate && device?.data.purchaseDate !== '1900-01-01T00:00:00'">
           <p class="card-text text-center">
             <strong>{{ 'labels.purchaseDate' | translate }}:</strong> {{ device?.data?.purchaseDate | date:'dd MMM yyyy' : 'el' }}
           </p>

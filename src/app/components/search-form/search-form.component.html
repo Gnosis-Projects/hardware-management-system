@@ -17,17 +17,16 @@
 
       <div class="row mb-3">
         <div class="col-md-12">
-          <label for="aUnitId" class="form-label">{{'labels.aunit' | translate}} *</label>
+          <label for="aUnitId" class="form-label">{{ 'labels.aunit' | translate }} *</label>
           <select id="aUnitId" formControlName="aUnitId" class="form-select">
-            <option [disabled]="aUnits.length === 1" value="null">{{'all' | translate }}</option>
+            <option [value]="null">{{ 'all' | translate }}</option>
             <option *ngFor="let aUnit of aUnits" [value]="aUnit.id">{{ aUnit.name }}</option>
           </select>
           <div *ngIf="searchForm.controls['aUnitId'].invalid && searchForm.controls['aUnitId'].touched">
-            <p class="text-danger mt-1">{{'errorMessages.please.choose.aUnit' | translate}}</p>
+            <p class="text-danger mt-1">{{ 'errorMessages.please.choose.aUnit' | translate }}</p>
           </div>
         </div>
       </div>
-
       <!-- Common Fields -->
       <div *ngIf="searchType !== 'workstation'" formGroupName="filterDto">
         <div class="row mb-3">

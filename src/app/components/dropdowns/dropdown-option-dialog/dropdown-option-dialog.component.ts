@@ -71,7 +71,6 @@ export class DropdownOptionDialogComponent implements OnInit {
       addObservable.subscribe(
         (response) => {
           if (response.success) {
-            this.toastr.success('Option added successfully');
             this.dialogRef.close(true);
           } else {
             this.toastr.error(response.message || 'Failed to add option');

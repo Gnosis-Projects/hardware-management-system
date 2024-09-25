@@ -20,6 +20,13 @@
   gap: 1rem;
 }
 
+label {
+  font-size: 0.85em;
+  text-align: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
 .form-group {
   flex: 1;
   min-width: 200px;

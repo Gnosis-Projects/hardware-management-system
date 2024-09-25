@@ -15,7 +15,7 @@
 
       <ng-container [matColumnDef]="ItemColumnNames.carrierName">
         <th mat-header-cell *matHeaderCellDef> {{ ItemColumnNames.carrierName }} </th>
-        <td mat-cell *matCellDef="let item"> {{ item?.carrier?.name || carrierName }} </td>
+        <td mat-cell *matCellDef="let item"><b> {{ item?.carrier?.name || carrierName }} </b></td>
       </ng-container>
       
       <ng-container [matColumnDef]="ItemColumnNames.aUnitName">
@@ -65,7 +65,7 @@
         <td mat-cell *matCellDef="let item"> 
           <ng-container *ngIf="item?.employeeLastName === 'Warehouse'; else normalName">
             <mat-chip color="warn" selected>
-              {{ item?.employeeLastName }}
+              Αποθήκη
             </mat-chip>
           </ng-container>
           <ng-template #normalName>
@@ -74,10 +74,22 @@
         </td>
       </ng-container>
 
-      <ng-container [matColumnDef]="ItemColumnNames.employeeFirstName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="employeeFirstName"> {{ ItemColumnNames.employeeFirstName }} </th>
-        <td mat-cell *matCellDef="let item"> {{ item?.employeeFirstName }} </td>
+   <ng-container [matColumnDef]="ItemColumnNames.employeeFirstName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="employeeFirstName"> 
+          {{ ItemColumnNames.employeeFirstName }} 
+        </th>
+        <td mat-cell *matCellDef="let item"> 
+          <ng-container *ngIf="item?.employeeFirstName === 'Warehouse'; else normalName">
+            <mat-chip color="warn" selected>
+              Αποθήκη
+            </mat-chip>
+          </ng-container>
+          <ng-template #normalName>
+            {{ item?.employeeFirstName }}
+          </ng-template>
+        </td>
       </ng-container>
+      
 
       <ng-container [matColumnDef]="ItemColumnNames.email">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="email"> {{ ItemColumnNames.email }} </th>
@@ -109,6 +121,11 @@
         <td mat-cell *matCellDef="let item"> {{ item?.phoneType?.name }} </td>
       </ng-container>
 
+      <ng-container [matColumnDef]="ItemColumnNames.paperSize">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="paperSize"> {{ ItemColumnNames.paperSize }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.paperSize }} </td>
+      </ng-container>
+      
 
       <ng-container [matColumnDef]="ItemColumnNames.ssd">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="ssd"> {{ ItemColumnNames.ssd }} </th>

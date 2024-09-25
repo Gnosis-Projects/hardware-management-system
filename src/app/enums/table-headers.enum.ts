@@ -22,6 +22,7 @@ export enum CarrierTableHeaders {
     printerType = 'Τύπος εκτυπωτή',
     personalPhone = 'Αριθμός Τηλεφώνου',
     operatingSystem = 'Λειτουργικού Σύστημα',
+    paperSize = 'Μέγεθος χαρτιού',
     networkEquipmentType = 'Τύπος δικτυακού εξοπλισμού',
     networkEquipmentIP = 'Τύπος IP',
     networkDisk = 'Δικτυακός δίσκος',

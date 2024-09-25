@@ -81,6 +81,8 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnInit(): void {
     this.setDisplayedColumns();
+    this.carrierName = this.carrierState.getSelectedCarrier()?.name
+        
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -183,6 +185,7 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
           ItemColumnNames.model,
           ItemColumnNames.serialNumber,
           ItemColumnNames.printerType,
+          ItemColumnNames.paperSize,
           ItemColumnNames.actions
         ];
         break;

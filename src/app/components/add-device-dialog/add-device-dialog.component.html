@@ -215,6 +215,9 @@
             <mat-select formControlName="operatingSystemId">
               <mat-option *ngFor="let os of operatingSystems" [value]="os.id">{{ os.name }}</mat-option>
             </mat-select>
+            <mat-error *ngIf="deviceForm.get('operatingSystemId')?.hasError('required')">
+              {{ 'This field is required' | translate }}
+            </mat-error>
           </mat-form-field>
         </div>
       </div>

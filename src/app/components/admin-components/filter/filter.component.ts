@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FilterType } from '../../../enums/filter-type.enum';
 import { CommonModule, KeyValuePipe } from '@angular/common';
@@ -19,6 +19,7 @@ import { DeviceType } from '../../../enums/device-type';
   selector: 'app-filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   standalone: true,
   imports: [ReactiveFormsModule, MatTooltipModule, MatSidenavModule, MatButtonModule, MatIconModule, CommonModule, TranslateModule, KeyValuePipe]
 })

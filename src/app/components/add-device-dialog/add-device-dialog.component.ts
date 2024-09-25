@@ -86,7 +86,7 @@ export class AddDeviceDialogComponent implements OnInit {
       diskRotations: [''],
       outlet: [''],
       antivirus: [''],
-      operatingSystemId: [null],
+      operatingSystemId: [null,Validators.required],
       computerPrinters: this.fb.array([]),
       networkEquipmentIp: this.fb.group({
         ipTypeId: [1, Validators.required],
@@ -303,6 +303,11 @@ export class AddDeviceDialogComponent implements OnInit {
       let deviceData = { ...this.deviceForm.value };
       const workStationId = Number(this.workstationState.getWorkstationId());
 
+      if(this.deviceType === DeviceType.SERVER){
+        this.deviceForm.get('operatingSystemId')?.setValidators([Validators.required]);
+        this.deviceForm.get('operatingSystemId')?.updateValueAndValidity();
+      }
+  
       if (this.deviceType === DeviceType.NETWORK_EQUIPMENT) {
         const networkEquipmentIp = this.deviceForm.get('networkEquipmentIp')?.value;
         const floorValue = this.deviceForm.get('floor')?.value;
@@ -348,6 +353,7 @@ export class AddDeviceDialogComponent implements OnInit {
         delete deviceData.routerPassword;
         delete deviceData.switchAddress;
         delete deviceData.networkEquipmentIp;
+        delete deviceData.networkEquipmentFloor
       }
       if (this.deviceType !== DeviceType.SERVER) {
         delete deviceData.diskRotations;
@@ -359,9 +365,7 @@ export class AddDeviceDialogComponent implements OnInit {
 
       this.dialogRef.close(deviceData);
     } else {
-      console.log("Form is invalid");
-
-      // Log the specific invalid fields
+      
       Object.keys(this.deviceForm.controls).forEach(field => {
         const control = this.deviceForm.get(field);
         if (control && control.invalid) {

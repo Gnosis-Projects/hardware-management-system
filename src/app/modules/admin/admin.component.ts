@@ -163,7 +163,7 @@ export class AdminComponent implements OnInit {
       showCancelButton: true,
       inputValidator: (value) => {
         if (!value) {
-          return 'Επιλέξτε εναν φορέα!';
+          return 'Παρακαλώ επιλέξτε εναν φορέα!';
         }
         return null;
       }

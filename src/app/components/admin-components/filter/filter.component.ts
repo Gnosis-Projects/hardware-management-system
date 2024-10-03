@@ -45,7 +45,8 @@ export class FilterComponent implements OnInit, OnChanges {
   ipTypes: IpType[] = [];
   remoteDesktopAppTypes: RemoteDesktopApp[] = [];
 
-  resultsPerPageOptions: number[] = [10, 20, 30, 50,60];
+
+  resultsPerPageOptions: number[] = [10, 20, 30, 50, 60];
 
   FilterType = FilterType;
 

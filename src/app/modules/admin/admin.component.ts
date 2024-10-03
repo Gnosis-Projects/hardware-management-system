@@ -37,6 +37,13 @@ import { DropdownOptionDialogComponent } from '../../components/dropdowns/dropdo
 import Swal from 'sweetalert2';
 import { DropdownService } from '../../services/dropdown.service';
 import { PageEvent } from '@angular/material/paginator';
+import { AddMunOfficeDialogComponent } from '../../components/admin-components/add-munoffice-dialog/add-mun-office-dialog/add-munoffice-dialog.component';
+import { MunicipalOfficesService } from '../../services/municipalOffices.service';
+import { MunicipalOfficesTableComponent } from '../../components/admin-components/mun-offices-table/mun-offices-table.component';
+import { DepartmentsService } from '../../services/departments.service';
+import { AddDepartmentDialog } from '../../components/admin-components/add-department-dialog/add-department-dialog.component';
+import { DepartmentsTableComponent } from "../../components/admin-components/departments-table/departments-table.component";
+import { ExtraStateService } from '../../services/state-management/extra-state.service';
 
 @Component({
   standalone: true,
@@ -60,7 +67,9 @@ import { PageEvent } from '@angular/material/paginator';
     ItemDetailsComponent,
     MatIconModule,
     CarrierTableComponent,
-  ],
+    MunicipalOfficesTableComponent,
+    DepartmentsTableComponent
+],
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss'],
@@ -69,14 +78,17 @@ export class AdminComponent implements OnInit {
   @ViewChild('drawer') drawer!: MatSidenav;
 
   currentPage: number = 1;
-  pageSize: number = 50;
+  pageSize: number = 30;
   totalPages: number = 1;
   currentFilterParams: any = {};
 
   devices: Device[] = [];
   carriers: CommonResponse[] = [];
   aUnits: CommonResponse[] = [];
+  munOffices: CommonResponse[]=[];
+  departments:CommonResponse[] = []
   workstations: WorkStation[] = [];
+  municipalOfficesForFilter: CommonResponse[] = [];
   searchType: DeviceType = DeviceType.COMPUTER;
   filterType: FilterType = FilterType.Computer;
   columnNames = ExcelColumnNames;
@@ -87,13 +99,20 @@ export class AdminComponent implements OnInit {
   isDrawerOpen: boolean = false;
   showCarriers: boolean = false;
   showUsersTable: boolean = false;
+  showOfficesTable:boolean = false;
+  showDepartmentsTable:boolean = false;
   showFilter: boolean = false;
+  selectedCarrierId: number = 0;
+  selectedOfficeId: number = 0;
   hide: boolean = false;
 
   constructor(
     private adminService: AdminService,
     private alertService: AlertService,
+    public extraStateService: ExtraStateService,
     private dropdownService: DropdownService,
+    private departmentsService: DepartmentsService,
+    private municipalOfficesService: MunicipalOfficesService,
     private translate: TranslateService,
     private toastr: ToastrService,
     private carrierService: CarrierService,
@@ -109,12 +128,97 @@ export class AdminComponent implements OnInit {
     this.isSuperAdmin = this.authStateService.isSuperAdmin();
     this.searchType = DeviceType.COMPUTER;
     this.fetchCarriersAndUnits();
+    this.fetchMunicipalOffices();
+    this.fetchDepartments();
     this.loadPersistedData();
+    this.extraStateService.fetchAndStoreMunicipalOffices().then((offices) => {
+    this.municipalOfficesForFilter = offices;
+  }).catch((error) => {
+    console.error('Error fetching municipal offices:', error);
+  });
   }
 
   toggleOptions() {
     this.showOptions = !this.showOptions;
   }
+
+  toggleOfficesTable(): void {
+    const carrierOptions = this.carriers.map(carrier => {
+      return {
+        text: carrier.name,
+        value: carrier.id
+      };
+    });
+  
+    const inputOptions: { [key: string]: string } = carrierOptions.reduce((options, carrier) => {
+      options[carrier.value] = carrier.text;
+      return options;
+    }, {} as { [key: string]: string });
+  
+    Swal.fire({
+      title: 'Επιλέξτε εναν φορέα',
+      input: 'select',
+      inputOptions: inputOptions,
+      inputPlaceholder: 'Φορείς...',
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Επιλέξτε εναν φορέα!';
+        }
+        return null;
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const selectedCarrierId = result.value;
+        this.selectedCarrierId = selectedCarrierId;
+    
+        this.fetchMunicipalOffices();
+    
+        this.showOfficesTable = true;
+        this.devices = []
+        this.workstations = []
+        this.showDepartmentsTable = false;
+      }
+    });
+  }    
+  
+  
+  toggleDepartmentsTable(): void {
+    const municipalOfficeOptions = this.munOffices.map(office => {
+      return {
+        text: office.name,
+        value: office.id
+      };
+    });
+  
+    const inputOptions: { [key: string]: string } = municipalOfficeOptions.reduce((options, office) => {
+      options[office.value] = office.text;
+      return options;
+    }, {} as { [key: string]: string });
+  
+    Swal.fire({
+      title: 'Επιλέξτε μια διεύθυνση',
+      input: 'select',
+      inputOptions: inputOptions,
+      inputPlaceholder: 'Διευθύνσεις...',
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Επιλέξτε μια διεύθυνση!';
+        }
+        return null;
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const selectedMunicipalOfficeId = result.value;
+        this.selectedOfficeId = selectedMunicipalOfficeId;
+        this.fetchDepartments();
+        this.showDepartmentsTable = !this.showDepartmentsTable;
+        this.showOfficesTable = false;
+      }
+    });
+  }
+  
 
   toggleDrawer() {
     this.isDrawerOpen = !this.isDrawerOpen;
@@ -131,16 +235,22 @@ export class AdminComponent implements OnInit {
   showAllCarriers() {
     this.showCarriers = !this.showCarriers;
     this.showUsersTable = false;
+    this.showOfficesTable = false;
+    this.showDepartmentsTable = false;
     this.showFilter = false;
     this.resetProperties();
   }
 
   toggleUsersList() {
     this.showUsersTable = !this.showUsersTable;
+    this.showOfficesTable = false;
     this.showCarriers = false;
     this.showFilter = false;
+    this.showDepartmentsTable = false;
+    this.showOfficesTable = false;
     this.resetProperties();
   }
+
   
   addCarrier(): void {
     const dialogRef = this.dialog.open(AddCarrierDialogComponent, {
@@ -153,6 +263,20 @@ export class AdminComponent implements OnInit {
     const dialogRef = this.dialog.open(AddAunitDialogComponent, {
       width: '400px',
       data: { carrierName: '' }
+    });
+  }
+
+  addMunicipalOffice(): void{
+    const dialogRef = this.dialog.open(AddMunOfficeDialogComponent, {
+      width: '400px',
+      data: { carrierName: '' }
+    });
+  }
+
+  
+  addDepartment(): void{
+    const dialogRef = this.dialog.open(AddDepartmentDialog, {
+      width: '400px',
     });
   }
 
@@ -225,6 +349,30 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  fetchMunicipalOffices(){
+    this.municipalOfficesService.getAllByCarrier(this.selectedCarrierId).subscribe((response)=>{
+      if(response.success){
+        this.munOffices = response.data
+        this.extraStateService.setAllMunicipalOffices(response.data);
+      }
+      else {
+        this.toastr.error(response.message);
+      }
+    })
+  }
+
+  fetchDepartments(){
+    this.departmentsService.getAllByMunicipalOffice(this.selectedOfficeId).subscribe((response)=>{
+      if(response.success){
+        this.departments = response.data
+        this.extraStateService.setAllDepartments(response.data);
+      }
+      else {
+        this.toastr.error(response.message);
+      }
+    })
+  }
+
   addUser(): void {
     const dialogRef = this.dialog.open(CreateUserComponent, {
       width: '100%',
@@ -246,6 +394,8 @@ export class AdminComponent implements OnInit {
     this.filterType = this.getFilterType(type);
     this.showCarriers = false;
     this.showUsersTable = false;
+    this.showDepartmentsTable = false;
+    this.showOfficesTable = false;
     const searchParams = {
       ...filterParams,
       sorting: {
@@ -260,10 +410,14 @@ export class AdminComponent implements OnInit {
       if (response.success) {
         if (isWorkstation) {
           this.filteredWorkstations = response.data || [];
+          this.showOfficesTable=false
+          this.showDepartmentsTable = false;
           this.devices = [];
         } else {
           this.devices = response.data || [];
           this.filteredWorkstations = [];
+          this.showOfficesTable=false
+          this.showDepartmentsTable = false;
         }
         this.totalPages = response.totalPages;
         this.persistData();
@@ -315,11 +469,13 @@ export class AdminComponent implements OnInit {
 
   applyFilter(filterParams: any): void {
     this.currentFilterParams = filterParams; 
-    const { carrierId, aUnitId, ...specificFilterDto } = filterParams;
+    const { carrierId, aUnitId,municipalOfficeId,departmentId, ...specificFilterDto } = filterParams;
     const filterKey = Object.keys(specificFilterDto)[0];
     const searchParams = {
       carrierId: parseInt(carrierId),
       aUnitId: parseInt(aUnitId),
+      municipalOfficeId: parseInt(municipalOfficeId),
+      departmentId: parseInt(departmentId),
       [filterKey]: specificFilterDto[filterKey],
       sorting: {
         sortBy: 'name',
@@ -330,6 +486,12 @@ export class AdminComponent implements OnInit {
     this.fetchAllDevices(this.searchType, searchParams);
   }
 
+
+  onPageSizeChange(newPageSize: number): void {
+    this.pageSize = newPageSize; // Update the pageSize
+    this.currentPage = 1; // Reset to the first page when page size changes
+    this.fetchAllDevices(this.searchType, this.currentFilterParams); // Fetch the devices with the new page size
+  }
   
 
   showOperatingSystems(): void {

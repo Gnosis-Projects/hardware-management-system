@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Επεξεργασία διεύθυνσης' : 'Νέα διεύθυνση' }}</h2>
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="unitForm">
+    <mat-form-field class="full-width" *ngIf="!isEditMode">
+      <mat-label>Φορέας</mat-label>
+      <mat-select formControlName="carrier" placeholder="Επιλέξτε φορέα">
+        <mat-option *ngFor="let carrier of carriers" [value]="carrier.id">
+          {{ carrier.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <mat-form-field class="full-width">
+      <mat-label>Όνομα διεύθυνσης</mat-label>
+      <input matInput formControlName="munOfficeName" [disabled]="!isEditMode && !unitForm.get('carrier')?.value">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-actions">
+  <button mat-button color="primary" (click)="onSave()">{{ 'save' | translate }}</button>
+  <button mat-button color="warn" (click)="onCancel()">{{ 'cancel' | translate }}</button>
+</mat-dialog-actions>

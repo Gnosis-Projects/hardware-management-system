@@ -35,6 +35,7 @@ export class AddAunitDialogComponent implements OnInit {
   unitForm: FormGroup;
   carriers: CommonResponse[] = [];
   hideCarrierSelection = false;
+  selectedCarrier: CommonResponse | null | undefined;
 
   constructor(
     private fb: FormBuilder,
@@ -55,10 +56,16 @@ export class AddAunitDialogComponent implements OnInit {
   ngOnInit() {
     this.loadCarriers();
     this.setupCarrierValueChanges();
+    this.selectedCarrier = this.carrierStateService.getSelectedCarrier();
+    if(this.selectedCarrier && this.router.url !== '/admin'){
+      this.hideCarrierSelection = true;
+      this.unitForm.get('carrier')?.clearValidators();
+    }
   }
   
   private loadCarriers(): void {
     const carriersFromState = this.carrierStateService.getAllCarriers();
+    
     if (carriersFromState) {
       this.carriers = carriersFromState;
     } else {
@@ -86,7 +93,7 @@ export class AddAunitDialogComponent implements OnInit {
 
   onSave(): void {
     if (this.unitForm.valid) {
-      const carrierId = this.unitForm.value.carrier;
+      const carrierId = this.unitForm.value.carrier || this.selectedCarrier?.id;
       const unitName = this.unitForm.value.unitName;
       this.aUnitService.addAUnit(carrierId, unitName).subscribe({
         next: (response) => {

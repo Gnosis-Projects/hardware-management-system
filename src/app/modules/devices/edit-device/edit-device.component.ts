@@ -50,6 +50,7 @@ export class EditDeviceComponent implements OnInit {
   carrier: string = '';
   availableWorkstations: WorkStation[] = [];
   preFilledIpType: string = ''
+  isItemInWarehouse:boolean = false
 
   constructor(
     private fb: FormBuilder,
@@ -66,8 +67,8 @@ export class EditDeviceComponent implements OnInit {
     this.editForm = this.fb.group({
       id: [null],
       model: [''],
-      serialNumber: ['', Validators.required],
-      deviceName: ['', Validators.required],
+      serialNumber: [''],
+      deviceName: [''],
       ram: [''],
       ip: [''],
       macAddress: [''],
@@ -75,6 +76,7 @@ export class EditDeviceComponent implements OnInit {
       monitorType: [''],
       outlet: [''],
       antivirus: [''],
+      printerIp:[''],
       workGroupDomain: [''],
       networkDiskInfo: this.fb.group({
         name: [''],
@@ -100,6 +102,7 @@ export class EditDeviceComponent implements OnInit {
       paperSize: [''],
       serverDisks:this.fb.array([]),
       diskRotations: [null],
+      toBeDestroyed: [false],
       networkDisk: [false],
       networkEquipmentTypeId: [null],
       networkEquipmentFloor: [''],
@@ -118,7 +121,7 @@ export class EditDeviceComponent implements OnInit {
     return this.editForm.get('serverDisks') as FormArray;
   }
   ngOnInit(): void {
-
+ 
     if (this.deviceType === DeviceType.SERVER) {
       this.serverDisks.clear();
     }
@@ -179,6 +182,7 @@ export class EditDeviceComponent implements OnInit {
     this.deviceService.getDeviceById(deviceId, deviceType).subscribe({
       next: (response) => {
         if (response.success) {
+          this.isItemInWarehouse = response.data.workStation?.employeeFirstName === 'Warehouse'
           this.editForm.patchValue(response.data);
           this.newId = response.data.workStation?.id ?? 0;
           this.carrierId = response.data.workStation?.carrier?.id ?? 0;

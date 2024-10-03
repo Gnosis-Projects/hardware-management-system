@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AunitDetailComponent } from './aunit-detail.component';
+import { MunOfficesTableComponent } from './mun-offices-table.component';
 
-describe('AunitDetailComponent', () => {
-  let component: AunitDetailComponent;
-  let fixture: ComponentFixture<AunitDetailComponent>;
+describe('MunOfficesTableComponent', () => {
+  let component: MunOfficesTableComponent;
+  let fixture: ComponentFixture<MunOfficesTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AunitDetailComponent]
+      imports: [MunOfficesTableComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AunitDetailComponent);
+    fixture = TestBed.createComponent(MunOfficesTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

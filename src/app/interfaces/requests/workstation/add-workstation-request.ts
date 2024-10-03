@@ -5,7 +5,6 @@ export interface WorkstationRequest {
     workstationNumber:string;
     email: string;
     personalPhone: string;
-    department: string;
     city: string;
     address?: string;
 }

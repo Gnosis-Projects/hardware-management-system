@@ -10,6 +10,10 @@
               {{ ws.employeeFirstName.toLowerCase() === 'warehouse' ? 'Αποθήκη ' + ws.aUnit.name : ws.employeeFirstName + ' ' + ws.employeeLastName + ' | ' + ws.aUnit.name + ' | ' + ws.department }}
             </option>
           </select>
+          <div class="form-group mt-3" *ngIf="isItemInWarehouse">
+            <label for="toBeDestroyed">{{ 'labels.toBeDestroyed' | translate }}</label>
+            <input id="toBeDestroyed" type="checkbox" formControlName="toBeDestroyed" class="form-check-input" />
+          </div>
           </div>
           </div>
           <div class="col-md-4">
@@ -21,7 +25,6 @@
               </div>
             </div>
           </div>
-    
       <div class="col-md-4">
         <div class="form-group">
           <label for="model">{{ 'labels.model' | translate }}</label>
@@ -233,6 +236,12 @@
           <div class="form-group">
             <label for="paperSize">{{ 'labels.paperSize' | translate }}</label>
             <input id="paperSize" type="text" formControlName="paperSize" class="form-control" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="paperSize">{{ 'labels.ip' | translate }}</label>
+            <input id="printerIp" type="text" formControlName="printerIp" class="form-control" />
           </div>
         </div>
         <div class="col-md-6">

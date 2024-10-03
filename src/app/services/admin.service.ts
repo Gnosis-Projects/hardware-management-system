@@ -6,6 +6,7 @@ import { DeviceListResponse, Device } from "../interfaces/responses/device-respo
 import { WorkStationResponse, WorkStation } from "../interfaces/responses/workstation-response";
 import { DeviceType } from "../enums/device-type";
 
+
 @Injectable({
   providedIn: 'root'
 })

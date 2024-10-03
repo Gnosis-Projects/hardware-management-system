@@ -132,10 +132,6 @@ export class AlertService {
           <input type="text" id="personalPhone" placeholder="${this.translate.instant('phone')}" value="${workstation.personalPhone || ''}">
         </div>
         <div>
-          <label for="department">${this.translate.instant('department')}</label>
-          <input type="text" id="department" placeholder="${this.translate.instant('department')}" value="${workstation.department || ''}">
-        </div>
-        <div>
           <label for="workstationNumber">${this.translate.instant('workstationNumber')}</label>
           <input type="text" id="workstationNumber" placeholder="${this.translate.instant('workstationNumber')}" value="${workstation.workstationNumber || ''}">
         </div>
@@ -166,18 +162,17 @@ export class AlertService {
         const employeeFirstName = (document.getElementById('employeeFirstName') as HTMLInputElement).value;
         const email = (document.getElementById('email') as HTMLInputElement).value;
         const personalPhone = (document.getElementById('personalPhone') as HTMLInputElement).value;
-        const department = (document.getElementById('department') as HTMLInputElement).value;
         const workstationNumber = (document.getElementById('workstationNumber') as HTMLInputElement).value;
         const socketNumber = (document.getElementById('socketNumber') as HTMLInputElement).value;
         const city = (document.getElementById('city') as HTMLInputElement).value;
         const address = (document.getElementById('address') as HTMLInputElement).value;
 
-        if (!employeeLastName || !employeeFirstName || !department || !city ) {
+        if (!employeeLastName || !employeeFirstName ||  !city ) {
           Swal.showValidationMessage(this.translate.instant('all.fields.required'));
           return false;
         }
 
-        return { employeeLastName, employeeFirstName, email, personalPhone, department, city, address, socketNumber, workstationNumber };
+        return { employeeLastName, employeeFirstName, email, personalPhone, city, address, socketNumber, workstationNumber };
       }
     });
 }

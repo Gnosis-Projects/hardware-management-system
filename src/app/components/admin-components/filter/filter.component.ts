@@ -14,6 +14,8 @@ import { DropdownService } from '../../../services/dropdown.service';
 import { IpType, OperatingSystem, PhoneType, PrinterType, RemoteDesktopApp, ServerDiskType } from '../../../interfaces/requests/device-request';
 import { NetworkEquipmentType } from '../../../interfaces/responses/device-response';
 import { DeviceType } from '../../../enums/device-type';
+import { DepartmentsService } from '../../../services/departments.service';
+import { MunicipalOfficesService } from '../../../services/municipalOffices.service';
 
 @Component({
   selector: 'app-filter',
@@ -26,12 +28,16 @@ import { DeviceType } from '../../../enums/device-type';
 export class FilterComponent implements OnInit, OnChanges {
   @Input() filterType: FilterType = FilterType.Computer;
   @Input() carriers: CommonResponse[] = [];
+  @Input() offices?: CommonResponse[] = [];
+  @Input() departments?: CommonResponse[] = [];
   @Output() filter = new EventEmitter<any>();
+  @Output() pageSizeChange = new EventEmitter<number>();
 
   showFilter: boolean = false;
   filterForm: FormGroup;
   operatingSystems: OperatingSystem[] = [];
   aUnits: CommonResponse[] = [];
+  deps: CommonResponse[] = [];
   printerTypes: PrinterType[] = [];
   phoneTypes: PhoneType[] = [];
   serverDiskTypes: ServerDiskType[] = [];
@@ -39,15 +45,24 @@ export class FilterComponent implements OnInit, OnChanges {
   ipTypes: IpType[] = [];
   remoteDesktopAppTypes: RemoteDesktopApp[] = [];
 
+  resultsPerPageOptions: number[] = [10, 20, 30, 50, 70, 100];
+
   FilterType = FilterType;
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private aUnitService: AUnitService,
+    private departmentsService: DepartmentsService,
+    private munOfficesService: MunicipalOfficesService,
     private dropdownService: DropdownService
   ) {
     this.filterForm = this.fb.group({});
+  }
+
+  onPageSizeChange(event: any): void {
+    const selectedPageSize = event.target.value;
+    this.pageSizeChange.emit(parseInt(selectedPageSize, 10));
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -70,7 +85,9 @@ export class FilterComponent implements OnInit, OnChanges {
       model: ['' ],
       serialNumber: ['' ],
       carrierId: [null],
-      aUnitId: [{ value: null, disabled: true }]
+      aUnitId: [{ value: null, disabled: true }],
+      departmentId:  [{ value: null, disabled: true }],
+      municipalOfficeId: [{ value: null, disabled: true }]
     };
 
     switch (this.filterType) {
@@ -86,6 +103,7 @@ export class FilterComponent implements OnInit, OnChanges {
         controls = {
           ...controls,
           printerTypeId: [null],
+          printerIp: [''],
           refurbished: [false],
           paperSize: ['']
         };
@@ -137,6 +155,13 @@ export class FilterComponent implements OnInit, OnChanges {
     this.filterForm.get('carrierId')?.valueChanges.subscribe(carrierId => {
       this.onCarrierChange(carrierId);
     });
+
+    this.filterForm.get('municipalOfficeId')?.valueChanges.subscribe(municipalOfficeId => {
+      this.onOfficeChange(municipalOfficeId);
+    });
+
+
+    
   }
 
   loadDropdownData(): void {
@@ -170,22 +195,42 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   onCarrierChange(carrierId: number): void {
-    if (carrierId) {
+    
+    if (carrierId && carrierId.toString() !== 'null') {
       this.aUnitService.getAUnitsByCarrierId(carrierId).subscribe(aUnits => {
         this.aUnits = aUnits.data;
         this.filterForm.get('aUnitId')?.enable();
         this.filterForm.patchValue({ aUnitId: null });
+        this.filterForm.get('municipalOfficeId')?.enable();
+        this.filterForm.patchValue({ municipalOfficeId: null });
+      });
+      this.munOfficesService.getAllByCarrier(carrierId).subscribe(offices => {
+        this.offices = offices.data;
       });
     } else {
-      this.aUnits = [];
+      this.offices = [];
       this.filterForm.get('aUnitId')?.disable();
-      this.filterForm.patchValue({ aUnitId: null });
+      this.filterForm.get('municipalOfficeId')?.disable();
+    }
+  }
+  
+
+  onOfficeChange(municipalOfficeId: number): void {
+    if (municipalOfficeId) {
+      this.departmentsService.getAllByMunicipalOffice(municipalOfficeId).subscribe(deps => {
+        this.departments = deps.data;
+        this.filterForm.get('departmentId')?.enable();
+        this.filterForm.patchValue({ departmentId: null });
+      });
+    } else {
+      this.departments = [];
+      this.filterForm.get('departmentId')?.disable();
     }
   }
 
   onFilter(): void {
     if (this.filterForm.valid) {
-      const { carrierId, aUnitId, hideWarehouses, ...filterDto } = this.filterForm.getRawValue();
+      const { carrierId, aUnitId, departmentId, municipalOfficeId,hideWarehouses, ...filterDto } = this.filterForm.getRawValue();
 
       Object.keys(filterDto).forEach((key) => {
         if (key !== 'macAddress' && key !== 'ram' && (filterDto[key] === null || filterDto[key] === '')) {
@@ -194,8 +239,9 @@ export class FilterComponent implements OnInit, OnChanges {
       });
 
       const filterKey = this.getSpecificFilterKey(this.filterType);
+      console.log(filterKey)
 
-      this.filter.emit({ carrierId, aUnitId, [filterKey]: filterDto });
+      this.filter.emit({ carrierId, aUnitId,departmentId,municipalOfficeId, [filterKey]: filterDto });
     }
   }
 
@@ -214,7 +260,7 @@ export class FilterComponent implements OnInit, OnChanges {
       case FilterType.Workstation:
         return 'workstationFilterDto';
       default:
-        return 'filterDto'; // Default to a generic filter if none matches
+        return 'filterDto';
     }
   }
 
@@ -222,6 +268,8 @@ export class FilterComponent implements OnInit, OnChanges {
     this.filterForm.reset({
       carrierId: null,
       aUnitId: null,
+      departmentId: null,
+      municipalOfficeId: null,
       deviceName: '',
       model: '',
       paperSize: '',
@@ -239,6 +287,8 @@ export class FilterComponent implements OnInit, OnChanges {
     });
     this.aUnits = [];
     this.filterForm.get('aUnitId')?.disable();
+    this.filterForm.get('departmentId')?.disable();
+    this.filterForm.get('municipalOfficeId')?.disable();
     this.onFilter();
   }
 }

@@ -14,6 +14,9 @@ import { WorkStationService } from '../../services/workstation.service';
 import { WorkstationRequest } from '../../interfaces/requests/workstation/add-workstation-request';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { CarrierStateService } from '../../services/state-management/carrier-state.service';
+import { DepartmentsService } from '../../services/departments.service';
+import { MunicipalOfficesService } from '../../services/municipalOffices.service';
  
 @Component({
   selector: 'app-add-workstation-dialog',
@@ -45,18 +48,27 @@ export class AddWorkStationDialogComponent implements OnInit {
   addWorkStationForm: FormGroup;
   disableCarrierInput: boolean = false;
   isSubmitting: boolean = false;
+  carrierId: number = this.carrierState.getSelectedCarrier()!.id
+  municipalOffices: CommonResponse[] = []
+  departments: CommonResponse[] = []
+
 
   constructor(
     private authStateService: AuthStateService, 
     private router: Router, 
     private aUnitService: AUnitService,
+    private carrierState:CarrierStateService,
     private workStationService: WorkStationService,
+    private municipalService: MunicipalOfficesService,
+    private departmentsService: DepartmentsService,
     private toastr: ToastrService,
     private translate: TranslateService
   ) {
     this.addWorkStationForm = this.fb.group({
       carrierId: [''],
       aUnitId: ['', Validators.required],
+      departmentId:  [{ value: null, disabled: true }],
+      municipalOfficeId: [''],
       employeeFirstName: ['', Validators.required],
       employeeLastName: ['', Validators.required],
       workstationNumber: [''],
@@ -64,7 +76,6 @@ export class AddWorkStationDialogComponent implements OnInit {
       email: [''],
       personalPhone: [''],
       address: [''],
-      department: ['',  Validators.required],
       city: ['',  Validators.required]
     });
 
@@ -85,22 +96,54 @@ export class AddWorkStationDialogComponent implements OnInit {
     }
     if (this.router.url === '/selectedCarrier') {
       this.disableCarrierInput = true;
+      this.addWorkStationForm.get('carrierId')?.disable();
+      this.municipalService.getAllByCarrier(this.carrierId).subscribe((response)=>{
+        this.municipalOffices = response.data
+      })
+    }
+    if(this.isSuperAdmin){
+      this.municipalService.getAllByCarrier(this.carrierId).subscribe((response)=>{
+        this.municipalOffices = response.data
+      })
+    }
+
+    this.addWorkStationForm.get('municipalOfficeId')?.valueChanges.subscribe(municipalOfficeId => {
+      this.onOfficeChange(municipalOfficeId);
+    });
+  }
+
+  onOfficeChange(municipalOfficeId: number): void {
+    if (municipalOfficeId) {
+      this.departmentsService.getAllByMunicipalOffice(municipalOfficeId).subscribe(deps => {
+        this.departments = deps.data;
+        this.addWorkStationForm.get('departmentId')?.enable();
+        this.addWorkStationForm.patchValue({ departmentId: null });
+      });
+    } else {
+      this.departments = [];
     }
   }
 
   onCarrierChange(carrierId: number): void {
+    this.carrierId = carrierId
     this.aUnitService.getAUnitsByCarrierId(carrierId).subscribe((response) => {
       if (response.success) {
         this.filteredAUnits = response.data;
         this.addWorkStationForm.get('aUnitId')?.reset();
       }
     });
+    this.municipalService.getAllByCarrier(carrierId).subscribe(offices => {
+      this.municipalOffices = offices.data;
+    });
+
   }
 
   onSave(): void {
     if (this.addWorkStationForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
       const formData = this.addWorkStationForm.value;
+
+      const departmentId = formData.departmentId;
 
       const workstationRequest: WorkstationRequest = {
         employeeLastName: formData.employeeLastName,
@@ -109,12 +152,11 @@ export class AddWorkStationDialogComponent implements OnInit {
         socketNumber: formData.socketNumber,
         workstationNumber: formData.workstationNumber,
         personalPhone: formData.personalPhone,
-        department: formData.department,
         city: formData.city,
         address: formData.address
       };
 
-      this.workStationService.addWorkStation(Number(formData.aUnitId), workstationRequest)
+      this.workStationService.addWorkStation(Number(formData.aUnitId), departmentId, workstationRequest)
         .subscribe((response) => {
           this.isSubmitting = false;
           if (response.success) {

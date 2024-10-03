@@ -20,7 +20,7 @@ export function updateFormControls(searchForm: FormGroup, searchType: DeviceType
         break;
 
       case DeviceType.SERVER:
-        enableControls(filterDtoGroup, ['deviceName', 'model', 'serialNumber', 'operatingSystemId', 'serverDiskTypeId', 'diskRotations', 'networkDisk']);
+        enableControls(filterDtoGroup, ['deviceName', 'model', 'serialNumber', 'operatingSystemId', 'serverDiskTypeId', 'diskRotations', 'networkDisk', 'antivirus']);
         disableControls(filterDtoGroup, ['ram', 'ip', 'macAddress', 'ssd', 'remoteDesktopAppId', 'phoneNumber', 'printerTypeId', 'networkEquipmentTypeId', 'floor']);
         workstationFilterDtoGroup.disable();
         break;

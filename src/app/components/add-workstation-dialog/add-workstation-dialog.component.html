@@ -18,6 +18,22 @@
     </mat-form-field>
 
     <mat-form-field class="full-width">
+      <mat-label>Διεύθυνση</mat-label>
+      <mat-select formControlName="municipalOfficeId">
+        <mat-option *ngFor="let office of municipalOffices" [value]="office.id">{{ office.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field class="full-width">
+      <mat-label>Τμήμα</mat-label>
+      <mat-select formControlName="departmentId">
+        <mat-option *ngFor="let dep of departments" [value]="dep.id">{{ dep.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field class="full-width">
       <mat-label>{{ 'employeeFirstName' | translate }}</mat-label>
       <input matInput formControlName="employeeFirstName">
       <mat-error *ngIf="addWorkStationForm.get('employeeFirstName')?.invalid && addWorkStationForm.get('employeeFirstName')?.touched" class="text-danger">
@@ -54,13 +70,6 @@
       <input matInput formControlName="personalPhone">
     </mat-form-field>
 
-    <mat-form-field class="full-width">
-      <mat-label>{{ 'department' | translate }}</mat-label>
-      <input matInput formControlName="department">
-      <mat-error *ngIf="addWorkStationForm.get('department')?.invalid && addWorkStationForm.get('employeeFirstName')?.touched" class="text-danger">
-        {{ 'This field is required' | translate }}
-      </mat-error>
-    </mat-form-field>
 
     <mat-form-field class="full-width">
       <mat-label>{{ 'city' | translate }}</mat-label>

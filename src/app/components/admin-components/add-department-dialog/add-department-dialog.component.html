@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Επεξεργασία τμήματος' : 'Νέο Τμήμα' }}</h2>
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="unitForm">
+    <mat-form-field class="full-width" *ngIf="!isEditMode">
+      <mat-label>Διεύθυνση</mat-label>
+      <mat-select formControlName="office" placeholder="Επιλέξτε διεύθυνση">
+        <mat-option *ngFor="let office of offices" [value]="office.id">
+          {{ office.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Όνομα τμήματος</mat-label>
+      <input matInput formControlName="departmentName">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-actions">
+  <button mat-button color="primary" (click)="onSave()">{{ 'save' | translate }}</button>
+  <button mat-button color="warn" (click)="onCancel()">{{ 'cancel' | translate }}</button>
+</mat-dialog-actions>

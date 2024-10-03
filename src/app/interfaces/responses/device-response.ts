@@ -80,7 +80,9 @@ export interface Device {
   serverDiskType?: ServerDiskType;
   paperSize?: string;
   macAddress?: string;
+  toBeDestroyed?:boolean;
   machineType?: string;
+  printerIp?: string;
   routerPassword?: string;
   routerUsername?: string;
   operatingSystem?: OperatingSystem
@@ -122,9 +124,11 @@ export interface DeviceHistory {
   paperSize?: string;
   checkDateTime: string;
   comments: string;
+  printerIp?: string;
   ip?: string;
   macAddress?: string;
   operatingSystemId?: number;
+  toBeDestroyed?:boolean;
   operatingSystem?: string;
   monitorType?: string;
   outlet?: string;

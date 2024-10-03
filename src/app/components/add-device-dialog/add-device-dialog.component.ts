@@ -72,6 +72,7 @@ export class AddDeviceDialogComponent implements OnInit {
       phoneNumber: [''],
       phoneSocket: [''],
       phoneTypeId: [null],
+      printerIp: [''],
       ram: [''],
       ip: [''],
       disks: this.fb.array([]),
@@ -86,7 +87,7 @@ export class AddDeviceDialogComponent implements OnInit {
       diskRotations: [''],
       outlet: [''],
       antivirus: [''],
-      operatingSystemId: [null,Validators.required],
+      operatingSystemId: [null],
       computerPrinters: this.fb.array([]),
       networkEquipmentIp: this.fb.group({
         ipTypeId: [1, Validators.required],
@@ -210,6 +211,7 @@ export class AddDeviceDialogComponent implements OnInit {
     switch (this.deviceType) {
       case DeviceType.COMPUTER:
         this.addDisk();
+        setValidators('operatingSystemId', [Validators.required]);
         break;
       case DeviceType.PRINTER:
         setValidators('printerTypeId', [Validators.required]);
@@ -222,6 +224,7 @@ export class AddDeviceDialogComponent implements OnInit {
         break;
       case DeviceType.SERVER:
         setValidators('serverDiskTypeId', [Validators.required]);
+        setValidators('operatingSystemId', [Validators.required]);
         break;
     }
 
@@ -303,11 +306,6 @@ export class AddDeviceDialogComponent implements OnInit {
       let deviceData = { ...this.deviceForm.value };
       const workStationId = Number(this.workstationState.getWorkstationId());
 
-      if(this.deviceType === DeviceType.SERVER){
-        this.deviceForm.get('operatingSystemId')?.setValidators([Validators.required]);
-        this.deviceForm.get('operatingSystemId')?.updateValueAndValidity();
-      }
-  
       if (this.deviceType === DeviceType.NETWORK_EQUIPMENT) {
         const networkEquipmentIp = this.deviceForm.get('networkEquipmentIp')?.value;
         const floorValue = this.deviceForm.get('floor')?.value;
@@ -327,19 +325,18 @@ export class AddDeviceDialogComponent implements OnInit {
         const computerFields = [
           'ram', 'ssd', 'ip', 'disks', 'antivirus',
           'macAddress', 'outlet', 'remoteDesktopApps', 'machineType',
-          'workGroupDomain', 'monitorType', 'computerPrinters',
+          'workGroupDomain', 'operatingSystemId','monitorType', 'computerPrinters',
         ];
         computerFields.forEach(field => delete deviceData[field]);
       }
-      if (this.deviceType !== DeviceType.COMPUTER && this.deviceType !== DeviceType.SERVER) {
-        delete deviceData.operatingSystemId;
-      }
+
       if (this.deviceType !== DeviceType.COMPUTER && this.deviceType !== DeviceType.PRINTER) {
         delete deviceData.refurbished;
       }
       if (this.deviceType !== DeviceType.PRINTER) {
         delete deviceData.printerTypeId;
         delete deviceData.paperSize;
+        delete deviceData.printerIp;
       }
       if (this.deviceType !== DeviceType.PHONE) {
         delete deviceData.phoneNumber;
@@ -357,10 +354,14 @@ export class AddDeviceDialogComponent implements OnInit {
       }
       if (this.deviceType !== DeviceType.SERVER) {
         delete deviceData.diskRotations;
-        delete deviceData.netWorkDisk;
+        delete deviceData.networkDisk;
         delete deviceData.serverDiskTypeId;
         delete deviceData.networkDiskInfo;
         delete deviceData.serverDisks;
+      }
+
+      if (this.deviceType !== DeviceType.COMPUTER && this.deviceType !== DeviceType.SERVER) {
+        delete deviceData.operatingSystemId;
       }
 
       this.dialogRef.close(deviceData);

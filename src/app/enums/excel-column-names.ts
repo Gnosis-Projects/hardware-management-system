@@ -69,6 +69,7 @@ export enum ExcelColumnNames {
   'computer.purchaseDate' = 'Ημερομηνία Αγοράς Υπολογιστή',
   'computer.comments' = 'Σχόλια Υπολογιστή',
   'computer.username' = 'Όνομα Χρήστη Υπολογιστή',
+  'computerPrinters' = 'Εκτυπωτές υπολογιστή',
   'phone.phoneNumber' = 'Τηλέφωνο',
   'phone.id' = 'ID Τηλεφώνου',
   'phone.model' = 'Μοντέλο Τηλεφώνου',
@@ -166,9 +167,14 @@ export enum ExcelColumnNames {
   'printer.paperSize' = 'Μέγεθος Χάρτου',
   'printer.supplier' = 'Προμηθευτής Εκτυπωτή',
 
-  'computer.disks.1.id' = 'ID Δίσκου Υπολογιστή',
-  'computer.disks.1.capacity' = 'Χωρητικότητα Δίσκου Υπολογιστή',
-  'computer.disks.1.ssd' = 'SSD Δίσκος Υπολογιστή',
+  'computer.disks.1.id' = 'ID Δίσκου',
+  'computer.disks.1.capacity' = 'Χωρητικότητα Δίσκου',
+  'computer.disks.1.ssd' = 'SSD Δίσκος',
+
+  
+  'disks.1.id' = 'ID Δίσκου',
+  'disks.1.capacity' = 'Χωρητικότητα Δίσκου',
+  'disks.1.ssd' = 'SSD Δίσκος',
 
   'phone.phoneSocket' = 'Πρίζα Τηλεφώνου',
   'phone.phoneType.id' = 'ID Τύπου Τηλεφώνου',
@@ -180,4 +186,6 @@ export enum ExcelColumnNames {
   'network_equipment.routerPassword' = 'Κωδικός Ρούτερ',
   'network_equipment.switchAddress' = 'Διεύθυνση Switch',
   'network_equipment.supplier' = 'Προμηθευτής Δικτυακού Εξοπλισμού',
+  'workStation.address' = 'Ταχυδρομική διευθ.',
+  toBeDestroyed = 'Προς καταστροφή'
 }

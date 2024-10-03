@@ -1,6 +1,16 @@
   import { CommonResponse } from "./common-response";
   import { Device } from "./device-response";
 
+  export interface Department{
+    id:number,
+    name:string
+  }
+
+  export interface MunicipalOffice{
+    id:number,
+    name:string
+  }
+
 
   export interface WorkStation {
     carrier: CommonResponse;
@@ -13,7 +23,8 @@
     socketNumber?: string;
     address?: string;
     workstationNumber?: string;
-    department: string;
+    department?: Department;
+    municipalOffice?: MunicipalOffice;
     city?: string;
     computers_list: Device[];
     printers_list: Device[];

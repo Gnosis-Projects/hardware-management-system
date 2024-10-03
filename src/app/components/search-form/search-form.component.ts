@@ -13,6 +13,10 @@ import { updateFormControls } from '../../shared/form-control';
 import { NetworkEquipmentType, OperatingSystem, PhoneType, PrinterType, RemoteDesktopApp, RemoteDesktopAppType, ServerDiskType } from '../../interfaces/requests/device-request';
 import { DropdownService } from '../../services/dropdown.service';
 import { Helper } from '../../shared/helpers';
+import { MunicipalOfficesService } from '../../services/municipalOffices.service';
+import { DepartmentsService } from '../../services/departments.service';
+import { CarrierService } from '../../services/carrier.service';
+import { CarrierStateService } from '../../services/state-management/carrier-state.service';
 
 @Component({
   selector: 'app-search-form',
@@ -34,12 +38,17 @@ export class SearchFormComponent implements OnInit, OnChanges {
   printerTypes: PrinterType[] = [];
   serverDiskTypes: ServerDiskType[] = [];
   operatingSystems: OperatingSystem[] = [];
+  offices: CommonResponse[] = [];
+  departments: CommonResponse[] = [];
+  selectedOfficeId: number = 0;
   phoneTypes: PhoneType[] = [];
   remoteDesktopAppTypes: RemoteDesktopAppType[] = []
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private dropdownService: DropdownService) {
+  constructor(private fb: FormBuilder, private carrierState: CarrierStateService, private http: HttpClient, private dropdownService: DropdownService, private municipalOfficeService: MunicipalOfficesService, private departmentsService: DepartmentsService) {
     this.searchForm = this.fb.group({
-      aUnitId: [null, Validators.required],
+      aUnitId: [0, Validators.required],
+      departmentId: [null],
+      municipalOfficeId: [null],
       filterDto: this.fb.group({
         deviceName: [''],
         model: [''],
@@ -52,6 +61,8 @@ export class SearchFormComponent implements OnInit, OnChanges {
         remoteDesktopAppId: [0],
         networkEquipmentTypeId: [0],
         printerTypeId: [0],
+        printerIp: [''],
+        antivirus: [''],
         phoneNumber: [''],
         phoneSocket: [''],
         phoneTypeId: [0],
@@ -66,29 +77,45 @@ export class SearchFormComponent implements OnInit, OnChanges {
         address: [''],
         switchAddress: [''],
         ipAddress: [''],
-        paperSize: ['']  
+        paperSize: ['']
       }),
       workstationFilterDto: this.fb.group({
         employeeLastName: [''],
         employeeFirstName: [''],
-        department: ['']
+        department: [''],
+        address: ['']
       }),
       sorting: this.fb.group({
         sortBy: [''],
         sortOrder: ['']
       })
     });
+    this.searchForm.get('municipalOfficeId')?.valueChanges.subscribe(municipalOfficeId => {
+      this.onOfficeChange(municipalOfficeId);
+    });
+
   }
 
   ngOnInit() {
     this.updateFormControls();
     this.loadDropdownData();
     this.loadFormState();
+    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['searchType']) {
       this.updateFormControls();
+    }
+  }
+
+  onOfficeChange(municipalOfficeId: number): void {
+    if (municipalOfficeId) {
+      this.departmentsService.getAllByMunicipalOffice(municipalOfficeId).subscribe(deps => {
+        this.departments = deps.data;
+      });
+    } else {
+      this.departments = [];
     }
   }
 
@@ -113,9 +140,23 @@ export class SearchFormComponent implements OnInit, OnChanges {
       this.remoteDesktopAppTypes = types.data;
     });
 
-    this.dropdownService.getNetEquipments().subscribe(types => {
-      this.netEqs = types.data;
-    });
+    this.municipalOfficeService.getAllByCarrier(this.carrierState.getSelectedCarrier()!.id).subscribe(response => {
+      this.offices = response.data
+    })
+
+    this.departmentsService.getAllByMunicipalOffice(this.selectedOfficeId).subscribe(response => {
+      this.departments = response.data
+    })
+
+
+    this.netEqs = [{
+      "id": 1,
+      "name": "Router"
+    },
+    {
+      "id": 2,
+      "name": "Switch"
+    }]
   }
 
   updateFormControls(): void {
@@ -129,10 +170,12 @@ export class SearchFormComponent implements OnInit, OnChanges {
     if (this.searchForm.valid) {
       const searchParams: any = {
         aUnitId: this.searchForm.value.aUnitId !== null ? Number(this.searchForm.value.aUnitId) : null,
+        departmentId: this.searchForm.value.departmentId !== null ? Number(this.searchForm.value.departmentId) : null,
+        municipalOfficeId: this.searchForm.value.municipalOfficeId !== null ? Number(this.searchForm.value.municipalOfficeId) : null,
         sorting: this.searchForm.value.sorting
       };
 
-      if(searchParams.aUnitId == 0){
+      if (searchParams.aUnitId == 0) {
         searchParams.aUnitId = null;
         this.searchForm.get('aUnitId')?.setValue('null')
       }
@@ -141,7 +184,7 @@ export class SearchFormComponent implements OnInit, OnChanges {
 
       if (filterDtoValue) {
         Object.keys(filterDtoValue).forEach(key => {
-          if (key !== 'macAddress' && key !=='ram' && (filterDtoValue[key] === null || filterDtoValue[key] === '' || filterDtoValue[key] === 0 || filterDtoValue[key] === false)) {
+          if (key !== 'macAddress' && key !== 'ram' && (filterDtoValue[key] === null || filterDtoValue[key] === "null" || filterDtoValue[key] === '' || filterDtoValue[key] === 0 || filterDtoValue[key] === false)) {
             delete filterDtoValue[key];
           }
         });
@@ -168,7 +211,7 @@ export class SearchFormComponent implements OnInit, OnChanges {
           break;
       }
 
-     
+
       this.search.emit(searchParams);
       this.saveFormState();
     }

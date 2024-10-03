@@ -21,6 +21,30 @@
         </select>
       </div>
 
+      <div class="form-group">
+        <label for="municipalOfficeId">Διεύθυνση</label>
+        <select id="municipalOfficeId" formControlName="municipalOfficeId" class="form-control form-control-sm">
+          <option [ngValue]="null">Επιλέξτε διεύθυνση</option> <!-- Use [ngValue] instead of [value] -->
+          <option *ngFor="let office of offices" [value]="office.id">{{ office.name }}</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="departmentId">Τμήμα</label>
+        <select id="departmentId" formControlName="departmentId" class="form-control form-control-sm">
+          <option [ngValue]="null">Επιλέξτε τμήμα</option> <!-- Use [ngValue] instead of [value] -->
+          <option *ngFor="let dep of departments" [value]="dep.id">{{ dep.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="resultsPerPage">Αποτελέσματα ανά σελίδα</label>
+        <select id="resultsPerPage" class="form-control form-control-sm" (change)="onPageSizeChange($event)">
+          <option [ngValue]="null">Επιλέξτε αριθμό</option>
+          <option *ngFor="let res of resultsPerPageOptions" [value]="res">{{ res }}</option>
+        </select>
+      </div>
+
       <!-- Common Fields -->
       <ng-container *ngIf="filterType !== FilterType.Workstation">
       <div class="form-group">
@@ -60,7 +84,6 @@
         </div>
       </ng-container>
 
-      <!-- Printer Filters -->
       <ng-container *ngIf="filterType === FilterType.Printer">
         <div class="form-group">
           <label for="printerTypeId">{{ 'labels.printerType' | translate }}</label>
@@ -72,6 +95,11 @@
         <div class="form-group">
           <label for="paperSize">{{ 'labels.paperSize' | translate }}</label>
           <input id="paperSize" formControlName="paperSize" class="form-control form-control-sm" type="text">
+        </div>
+
+        <div class="form-group">
+          <label for="printerIp">{{ 'labels.ip' | translate }}</label>
+          <input id="printerIp" formControlName="printerIp" class="form-control form-control-sm" type="text">
         </div>
 
         <div class="form-group">
@@ -173,10 +201,6 @@
         <div class="form-group">
           <label for="employeeFirstName">{{ 'employeeFirstName' | translate }}</label>
           <input id="employeeFirstName" formControlName="employeeFirstName" class="form-control form-control-sm" type="text">
-        </div>
-        <div class="form-group">
-          <label for="department">{{ 'labels.department' | translate }}</label>
-          <input id="department" formControlName="department" class="form-control form-control-sm" type="text">
         </div>
         <div class="form-group">
           <label for="address">{{ 'labels.address' | translate }}</label>

@@ -1,0 +1,53 @@
+<div class="container mt-4">
+  <h2 class="text-primary mb-4">Διευθύνσεις</h2>
+
+  <span class="text-danger" *ngIf="dataSource && dataSource.data.length === 0"
+    >Δεν βρέθηκαν αποτελέσματα</span
+  >
+
+  <mat-table [dataSource]="dataSource" class="custom-table mat-elevation-z8">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+      <mat-cell *matCellDef="let office"> {{ office.id }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Όνομα </mat-header-cell>
+      <mat-cell *matCellDef="let office"> {{ office.name }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        {{ "table-headers.actions" | translate }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let office">
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          matTooltip="{{ 'table-headers.actions' | translate }}"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="editMunOffice(office)">
+            <mat-icon>edit</mat-icon> Επεξεργασία
+          </button>
+          <button mat-menu-item (click)="deleteMunOffice(office.id, office.name)">
+            <mat-icon>delete</mat-icon> Διαγραφή
+          </button>
+        </mat-menu>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <app-export-data-button
+    *ngIf="dataSource.data.length > 0"
+    [data]="dataSource.data"
+    fileName="{{ 'export.carriers.report' | translate }}"
+    [columnNames]="columnNames"
+  >
+  </app-export-data-button>
+</div>

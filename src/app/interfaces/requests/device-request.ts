@@ -125,6 +125,7 @@ export interface EditDeviceRequest {
   serialNumber: string;
   deviceName: string;
   printerTypeId?: number;
+  printerIp?: string;
   networkEquipmentTypeId?: number;
   floor?: string;
   networkEquipmentFloor?: string;
@@ -151,6 +152,7 @@ export interface EditDeviceRequest {
   networkDiskInfo?: NetworkDiskInfo;
   remoteDesktopApp?: number;
   purchaseDate?: string;
+  toBeDestroyed?: boolean,
   comments?: string;
   phoneSocket?: string;
   phoneTypeId?: number;

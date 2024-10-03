@@ -81,9 +81,9 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnInit(): void {
     this.setDisplayedColumns();
-    this.carrierName = this.carrierState.getSelectedCarrier()?.name
-        
   }
+
+  
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['items']) {
@@ -131,12 +131,15 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.displayedColumns = [
           ItemColumnNames.carrierName,
           ItemColumnNames.aUnitName,
+          ItemColumnNames.municipalOffice,
+          ItemColumnNames.department,
           ItemColumnNames.deviceName,
           ItemColumnNames.model,
           ItemColumnNames.serialNumber,
           ItemColumnNames.ram,
           ItemColumnNames.ssd,
           ItemColumnNames.operatingSystem,
+          ItemColumnNames.toBeDestroyed,
           ItemColumnNames.actions
         ];
         break;
@@ -144,11 +147,14 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.displayedColumns = [
           ItemColumnNames.carrierName,
           ItemColumnNames.aUnitName,
+          ItemColumnNames.municipalOffice,
+          ItemColumnNames.department,
           ItemColumnNames.deviceName,
           ItemColumnNames.model,
           ItemColumnNames.serialNumber,
           ItemColumnNames.networkEquipmentType,
           ItemColumnNames.networkEquipmentIP,
+          ItemColumnNames.toBeDestroyed,
           ItemColumnNames.actions
         ];
         break;
@@ -156,11 +162,12 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.displayedColumns = [
           ItemColumnNames.carrierName,
           ItemColumnNames.aUnitName,
+          ItemColumnNames.municipalOffice,
+          ItemColumnNames.department,
           ItemColumnNames.employeeLastName,
           ItemColumnNames.employeeFirstName,
           ItemColumnNames.email,
           ItemColumnNames.personalPhone,
-          ItemColumnNames.department,
           ItemColumnNames.city,
           ItemColumnNames.address,
           ItemColumnNames.actions
@@ -170,10 +177,13 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.displayedColumns = [
           ItemColumnNames.carrierName,
           ItemColumnNames.aUnitName,
+          ItemColumnNames.municipalOffice,
+          ItemColumnNames.department,
           ItemColumnNames.deviceName,
           ItemColumnNames.model,
           ItemColumnNames.serialNumber,
           ItemColumnNames.phoneType,
+          ItemColumnNames.toBeDestroyed,
           ItemColumnNames.actions
         ];
         break;
@@ -181,11 +191,15 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.displayedColumns = [
           ItemColumnNames.carrierName,
           ItemColumnNames.aUnitName,
+          ItemColumnNames.municipalOffice,
+          ItemColumnNames.department,
           ItemColumnNames.deviceName,
           ItemColumnNames.model,
           ItemColumnNames.serialNumber,
           ItemColumnNames.printerType,
+          ItemColumnNames.printerIp,
           ItemColumnNames.paperSize,
+          ItemColumnNames.toBeDestroyed,
           ItemColumnNames.actions
         ];
         break;
@@ -193,12 +207,15 @@ export class ItemTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.displayedColumns = [
           ItemColumnNames.carrierName,
           ItemColumnNames.aUnitName,
+          ItemColumnNames.municipalOffice,
+          ItemColumnNames.department,
           ItemColumnNames.deviceName,
           ItemColumnNames.model,
           ItemColumnNames.serialNumber,
           ItemColumnNames.serverDiskType,
           ItemColumnNames.networkDisk,
           ItemColumnNames.diskRotations,
+          ItemColumnNames.toBeDestroyed,
           ItemColumnNames.actions
         ];
         break;

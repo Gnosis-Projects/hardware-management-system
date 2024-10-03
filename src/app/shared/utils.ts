@@ -96,9 +96,9 @@ export class Utils {
     });
   }
 
-  addWorkStation(aUnitId: number, request: WorkstationRequest, callback: (success: boolean, id?: number) => void): void {
+  addWorkStation(aUnitId: number,departmentId:number, request: WorkstationRequest, callback: (success: boolean, id?: number) => void): void {
     if (this.router.url !== '/selectedCarrier') {
-      this.workStationService.addWorkStation(aUnitId, request).subscribe(response => {
+      this.workStationService.addWorkStation(aUnitId, departmentId, request).subscribe(response => {
         if (response.success) {
           this.utilityService.handleResponse(
             response.success,

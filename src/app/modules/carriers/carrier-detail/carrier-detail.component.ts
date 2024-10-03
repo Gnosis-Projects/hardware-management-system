@@ -223,7 +223,7 @@ export class CarrierDetailComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.utils.addWorkStation(result.aUnitId, result as WorkstationRequest, (success, id) => {
+        this.utils.addWorkStation(result.aUnitId, result.departmentId, result as WorkstationRequest, (success, id) => {
           if (success && id) {
             this.openSnackBar(this.translate.instant('successMessages.workstation.added.successfully'), 'Προβολή', id);
           }

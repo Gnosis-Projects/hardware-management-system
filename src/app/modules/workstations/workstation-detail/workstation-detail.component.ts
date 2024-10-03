@@ -47,6 +47,7 @@ export class WorkstationDetailComponent implements OnInit {
   deviceType = DeviceType;
   currentView: string = 'COMPUTER';
   columnNames = ExcelColumnNames
+  carrierName:string = ''
   constructor(
     private router: Router,
     private workStationStateService: WorkStationStateService,
@@ -61,6 +62,7 @@ export class WorkstationDetailComponent implements OnInit {
       this.utils.fetchWorkstation(workstationId, (response) => {
         if (response.success) {
           this.workstation = response;
+          this.carrierName = response?.data?.carrier?.name
         } else {
           this.toastr.error(this.translate.instant('errorMessages.unexpected.error'));
         }

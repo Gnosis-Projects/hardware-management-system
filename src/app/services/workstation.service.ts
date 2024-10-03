@@ -36,8 +36,10 @@ export class WorkStationService {
         return this.http.get<SingleWorkStationResponse>(`${this.apiUrl}/GetByIdWithEquipment/${id}`);
     }
 
-    addWorkStation(aUnitId: number, request: WorkstationRequest): Observable<any> {
-        return this.http.post<any>(`${this.apiUrl}/Add/${aUnitId}`, request);
+    addWorkStation(aUnitId: number, departmentId:number, request: WorkstationRequest,): Observable<any> {
+        const params = new HttpParams()
+          .set('departmentId', departmentId)
+        return this.http.post<any>(`${this.apiUrl}/Add/${aUnitId}`, request, {params});
     }
 
     updateWorkStation(request: EditWorkStationRequest): Observable<any> {

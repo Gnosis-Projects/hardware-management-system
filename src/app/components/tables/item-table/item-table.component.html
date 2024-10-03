@@ -5,6 +5,8 @@
 <div class="mat-elevation-z8 mt-4">
 
   <div class="table-responsive">
+    <div class="text-center font-bold text-sm">Σελίδα {{currentPage}} απο {{totalPages}}</div>
+        
     <div class="table-pagination-buttons">
       <button mat-button (click)="onFirstPage()" [disabled]="currentPage === 1">Πρώτη σελίδα</button>
       <button mat-button (click)="onPreviousPage()" [disabled]="currentPage === 1">Προηγούμενη σελίδα</button>
@@ -22,6 +24,20 @@
         <th mat-header-cell *matHeaderCellDef> {{ ItemColumnNames.aUnitName }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.aUnit?.name || unitName }} </td>
       </ng-container>
+
+
+      <ng-container [matColumnDef]="ItemColumnNames.department">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="department"> {{ ItemColumnNames.department }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.department?.name }} </td>
+      </ng-container>
+
+      
+      <ng-container [matColumnDef]="ItemColumnNames.municipalOffice">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="municipalOffice"> {{ ItemColumnNames.municipalOffice }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.municipalOffice?.name }} </td>
+      </ng-container>
+      
+      
       <ng-container *ngIf="deviceType === 'network_equipment'" [matColumnDef]="ItemColumnNames.networkEquipmentType">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="networkEquipmentType"> {{ ItemColumnNames.networkEquipmentType }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.networkEquipmentType?.name }} </td>
@@ -111,6 +127,12 @@
         <td mat-cell *matCellDef="let item"> {{ item?.printerType?.name }} </td>
       </ng-container>
 
+      <ng-container [matColumnDef]="ItemColumnNames.printerIp">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="printerIp"> {{ ItemColumnNames.printerIp }} </th>
+        <td mat-cell *matCellDef="let item"> {{ item?.printerIp }} </td>
+      </ng-container>
+
+
       <ng-container [matColumnDef]="ItemColumnNames.serverDiskType">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="serverDiskType"> {{ ItemColumnNames.serverDiskType }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.serverDisks[0]?.serverDiskType.name }} </td>
@@ -151,10 +173,7 @@
         </td>
       </ng-container>
 
-      <ng-container [matColumnDef]="ItemColumnNames.department">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="department"> {{ ItemColumnNames.department }} </th>
-        <td mat-cell *matCellDef="let item"> {{ item?.department }} </td>
-      </ng-container>
+
 
       <ng-container [matColumnDef]="ItemColumnNames.operatingSystem">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="operatingSystem"> {{ ItemColumnNames.operatingSystem }} </th>
@@ -174,6 +193,18 @@
       <ng-container [matColumnDef]="ItemColumnNames.checkDateTime">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="checkDateTime"> {{ ItemColumnNames.checkDateTime }} </th>
         <td mat-cell *matCellDef="let item"> {{ item?.data?.checkDateTime }} </td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="ItemColumnNames.toBeDestroyed">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="toBeDestroyed"> {{ ItemColumnNames.toBeDestroyed }} </th>
+        <td mat-cell *matCellDef="let item">
+          <ng-container *ngIf="item?.toBeDestroyed; else noDestroy">
+            <mat-icon color="primary" matTooltip="Network Disk">check_circle</mat-icon>
+          </ng-container>
+          <ng-template #noDestroy>
+            <mat-icon color="warn" matTooltip="Not a Network Disk">cancel</mat-icon>
+          </ng-template>
+        </td>
       </ng-container>
 
       <ng-container [matColumnDef]="ItemColumnNames.actions">

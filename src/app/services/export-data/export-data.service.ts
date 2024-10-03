@@ -43,28 +43,39 @@ export class ExportDataService {
   }
 
   exportDataToExcelWithSheets(json: any, excelFileName: string, columnNames: any): void {
-
-    const workstationsList = [this.extractWorkstationData(json[0])];
-    const computersList = this.flattenData(json[0].computers_list || []);
-    const printersList = this.flattenData(json[0].printers_list || []);
-    const phonesList = this.flattenData(json[0].phones_list || []);
-    const networkEquipmentList = this.flattenData(json[0].network_equipment_list || []);
-    const serversList = this.flattenData(json[0].servers_list || []);
-
+    const filteredJson = json.map((item: any) => {
+      return {
+        ...item,
+        computers_list: item.computers_list.filter((c: any) => !c.toBeDestroyed),
+        printers_list: item.printers_list.filter((p: any) => !p.toBeDestroyed),
+        phones_list: item.phones_list.filter((ph: any) => !ph.toBeDestroyed),
+        network_equipment_list: item.network_equipment_list.filter((ne: any) => !ne.toBeDestroyed),
+        servers_list: item.servers_list.filter((s: any) => !s.toBeDestroyed),
+      };
+    });
+  
+    // Extract and map data
+    const workstationsList = [this.extractWorkstationData(filteredJson[0])];
+    const computersList = this.flattenData(filteredJson[0].computers_list || []);
+    const printersList = this.flattenData(filteredJson[0].printers_list || []);
+    const phonesList = this.flattenData(filteredJson[0].phones_list || []);
+    const networkEquipmentList = this.flattenData(filteredJson[0].network_equipment_list || []);
+    const serversList = this.flattenData(filteredJson[0].servers_list || []);
+  
     const mappedWorkstationsList = this.renameColumns(workstationsList, columnNames);
     const mappedComputersList = this.renameColumns(computersList, columnNames);
     const mappedPrintersList = this.renameColumns(printersList, columnNames);
     const mappedPhonesList = this.renameColumns(phonesList, columnNames);
     const mappedNetworkEquipmentList = this.renameColumns(networkEquipmentList, columnNames);
     const mappedServersList = this.renameColumns(serversList, columnNames);
-
+  
     const workstationsSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mappedWorkstationsList);
     const computersSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mappedComputersList);
     const printersSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mappedPrintersList);
     const phonesSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mappedPhonesList);
     const networkEquipmentSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mappedNetworkEquipmentList);
     const serversSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mappedServersList);
-
+  
     const workbook: XLSX.WorkBook = {
       Sheets: {
         'Θέση Εργασίας': workstationsSheet,
@@ -74,9 +85,9 @@ export class ExportDataService {
         'Δικτυακός Εξοπλισμός': networkEquipmentSheet,
         'Servers': serversSheet
       },
-      SheetNames: ['Θέση Εργασίας','Υπολογιστές', 'Εκτυπωτές', 'Τηλέφωνα', 'Δικτυακός Εξοπλισμός', 'Servers']
+      SheetNames: ['Θέση Εργασίας', 'Υπολογιστές', 'Εκτυπωτές', 'Τηλέφωνα', 'Δικτυακός Εξοπλισμός', 'Servers']
     };
-
+  
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     this.saveAsExcelFile(excelBuffer, excelFileName);
   }
@@ -171,43 +182,69 @@ export class ExportDataService {
     return result;
   }
 
- private flattenItem(item: any, prefix: string = '', parentKey: string = '', result: any = {}): any {
-  for (const key in item) {
-    if (item.hasOwnProperty(key)) {
-      const newKey = parentKey ? `${parentKey}.${key}` : key;
-      const prefixedKey = prefix ? `${prefix}.${newKey}` : newKey;
-
-      if (key === 'disks' || key === 'Απομακρυσμένη σύνδεση') {
-        if (Array.isArray(item[key])) {
-          item[key].forEach((subItem: any, index: number) => {
-            if (typeof subItem === 'object') {
-              for (const subKey in subItem) {
-                result[`${prefixedKey}.${index + 1}.${subKey}`] = subItem[subKey];
-              }
-            } else {
-              result[`${prefixedKey}.${index + 1}`] = subItem;
+  private flattenItem(item: any, prefix: string = '', parentKey: string = '', result: any = {}): any {
+    for (const key in item) {
+      if (item.hasOwnProperty(key)) {
+        const newKey = parentKey ? `${parentKey}.${key}` : key;
+        const prefixedKey = prefix ? `${prefix}.${newKey}` : newKey;
+        
+        if (item[key] === false) {
+          result[prefixedKey] = 'OXI';
+        } 
+        else if (key === 'computerPrinters' && Array.isArray(item[key])) {
+          const printerNames = item[key].map((printer: any) => {
+            if (printer.name === 'δικτυακός') {
+              return `${printer.name} (${printer.ipAddress})`;
             }
-          });
-        } else if (typeof item[key] === 'object' && item[key] !== null) {
-          for (const subKey in item[key]) {
-            result[`${prefixedKey}.${subKey}`] = item[key][subKey];
+            return printer.name;
+          }).join(', ');
+          result[prefixedKey] = printerNames;
+        } 
+
+        else if (key === 'remoteDesktopApps' && Array.isArray(item[key])) {
+          const remoteApps = item[key].map((ra: any) => {
+
+              return `${ra.name} (${ra?.userId})`;
+            
+          }).join(', ');
+          result[prefixedKey] = remoteApps;
+        } 
+        else if (key === 'disks') {
+          if (Array.isArray(item[key])) {
+            item[key].forEach((subItem: any, index: number) => {
+              if (typeof subItem === 'object') {
+                for (const subKey in subItem) {
+                  result[`${prefixedKey}.${index + 1}.${subKey}`] = subItem[subKey];
+                }
+              } else {
+                result[`${prefixedKey}.${index + 1}`] = subItem;
+              }
+            });
+          } else if (typeof item[key] === 'object' && item[key] !== null) {
+            for (const subKey in item[key]) {
+              result[`${prefixedKey}.${subKey}`] = item[key][subKey];
+            }
           }
-        }
-      } else if (typeof item[key] === 'object' && item[key] !== null) {
-        if (Array.isArray(item[key])) {
-          result[prefixedKey] = item[key].map((subItem: any) => 
-            (typeof subItem === 'object' ? JSON.stringify(subItem) : subItem)
-          ).join(', ');
-        } else {
-          for (const subKey in item[key]) {
-            result[`${prefixedKey}.${subKey}`] = item[key][subKey];
+        } 
+        // Handle nested arrays or objects
+        else if (typeof item[key] === 'object' && item[key] !== null) {
+          if (Array.isArray(item[key])) {
+            result[prefixedKey] = item[key].map((subItem: any) => 
+              (typeof subItem === 'object' ? JSON.stringify(subItem) : subItem)
+            ).join(', ');
+          } else {
+            for (const subKey in item[key]) {
+              result[`${prefixedKey}.${subKey}`] = item[key][subKey];
+            }
           }
+        } 
+        // Default case for non-object properties
+        else {
+          result[prefixedKey] = item[key];
         }
-      } else {
-        result[prefixedKey] = item[key];
       }
     }
+    return result;
   }
-  return result;
-}
+  
 }

@@ -6,7 +6,6 @@ export const routes: Routes = [
   { path: 'login', loadComponent: () => import('./modules/auth/login/login.component').then(m => m.LoginComponent), data: { breadcrumb: 'Login' }},
   { path: 'carriers', loadComponent: () => import('./modules/carriers/carrier-list/carrier-list.component').then(m => m.CarrierListComponent), data: { breadcrumb: 'Carriers' }, canActivate: [AuthStateGuard] },
   { path: 'admin', loadComponent: () => import('./modules/admin/admin.component').then(m => m.AdminComponent), data: { breadcrumb: 'Admin' }, canActivate: [AuthStateGuard] },
-  { path: 'aunit', loadComponent: () => import('./modules/aunits/aunit-detail/aunit-detail.component').then(m => m.AUnitDetailComponent), data: { breadcrumb: 'AUnit Detail' } },
   { path: 'selectedCarrier', loadComponent: () => import('./modules/carriers/carrier-detail/carrier-detail.component').then(m => m.CarrierDetailComponent), data: { breadcrumb: 'Carrier Detail' }, canActivate: [AuthStateGuard] },
   { path: 'selectedDevice', loadComponent: () => import('./modules/devices/device-detail/device-detail.component').then(m => m.DeviceDetailComponent), data: { breadcrumb: 'Device Detail' }, canActivate: [AuthStateGuard] },
   { path: 'selectedDevice/edit', loadComponent: () => import('./modules/devices/edit-device/edit-device.component').then(m => m.EditDeviceComponent), data: { breadcrumb: 'Edit Device' }, canActivate: [AuthStateGuard] },

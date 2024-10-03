@@ -61,7 +61,7 @@
     <div class="col-md-1">
       <mat-toolbar color="primary" class="header-toolbar">
         <button mat-icon-button (click)="toggleDrawer()">
-          <mat-icon class="sidebar-icon">{{ !isDrawerOpen ? 'close' : 'menu' }}</mat-icon>
+          <mat-icon class="sidebar-icon">{{ isDrawerOpen ? 'menu' : 'close' }}</mat-icon>
         </button>
       </mat-toolbar>
     </div>
@@ -128,7 +128,7 @@
         </div>
         <div class="all-devices-text" *ngIf="filteredWorkstations.length > 0">{{ 'all.workstations' | translate }}</div>
         <app-filter [filterType]="filterType" [carriers]="carriers" [offices]="municipalOfficesForFilter" [departments]="departments"
-          *ngIf="this.showFilter" (pageSizeChange)="onPageSizeChange($event)" (filter)="applyFilter($event)"></app-filter>>
+          *ngIf="this.showFilter" (pageSizeChange)="onPageSizeChange($event)" (filter)="applyFilter($event)"></app-filter>
         <div class="row">
           <app-item-table *ngIf="devices.length > 0 || filteredWorkstations.length > 0"
             [items]="devices.length > 0 ? devices : filteredWorkstations" [deviceType]="searchType"

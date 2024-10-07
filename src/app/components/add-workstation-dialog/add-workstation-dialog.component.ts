@@ -48,7 +48,7 @@ export class AddWorkStationDialogComponent implements OnInit {
   addWorkStationForm: FormGroup;
   disableCarrierInput: boolean = false;
   isSubmitting: boolean = false;
-  carrierId: number = this.carrierState.getSelectedCarrier()!.id
+  carrierId: number = 0
   municipalOffices: CommonResponse[] = []
   departments: CommonResponse[] = []
 

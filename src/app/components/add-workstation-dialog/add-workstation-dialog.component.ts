@@ -48,10 +48,9 @@ export class AddWorkStationDialogComponent implements OnInit {
   addWorkStationForm: FormGroup;
   disableCarrierInput: boolean = false;
   isSubmitting: boolean = false;
-  carrierId: number = 0
   municipalOffices: CommonResponse[] = []
   departments: CommonResponse[] = []
-
+  carrierId: number = 0
 
   constructor(
     private authStateService: AuthStateService, 
